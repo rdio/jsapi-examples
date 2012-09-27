@@ -1,6 +1,6 @@
 # About
 
-This web-app is an example usage of the new Rdio JavaScript API. 
+This web-app is an example usage of the new Rdio JavaScript API. You can see it in action at http://music-triage.appspot.com/
 
 I like to queue up a bunch of new music and listen to it throughout the day. Every day or two I go back through my history and add the albums I liked to my collection. This web app is tailored to that history triage. Albums you've listened to but haven't triaged show up in the middle. Hit the heart on an album to add that album to your collection; hit the X to discard it.
 
