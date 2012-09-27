@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Music Triage</title>
+    <link rel="stylesheet" type="text/css" href="/lib/normalize.css">
+    <link rel="stylesheet/less" type="text/css" href="/style/main.less">
+    <script src="https://rdio.com/api/api.js?client_id=zfPdMwbs2DyCN96qUswHmQ"></script>
+<!--     <script src="https://rdio.com/api/api.js?client_id=DRpdRofBxca5-4xExm4xsA"></script> -->
+    <script src="/lib/jquery-1.8.2.min.js"></script>
+    <script src="/lib/underscore-min.js"></script>
+    <script src="/lib/less-1.3.0.min.js"></script>
+    <script src="/lib/transformjs.1.0.beta.2.min.js"></script>
+    <script src="/lib/zot.js"></script>
+    <script src="/lib/spin.min.js"></script>
+    <script src="/js/music.js"></script>
+    <script src="/js/album.js"></script>
+    <script src="/js/main.js"></script>
+    <script id="album-template" type="text/template">
+      <div class="album" data-key="<%= key %>">
+        <div class="yes btn"></div>
+        <div class="no btn"></div>
+        <div class="sample btn"></div>
+        <a href="<%= url %>" target="_blank">
+          <div class="icon" style="background-image: url(<%= icon %>)"></div>
+        </a>
+      </div>
+    </script>
+  </head>
+  <body>
+    <div id="no-rdio">
+      <p>Unable to contact Rdio API.</p>
+    </div>
+    <div id="unauthenticated">
+      <p>I like to queue up a bunch of new music and listen to it throughout the day. Every day or two I go back through my history and add the albums I liked to my collection. This web app is tailored to that history triage. Albums you've listened to but haven't triaged show up in the middle. Hit the heart on an album to add that album to your collection; hit the X to discard it.</p>
+      <p>To get started, you'll have to <button id="authenticate">authorize</button> this app.</p>
+      <p>Note that the "dustbin" status of an album is stored only in your browser's local storage. Perhaps in the future we'll add a server-side component for more robust storage.</p>
+    </div>
+    <div id="authenticated">
+      <div id="collection">
+        <div class="section-head">
+          Added to Collection
+        </div>
+        <div class="albums small">
+        </div>
+      </div>
+      <div id="history">
+        <div class="section-head">
+          Untriaged History
+        </div>
+        <div class="albums">
+        </div>
+      </div>
+      <div id="rejects">
+        <div class="section-head">
+          Dustbin
+        </div>
+        <div class="albums small">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

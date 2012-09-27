@@ -1,0 +1,33 @@
+application: music-triage
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /helper\.html
+  static_files: helper.html
+  upload: helper\.html
+
+- url: /style
+  static_dir: style
+  
+- url: /img
+  static_dir: img
+  
+- url: /js
+  static_dir: js
+  
+- url: /lib
+  static_dir: lib
+  
+- url: .*
+  script: main.app
+
+libraries:
+- name: webapp2
+  version: "2.5.1"

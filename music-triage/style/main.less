@@ -1,0 +1,136 @@
+@top-height: 0px;
+@side-width: 120px;
+
+.border-radius(@radius: 10px) {
+  -webkit-border-radius: @radius; /* Saf3-4, iOS 1-3.2, Android ≤1.6 */
+          border-radius: @radius  ; /* Opera 10.5, IE9, Saf5, Chrome, FF4+, iOS 4, Android 2.1+ */
+
+  /* useful if you don't want a bg color from leaking outside the border: */
+  -moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
+}
+
+html, 
+body {
+  position: fixed; 
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+body {
+  background: #fff;
+  font-family: sans-serif;
+}
+
+p {
+  font-size: 14px;
+  margin: 0 0 1em 0;
+}
+
+#no-rdio {
+  display: none;
+  padding: 20px;
+}
+
+#unauthenticated {
+  display: none;
+  padding: 20px;
+}
+
+#authenticated {
+  display: none;
+}
+
+.album {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 200px;
+  
+  .icon {
+    width: 200px;
+    height: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn {
+    display: none;
+    z-index: 10;  
+  }
+  
+  &:hover .btn {
+    display: block;
+  }
+  
+  &:hover.small .btn {
+    display: none;
+  }
+}
+
+.btn {
+  .border-radius(5px);
+  width: 40px;
+  height: 40px;
+  border: 1px solid #333;
+  cursor: pointer;
+  background: no-repeat center center #aaa;
+  
+  &.selected {
+    background-color: #eee;
+  }
+}
+
+.yes {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  background-image: url(/img/yes.png); 
+}
+
+.no {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-image: url(/img/no.png); 
+}
+
+.sample {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background-image: url(/img/sample.png); 
+}
+
+#collection {
+  position: fixed; 
+  left: 0;
+  top: @top-height;
+  width: @side-width;
+  bottom: 0;
+}
+
+#history {
+  position: fixed; 
+  left: @side-width + 1;
+  top: @top-height;
+  right: @side-width + 1;
+  bottom: 0;
+}
+
+#rejects {
+  position: fixed; 
+  width: @side-width;
+  top: @top-height;
+  right: 0;
+  bottom: 0;
+}
+
+.section-head {
+  margin: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
