@@ -1,0 +1,31 @@
+.header {
+  height: 60px;
+}
+
+.search {
+  padding: 10px;
+}
+
+.album {
+  float: left;
+  margin: 0 20px 20px 0;
+  width: 200px;
+  height: 240px;
+}
+
+.album .icon {
+  width: 200px;
+  height: 200px;
+  margin: 0 0 4px 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.album .label {
+  text-align: center;
+  height: 1em;
+  overflow: hidden;
+}
+
+.album .artist {
+  color: #555;
+}
