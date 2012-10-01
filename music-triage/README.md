@@ -8,11 +8,7 @@ Note that the "dustbin" status of an album is stored only in your browser's loca
 
 # Todo: high
 
-* Handle individual tracks properly: either ignore them entirely or do the full album
-* Handle play lists as well as albums, or ignore them for now
 * Show track count (when album is shown big)
-* Don't add the same album to the triage list twice
-* Layout animation doesn't seem to be working (heart/X)
 * Save dustbin to server
 
 # Todo: normal
