@@ -1,13 +1,42 @@
+/* --------- */
 .header {
-  height: 60px;
+  height: 100px;
+  padding: 10px;
+  background: #ddd;
 }
 
+.header .section {
+  float: left;
+  margin: 0 20px 0 0;
+}
+
+.header .icon {
+  width: 100px;
+  height: 100px;
+}
+
+.header button {
+  display: block;
+  margin: 0 5px 0 0;
+}
+
+.header .label {
+  margin: 0 5px 0 0;
+}
+
+/* --------- */
 .search {
+  padding: 10px;
+}
+
+/* --------- */
+.results {
   padding: 10px;
 }
 
 .album {
   float: left;
+  position: relative;
   margin: 0 20px 20px 0;
   width: 200px;
   height: 240px;
@@ -29,3 +58,27 @@
 .album .artist {
   color: #555;
 }
+
+.album .btn {
+  display: none;
+  z-index: 10;  
+}
+
+.album:hover .btn {
+  display: block;
+}
+
+.btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #333;
+  cursor: pointer;
+  background: no-repeat center center #aaa;
+}
+
+.btn.play {
+  position: absolute;
+  left: 10px;
+  bottom: 50px;
+}
+
