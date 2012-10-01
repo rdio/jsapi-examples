@@ -115,24 +115,29 @@
           
           _.each(data.result, function(v, i) {
             var album = new Album(v);
-            var handled = false;
+            if (!album.viable()) {
+              return;
+            }
+            
+            var group = self.albums;
             var record = localStorage[self.recordKey(album.key)];
             if (record) {
               record = JSON.parse(record);
               if (record.collected) {
-                self.collectedAlbums.push(album);
-                album.$el.addClass("small");
-                handled = true;
+                album.becomeSmall();
+                group = self.collectedAlbums;
               } else if (record.rejected) {
-                self.rejectedAlbums.push(album);
-                album.$el.addClass("small");
-                handled = true;
+                album.becomeSmall();
+                group = self.rejectedAlbums;
               }
             }
             
-            if (!handled) {
-              self.albums.push(album);
+            if (_.where(group, {key: album.key}).length) {
+              return;
             }
+            
+            album.create();
+            group.push(album);
           });
           
           self.layout();
