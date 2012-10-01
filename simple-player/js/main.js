@@ -26,6 +26,11 @@
           }
         });
         
+      if (!("R" in window)) {
+        $(".no-rdio").show();
+        return;
+      }
+
       R.ready(function() {
         var $play = $(".header .play")
           .click(function() {

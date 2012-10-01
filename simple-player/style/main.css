@@ -1,4 +1,10 @@
 /* --------- */
+.no-rdio {
+  display: none;
+  padding: 20px;
+}
+
+/* --------- */
 .header {
   height: 100px;
   padding: 10px;
