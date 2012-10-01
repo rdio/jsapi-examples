@@ -17,11 +17,11 @@
 
 .header button {
   display: block;
-  margin: 0 5px 0 0;
+  margin: 0 0 10px 0;
 }
 
 .header .label {
-  margin: 0 5px 0 0;
+  margin: 0 0 10px 0;
 }
 
 /* --------- */
@@ -68,7 +68,7 @@
   display: block;
 }
 
-.btn {
+.album .btn {
   width: 40px;
   height: 40px;
   border: 1px solid #333;
@@ -76,9 +76,10 @@
   background: no-repeat center center #aaa;
 }
 
-.btn.play {
+.album .btn.play {
   position: absolute;
   left: 10px;
   bottom: 50px;
+  background-image: url(../img/sample.png); 
 }
 
