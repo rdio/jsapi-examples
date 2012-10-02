@@ -8,14 +8,15 @@ Note that the "dustbin" status of an album is stored only in your browser's loca
 
 # Todo: high
 
+* Album and artist name
 * Show track count (when album is shown big)
 * Save dustbin to server
+* If you've removed an album from your collection, remove it from the local storage cache too
 
 # Todo: normal
 
 * If an album is playing when you hit heart/x, start the next album playing
 * Each click on sample button should take you to 1/3rd through the next track (on playingTrack change, seek to its duration / 3)
-* Album and artist name
 * Indicate that there's nothing left to triage when you're all done
 * Key combos
 * The first time you hit play there's a bit of a lag before the button highlights
@@ -28,5 +29,12 @@ Note that the "dustbin" status of an album is stored only in your browser's loca
 * Only load as much collection as needed (remember where you left off)
 * Third option: add back to the queue for another listen
 * Use normal Rdio album controls, but add some of our own
-* Triage for new releases (heart goes into queue instead of collection)
 * Sort high if other albums from same artist in collection; low if not and others in dustbin
+
+# Wishlist
+
+* Triage for new releases (heart goes into queue instead of collection)
+* Triage related, based on an artist/album
+* Triage albums from activity in your network
+* Triage new albums from artists in your collection
+
