@@ -1,4 +1,4 @@
-/*globals R, Main */
+/*globals R, Main, Modernizr */
 
 (function() {
 
@@ -102,9 +102,25 @@
       this.$results.empty();
       
       _.each(albums, function(album) {
+        album.appUrl = album.shortUrl.replace("http", "rdio");        
         var $el = $(self.albumTemplate(album))
           .appendTo(self.$results);
-          
+        
+        if (Modernizr.touch) {  
+          $el.click(function() {
+            if (!$el.hasClass("hover")) {
+              $(".album").not($el).removeClass("hover");
+              $el.addClass("hover");
+            }
+          });
+        } else {
+          $el.hover(function() {
+            $el.addClass("hover");
+          }, function() {
+            $el.removeClass("hover");
+          });
+        }
+        
         $el.find(".play")
           .click(function() {
             R.player.play({source: album.key});

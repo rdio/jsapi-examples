@@ -6,7 +6,7 @@
 
 /* --------- */
 .header {
-  height: 100px;
+  overflow: hidden;
   padding: 10px;
   background: #ddd;
 }
@@ -38,10 +38,11 @@
 /* --------- */
 .results {
   padding: 10px;
+  text-align: center;
 }
 
 .album {
-  float: left;
+  display: inline-block;
   position: relative;
   margin: 0 20px 20px 0;
   width: 200px;
@@ -57,7 +58,9 @@
 
 .album .label {
   text-align: center;
-  height: 1em;
+  height: 1.3em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   overflow: hidden;
 }
 
@@ -65,27 +68,37 @@
   color: #555;
 }
 
-.album .btn {
+.album .buttons {
   display: none;
-  z-index: 10;  
+  position: absolute;
+  z-index: 10; 
+  text-align: center; 
 }
 
-.album:hover .btn {
+.album.hover .buttons {
   display: block;
 }
 
 .album .btn {
-  width: 40px;
-  height: 40px;
-  border: 1px solid #333;
+  padding: 10px;
+  margin-top: 20px;
+  width: 80%;
+  background: rgba(255, 255, 255, 0.85);
   cursor: pointer;
-  background: no-repeat center center #aaa;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+  color: #000;
+  display: inline-block;
+  -webkit-border-radius: 6px; /* Safari 3-4, iOS 1-3.2, Android ≤1.6 */
+  border-radius: 6px; /* Opera 10.5, IE9+, Safari 5, Chrome, Firefox 4+, iOS 4, Android 2.1+ */
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.2); /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
+  box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.2); /* Opera 10.5, IE9+, Firefox 4+, Chrome 6+, iOS 5 */
 }
 
-.album .btn.play {
-  position: absolute;
-  left: 10px;
-  bottom: 50px;
-  background-image: url(../img/sample.png); 
+.album a.btn, 
+.album a.btn:visited,
+.album a.btn:hover,
+.album a.btn:active {
+  text-decoration: none;
 }
 

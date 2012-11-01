@@ -2,21 +2,26 @@
 <html>
   <head>
     <title>Simple Player</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="stylesheet" type="text/css" href="lib/normalize.css">
     <link rel="stylesheet" type="text/css" href="style/main.css">
     <script src="https://rdio.com/api/api.js?client_id=ppJo1acOvcWl8ZlpTnXUkA"></script>
     <script src="lib/jquery-1.8.2.min.js"></script>
+    <script src="lib/modernizr.touch.js"></script>
     <script src="lib/underscore-min.js"></script>
     <script src="js/main.js"></script>
     <script id="album-template" type="text/template">
-      <div class="album">
-        <div class="play btn"></div>
-        <a href="http://rdio.com<%= url %>" target="_blank">
-          <div class="icon" style="background-image: url(<%= icon %>)"></div>
-        </a>
+      <span class="album">
+        <div class="buttons">
+          <span class="play btn">Play Album</span>
+          <a href="http://rdio.com<%= url %>" target="_blank" class="site btn">View on Rdio.com</a>
+          <a href="<%= appUrl %>" target="_blank" class="app btn">View in Rdio app</a>
+        </div>
+        <div class="icon" style="background-image: url(<%= icon %>)"></div>
         <div class="title label"><%= name %></div>
         <div class="artist label"><%= artist %></div>
-      </div>
+      </span>
     </script>
   </head>
   <body>
