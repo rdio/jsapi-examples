@@ -13,12 +13,13 @@
     <script src="js/main.js"></script>
     <script id="album-template" type="text/template">
       <span class="album">
-        <div class="buttons">
-          <span class="play btn">Play Album</span>
-          <a href="http://rdio.com<%= url %>" target="_blank" class="site btn">View on Rdio.com</a>
-          <a href="<%= appUrl %>" target="_blank" class="app btn">View in Rdio app</a>
+        <div class="icon" style="background-image: url(<%= icon %>)">
+          <div class="buttons">
+            <span class="play btn">Play Album</span>
+            <a href="http://rdio.com<%= url %>" target="_blank" class="site btn">View on Rdio.com</a>
+            <a href="<%= appUrl %>" target="_blank" class="app btn">View in Rdio app</a>
+          </div>          
         </div>
-        <div class="icon" style="background-image: url(<%= icon %>)"></div>
         <div class="title label"><%= name %></div>
         <div class="artist label"><%= artist %></div>
       </span>

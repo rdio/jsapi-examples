@@ -11,10 +11,17 @@
       this.$results = $(".results");
       this.albumTemplate = _.template($("#album-template").text());
 
-      _.defer(function() {
-        self.$input.focus();
-      });
-        
+      if (Modernizr.touch) {
+        self.$results
+          .click(function() {
+            $(".album").removeClass("hover");          
+          });
+      } else {
+        _.defer(function() {
+          self.$input.focus();
+        });
+      }
+              
       $(".search")
         .submit(function(event) {
           event.preventDefault();
@@ -106,15 +113,17 @@
         var $el = $(self.albumTemplate(album))
           .appendTo(self.$results);
         
+        var $cover = $el.find(".icon");
         if (Modernizr.touch) {  
-          $el.click(function() {
+          $cover.click(function(event) {
+            event.stopPropagation();
             if (!$el.hasClass("hover")) {
               $(".album").not($el).removeClass("hover");
               $el.addClass("hover");
             }
           });
         } else {
-          $el.hover(function() {
+          $cover.hover(function() {
             $el.addClass("hover");
           }, function() {
             $el.removeClass("hover");
