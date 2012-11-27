@@ -1,3 +1,7 @@
+# About
+
+This app gives a more visual way to browse your Rdio collection with your mobile device.
+
 # Todo: high
 
 # Todo: normal
