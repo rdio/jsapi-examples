@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Collection Browser</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" type="text/css" href="lib/normalize.css">
+    <link rel="stylesheet/less" type="text/css" href="style/main.less">
+    <script src="https://rdio.com/api/api.js?client_id=_vwOqj6dNz2CzZysDPpZDA"></script>
+    <script src="lib/jquery-1.8.2.min.js"></script>
+    <script src="lib/underscore-min.js"></script>
+    <script src="lib/less-1.3.0.min.js"></script>
+    <script src="lib/spin.min.js"></script>
+    <script src="js/album.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/collection.js"></script>
+
+    <script id="album-template" type="text/template">
+      <div class="album">
+        <a href="{{ appUrl }}"><img src="{{ icon }}"></a>
+        <div class="label"><strong>{{ name }}</strong></div>
+        <div class="label">{{ artist }}</div>
+      </div>
+    </script>
+
+    <script id="no-rdio-template" type="text/template">
+      <p>Unable to contact Rdio API.</p>
+    </script>
+
+    <script id="unauthenticated-template" type="text/template">
+      <p>This app gives a more visual way to browse music on Rdio with your mobile device.</p>
+      <p>To get started, you'll have to <button id="authenticate">authorize</button>.</p>
+    </script>
+
+    <script id="collection-template" type="text/template">
+      <div class="header">
+        Sort by:
+        <select id="sort">
+          <option value="playCount">Play Count</option>
+          <option value="dateAdded">Date Added</option>
+          <option value="name">Album Name</option>
+          <option value="artist">Artist Name</option>
+        </select> 
+      </div>
+      <div class="albums">
+      </div>
+    </script>
+
+  </head>
+  <body>
+    <div id="content"></div>
+  </body>
+</html>
