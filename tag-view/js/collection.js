@@ -1,4 +1,4 @@
-/*globals Main, R, Backbone */
+/*globals Main, R, Backbone, amplify */
 
 (function() {
 
@@ -6,15 +6,36 @@
     initialize: function() {
       var self = this;
       this.start = 0;
-      this.count = 100;
+      this.count = 20;
       this.loading = false;
       this.done = false;
+      
+      var stored = amplify.store('albums');
+      if (stored && stored.models) {
+        _.each(stored.models, function(v, i) {
+          self.addAlbum(v);
+        });
+      }
       
       R.on('change:authenticated', function(authenticated) {
         if (authenticated) {
           self.loadMore();
         }
       });
+    },
+    
+    addAlbum: function(data) {
+      if (!data.canStream) {
+        return;
+      }
+      
+      var albums = this.where({key: data.key});
+      if (albums.length) {
+        return;
+      }
+      
+      var album = new Main.Models.Album(data);
+      this.add(album);
     },
     
     loadMore: function() {
@@ -39,20 +60,22 @@
           self.start += self.count;
           if (data && data.result && data.result.length) {
             _.each(data.result, function(v, i) {
-              if (!v.canStream) {
-                return;
-              }
-              
-              var album = new Main.Models.Album(v);
-              self.add(album);
+              self.addAlbum(v);
             });
-            
-            self.loadMore();
+
+            self.save();            
+/*             self.loadMore(); */
           } else {
             self.done = true;
           }
         }
       });      
+    },
+    
+    save: function() {
+      amplify.store('albums', {
+        models: this.toJSON()
+      });
     }
   });
 

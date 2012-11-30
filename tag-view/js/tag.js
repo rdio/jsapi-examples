@@ -31,6 +31,10 @@
           self.add(tag);
         });
       }
+      
+      R.ready(function() {
+        self.loadNextAlbum();
+      });
     },
     
     comparator: function(a, b) {
@@ -49,10 +53,7 @@
     
     addAlbum: function(album) {
       this.albumsToLoad.push(album);
-      if (!this.loading) {
-        this.loadNextAlbum();
-      }
-/*       var tags = this.where() */
+      this.loadNextAlbum();
     },
     
     addTag: function(config) {
@@ -79,7 +80,7 @@
     loadNextAlbum: function() {
       var self = this;
       
-      if (this.loading) {
+      if (this.loading || !R.ready()) {
         return;
       }
       

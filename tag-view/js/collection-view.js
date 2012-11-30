@@ -10,10 +10,12 @@
       this.$tags = this.$el.find('.tags');
       this.albumViews = [];
       
+      Main.collection.each(function(v, i) {
+        self.addAlbum(v);
+      });
+      
       Main.collection.on('add', function(album) {
-        var albumView = new Main.Views.Album(album);
-        self.$albums.append(albumView.$el);
-        self.albumViews.push(albumView);
+        self.addAlbum(album);
       });
       
       var debouncedRenderTags = _.debounce(_.bind(this.renderTags, this), 100);
@@ -25,6 +27,14 @@
 
         debouncedRenderTags();
       });
+      
+      this.renderTags();
+    },
+    
+    addAlbum: function(album) {
+      var albumView = new Main.Views.Album(album);
+      this.$albums.append(albumView.$el);
+      this.albumViews.push(albumView);
     },
     
     renderTags: function() {
