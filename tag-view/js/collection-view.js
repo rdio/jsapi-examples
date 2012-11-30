@@ -6,8 +6,8 @@
     init: function() {
       var self = this;
       this.$el = $('#content');
-      this.$albums = this.$el.find('.albums');
-      this.$tags = this.$el.find('.tags');
+      this.$albums = this.$el.find('.albums .inner');
+      this.$tags = this.$el.find('.tags .inner');
       this.albumViews = [];
       
       this.$tags.on("click", ".tag", function(event) {
