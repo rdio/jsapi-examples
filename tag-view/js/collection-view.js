@@ -10,6 +10,10 @@
       this.$tags = this.$el.find('.tags');
       this.albumViews = [];
       
+      this.$tags.on("click", ".tag", function(event) {
+        self.selectTag($(event.target).data('tag')); 
+      });
+      
       Main.collection.each(function(v, i) {
         self.addAlbum(v);
       });
@@ -35,8 +39,16 @@
       Main.tags.each(function(v, i) {
         var count = v.get('count');
         if (count > 1) {
-          self.$tags.append('<p class="tag">' + v.get('name') + ' (' + count + ')</p>');        
+          var $tag = $('<p class="tag">' + v.get('name') + ' (' + count + ')</p>')
+            .data('tag', v)
+            .appendTo(self.$tags);
         }
+      });
+    },
+    
+    selectTag: function(tag) {
+      _.each(this.albumViews, function(v, i) {
+        v.toggle(tag.get('albums').indexOf(v.model) != -1);
       });
     }
   };

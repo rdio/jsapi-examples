@@ -6,7 +6,7 @@
     initialize: function() {
       var self = this;
       this.start = 0;
-      this.count = 20;
+      this.count = 30;
       this.loading = false;
       this.done = false;
       

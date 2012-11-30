@@ -28,7 +28,13 @@
       .click(function() {
         R.player.play({source: self.model.get('key')});
       });
-    };
+  };
+    
+  Main.Views.Album.prototype = {
+    toggle: function(flag) {
+      this.$el.toggle(flag);
+    }
+  }; 
   
   _.extend(Main.Views.Album, {
     init: function() {
