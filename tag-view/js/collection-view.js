@@ -11,7 +11,10 @@
       this.albumViews = [];
       
       this.$tags.on("click", ".tag", function(event) {
-        self.selectTag($(event.target).data('tag')); 
+        var $target = $(event.target);
+        self.selectTag($target.data('tag'));
+        self.$el.find('.tag').not($target).removeClass('selected');
+        $target.addClass('selected');
       });
       
       Main.collection.each(function(v, i) {
