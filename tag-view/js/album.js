@@ -7,6 +7,8 @@
       this.set({
         appUrl: this.get('shortUrl').replace("http", "rdio")
       });
+      
+      Main.tags.addAlbum(this);
     }
   });
 
