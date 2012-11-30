@@ -3,9 +3,20 @@
 (function() {
 
   Main.Models.Tag = Backbone.Model.extend({
+    defaults: {
+      albumKeys: []
+    },
+    
     initialize: function() {
-      this.set({
-        albums: new Backbone.Collection()
+      var self = this;
+
+      var albums = new Backbone.Collection();
+
+      this.set({albums: albums});
+      this.set({count: this._albumCount()});
+
+      albums.on('add', function() {
+        self.set({count: self._albumCount()});
       });
     },
     
@@ -14,6 +25,19 @@
       if (albums.indexOf(album) == -1) {
         albums.add(album);
       }
+    },
+    
+    _albumCount: function() {
+      return Math.max(this.get('albumKeys').length, this.get('albums').length);
+    },
+    
+    toJSON: function() {
+      return {
+        name: this.get('name'),
+        albumKeys: this.get('albums').map(function(v, i) {
+          return v.get('key');
+        })
+      };
     }
   });
 
@@ -25,8 +49,8 @@
       this.blacklist = ['all', 'spotify'];
       
       var stored = amplify.store('tags');
-      if (stored) {
-        _.each(stored.tags, function(v, i) {
+      if (stored && stored.models) {
+        _.each(stored.models, function(v, i) {
           var tag = new Main.Models.Tag(v);
           self.add(tag);
         });
@@ -35,11 +59,15 @@
       R.ready(function() {
         self.loadNextAlbum();
       });
+      
+      this.on('add change:count', _.debounce(function() {
+        self.save();
+      }, 100));
     },
     
     comparator: function(a, b) {
-      var al = a.get('albums').length;
-      var bl = b.get('albums').length;
+      var al = a.get('count');
+      var bl = b.get('count');
       if (al > bl) {
         return -1;
       } else if (bl > al) {
@@ -52,8 +80,18 @@
     },
     
     addAlbum: function(album) {
-      this.albumsToLoad.push(album);
-      this.loadNextAlbum();
+      var tags = this.filter(function(v, i) {
+        return _.indexOf(v.get('albumKeys'), album.get('key')) != -1;
+      });
+      
+      if (tags.length) {
+        _.each(tags, function(v, i) {
+          v.addAlbum(album);
+        });
+      } else {
+        this.albumsToLoad.push(album);
+        this.loadNextAlbum();
+      }
     },
     
     addTag: function(config) {
@@ -113,8 +151,13 @@
         
         self.loadNextAlbum();
       });
-    }
+    },
     
+    save: function() {
+      amplify.store('tags', {
+        models: this.toJSON()
+      });
+    }
   });
 
 })();

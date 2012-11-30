@@ -18,16 +18,7 @@
         self.addAlbum(album);
       });
       
-      var debouncedRenderTags = _.debounce(_.bind(this.renderTags, this), 100);
-      
-      Main.tags.on('add', function(tag) {
-        tag.get('albums').on('add', function() {
-          debouncedRenderTags();
-        });
-
-        debouncedRenderTags();
-      });
-      
+      Main.tags.on('add change:count', _.debounce(_.bind(this.renderTags, this), 100));
       this.renderTags();
     },
     
@@ -42,7 +33,7 @@
       self.$tags.empty();
       Main.tags.sort();
       Main.tags.each(function(v, i) {
-        var count = v.get('albums').length;
+        var count = v.get('count');
         if (count > 1) {
           self.$tags.append('<p class="tag">' + v.get('name') + ' (' + count + ')</p>');        
         }
