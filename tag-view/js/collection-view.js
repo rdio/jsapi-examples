@@ -32,7 +32,10 @@
       self.$tags.empty();
       Main.tags.sort();
       Main.tags.each(function(v, i) {
-        self.$tags.append('<p class="tag">' + v.get('name') + ' (' + v.get('albums').length + ')</p>');        
+        var count = v.get('albums').length;
+        if (count > 1) {
+          self.$tags.append('<p class="tag">' + v.get('name') + ' (' + count + ')</p>');        
+        }
       });
     }
   };

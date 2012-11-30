@@ -10,7 +10,10 @@
     },
     
     addAlbum: function(album) {
-      this.get('albums').add(album);
+      var albums = this.get('albums');
+      if (albums.indexOf(album) == -1) {
+        albums.add(album);
+      }
     }
   });
 
@@ -19,6 +22,8 @@
       var self = this;
       this.albumsToLoad = [];
       this.loading = false;
+      this.blacklist = ['all', 'spotify'];
+      
       var stored = amplify.store('tags');
       if (stored) {
         _.each(stored.tags, function(v, i) {
@@ -95,10 +100,13 @@
         self.loading = false;
         _.each(data.toptags.tag, function(v, i) {
           if (v.count >= 1) {
-            self.addTag({
-              name: v.name.toLowerCase(),
-              album: album
-            });
+            var tagName = v.name.toLowerCase().replace('-', ' ');
+            if (_.indexOf(self.blacklist, tagName) == -1) {
+              self.addTag({
+                name: tagName,
+                album: album
+              });
+            }
           }
         });
         
