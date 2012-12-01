@@ -48,21 +48,35 @@
       this.loading = false;
       this.blacklist = ['all', 'spotify'];
       
-      var stored = amplify.store('tags');
-      if (stored && stored.models) {
-        _.each(stored.models, function(v, i) {
-          var tag = new Main.Models.Tag(v);
-          self.add(tag);
-        });
-      }
-      
-      R.ready(function() {
-        self.loadNextAlbum();
-      });
-      
+      this.stored = amplify.store('tags');
+      this._loadStored();
+            
       this.on('add change:count', _.debounce(function() {
         self.save();
       }, 100));
+    },
+    
+    _loadStored: function() {
+      var self = this;
+      
+      if (!this.stored || !this.stored.models || !this.stored.models.length) {
+        this.stored = null;
+
+        R.ready(function() {
+          self.loadNextAlbum();
+        });
+
+        return;
+      }
+      
+      for(var i = 0; i < 100; i++) {
+        var data = this.stored.models.shift();
+        if (data) {
+          this.add(new Main.Models.Tag(data));
+        }
+      }
+      
+      _.delay(_.bind(this._loadStored, this), 100);
     },
     
     comparator: function(a, b) {
@@ -118,7 +132,7 @@
     loadNextAlbum: function() {
       var self = this;
       
-      if (this.loading || !R.ready()) {
+      if (this.loading || this.stored || !R.ready()) {
         return;
       }
       

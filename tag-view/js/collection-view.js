@@ -26,7 +26,11 @@
         self.addAlbum(album);
       });
       
-      Main.tags.on('add change:count', _.debounce(_.bind(this.renderTags, this), 100));
+      Main.tags.on('add change:count', _.debounce(function() {
+        self.renderTags();
+        self.updateAlbums();
+      }, 100));
+      
       this.renderTags();
     },
     
@@ -61,6 +65,11 @@
     
     selectTag: function(tag) {
       this.selectedTag = tag;
+      this.updateAlbums();
+    },
+
+    updateAlbums: function() {
+      var tag = this.selectedTag;
       _.each(this.albumViews, function(v, i) {
         var show = (!tag || tag.get('albums').indexOf(v.model) != -1);
         v.toggle(show);

@@ -6,7 +6,7 @@
     initialize: function() {
       var self = this;
       this.start = 0;
-      this.count = 30;
+      this.count = 100;
       this.loading = false;
       this.done = false;
       
@@ -63,8 +63,8 @@
               self.addAlbum(v);
             });
 
-            self.save();            
-/*             self.loadMore(); */
+            self.save();
+            self.loadMore();
           } else {
             self.done = true;
           }
