@@ -72,7 +72,7 @@
         this._loadOneStored();
       }
       
-      _.delay(_.bind(this._loadStored, this), 200);
+      _.delay(_.bind(this._loadStored, this), 100);
     },
     
     _loadOneStored: function() {
