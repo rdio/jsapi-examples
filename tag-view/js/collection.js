@@ -10,7 +10,7 @@
       this.loading = false;
       this.done = false;
       
-      var stored = amplify.store('albums');
+      var stored = (Main.resetFlag ? null : amplify.store('albums'));
       if (stored && stored.models) {
         _.each(stored.models, function(v, i) {
           self.addAlbum(v);
@@ -64,7 +64,7 @@
             });
 
             self.save();
-            self.loadMore();
+/*             self.loadMore(); */
           } else {
             self.done = true;
           }

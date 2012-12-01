@@ -29,9 +29,13 @@
       Main.tags.on('add change:count', _.debounce(function() {
         self.renderTags();
         self.updateAlbums();
-      }, 100));
+      }, 10));
       
       this.renderTags();
+        
+      _.defer(function() {
+        Main.tags._loadStored();
+      });
     },
     
     addAlbum: function(album) {

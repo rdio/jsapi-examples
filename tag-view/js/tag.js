@@ -48,8 +48,13 @@
       this.loading = false;
       this.blacklist = ['all', 'spotify'];
       
-      this.stored = amplify.store('tags');
-      this._loadStored();
+      this.stored = (Main.resetFlag ? null : amplify.store('tags'));
+      
+/*
+      R.ready(function() {
+        self._loadStored();
+      });
+*/
             
       this.on('add change:count', _.debounce(function() {
         self.save();
@@ -57,26 +62,35 @@
     },
     
     _loadStored: function() {
-      var self = this;
-      
       if (!this.stored || !this.stored.models || !this.stored.models.length) {
         this.stored = null;
-
-        R.ready(function() {
-          self.loadNextAlbum();
-        });
-
+        this.loadNextAlbum();
         return;
       }
       
-      for(var i = 0; i < 100; i++) {
-        var data = this.stored.models.shift();
-        if (data) {
-          this.add(new Main.Models.Tag(data));
-        }
+      for(var i = 0; i < 50; i++) {
+        this._loadOneStored();
       }
       
-      _.delay(_.bind(this._loadStored, this), 100);
+      _.delay(_.bind(this._loadStored, this), 200);
+    },
+    
+    _loadOneStored: function() {
+      var self = this;
+      var data = this.stored.models.shift();
+      if (data) {
+        var tag = new Main.Models.Tag(data);
+        this.add(tag);
+        _.each(tag.get('albumKeys'), function(key) {
+          _.each(Main.collection.where({key: key}), function(album) {
+            tag.addAlbum(album);
+            var index = _.indexOf(self.albumsToLoad, album);
+            if (index != -1) {
+              self.albumsToLoad.splice(index, 1);
+            }
+          });
+        });
+      }
     },
     
     comparator: function(a, b) {
@@ -152,7 +166,7 @@
       $.getJSON(url, function (data) {
         self.loading = false;
         _.each(data.toptags.tag, function(v, i) {
-          if (v.count >= 1) {
+          if (v.count >= 3) {
             var tagName = v.name.toLowerCase().replace('-', ' ');
             if (_.indexOf(self.blacklist, tagName) == -1) {
               self.addTag({
