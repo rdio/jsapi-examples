@@ -8,14 +8,41 @@
       this.$el = $('#content');
       this.$albums = this.$el.find('.albums .inner');
       this.$tags = this.$el.find('.tags .inner');
+      this.$albumTags = this.$el.find('.album-tags');
+      this.$allTags = this.$el.find('.all-tags');
       this.albumViews = [];
       this.selectedTag = null;
       
-      this.$tags.on("click", ".tag", function(event) {
+      this.$allTags.on("click", ".tag", function(event) {
         var $target = $(event.target);
         self.selectTag($target.data('tag'));
         self.$el.find('.tag').not($target).removeClass('selected');
         $target.addClass('selected');
+      });
+      
+      this.$albums.on('mouseenter', '.album', function(event) {
+        var $album = $(event.currentTarget);        
+        var album = $album.data('album');
+
+        self.$allTags.hide();
+        self.$albumTags
+          .show()
+          .empty()
+          .append('<p>Tags for ' + album.get('name') + ':</p>');
+        
+        var tags = album.get('tags');
+        if (!tags.length) {
+          self.$albumTags.append('<p>Not loaded yet</p>');  
+        } else {
+          _.each(tags, function(v, i) {
+            self.$albumTags.append('<p>' + v + '</p>');
+          });
+        }
+      });
+      
+      this.$albums.on('mouseleave', '.album', function(event) {
+        self.$allTags.show();
+        self.$albumTags.hide();
       });
       
       _.each(Main.collection.models, function(v, k) {
@@ -38,14 +65,15 @@
     
     addAlbum: function(album) {
       var albumView = new Main.Views.Album(album);
+      albumView.$el.data('album', album);
       this.$albums.append(albumView.$el);
-      this.albumViews.push(albumView);
+      this.albumViews.push(albumView);      
     },
     
     renderTags: function() {
       var self = this;
       
-      this.$tags.empty();
+      this.$allTags.empty();
       
       this.renderTag('all', Main.collection.length, null);
       
@@ -81,7 +109,7 @@
       var $tag = $('<p class="tag">' + name + ' (' + count + ')</p>')
         .data('tag', tag)
         .toggleClass('selected', this.selectedTag == tag)
-        .appendTo(this.$tags);
+        .appendTo(this.$allTags);
     },
     
     selectTag: function(tag) {
@@ -90,26 +118,51 @@
     },
 
     updateAlbums: function() {
+      var self = this;
       var tag = this.selectedTag;
+      
+/*
+      this.shownAlbums = [];
+      this.shownTags = {};
+*/
+      
       _.each(this.albumViews, function(v, i) {
         var show = (!tag || tag.get('albumKeys').indexOf(v.model.get('key')) != -1);
         v.toggle(show);
+/*
+        if (show) {
+          self.shownAlbums.push(v.model);
+          _.each(v.model.get('tags'), function(v2, i2) {
+            var tag2 = self.shownTags[v2];
+            if (!tag2) {
+              tag2 = {
+                count: 0
+              };
+              
+              self.shownTags[v2] = tag2;
+            }
+            
+            tag2.count++;
+          });
+        }
+*/
       });
 
       this.updateAlbumCovers();
     },
     
     updateAlbumCovers: function() {
-      return;
+/*
       var wh = $(window).height();
       _.each(this.albumViews, function(v, i) {
         var pos = v.$el.position();
         if (pos.top < wh) {
-/*           if (!$album.css('background-image')) { */
+          if (!$album.css('background-image')) {
             v.$cover.css('background-image', v.model.get('icon'));
-/*           } */
+          }
         }
       });
+*/
     }
   };
 
