@@ -28,7 +28,7 @@
         self.$albumTags
           .show()
           .empty()
-          .append('<p>Tags for ' + album.get('name') + ':</p>');
+          .append('<p><strong>Tags for ' + album.get('name') + ':</strong></p>');
         
         var tags = album.get('tags');
         if (!tags.length) {
