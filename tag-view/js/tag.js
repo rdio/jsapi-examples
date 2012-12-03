@@ -3,50 +3,36 @@
 (function() {
 
   Main.Models.Tag = Backbone.Model.extend({
-    defaults: {
-      albumKeys: []
-    },
-    
     initialize: function() {
-      var self = this;
-
-      var albums = new Backbone.Collection();
-
-      this.set({albums: albums});
-      this.set({count: this._albumCount()});
-
-      albums.on('add', function() {
-        self.set({count: self._albumCount()});
-      });
-    },
-    
-    addAlbum: function(album) {
-      var albums = this.get('albums');
-      if (albums.indexOf(album) == -1) {
-        albums.add(album);
+      if (!this.get('albumKeys')) {
+        this.set({albumKeys: []});
       }
     },
     
-    _albumCount: function() {
-      return Math.max(this.get('albumKeys').length, this.get('albums').length);
+    addAlbumKey: function(albumKey) {
+      var albumKeys = this.get('albumKeys');
+      if (_.indexOf(albumKeys, albumKey) == -1) {
+        albumKeys.push(albumKey);
+        this.trigger('change:count');
+      }
     },
     
     toJSON: function() {
       return {
         name: this.get('name'),
-        albumKeys: this.get('albums').map(function(v, i) {
-          return v.get('key');
-        })
+        albumKeys: this.get('albumKeys')
       };
     }
   });
 
-  Main.Models.TagCollection = Backbone.Collection.extend({
+  Main.tags = _.extend({
     initialize: function() {
       var self = this;
       this.albumsToLoad = [];
       this.loading = false;
       this.blacklist = ['all', 'spotify'];
+      this.models = {};
+      this.length = 0;
       
       this.stored = (Main.resetFlag ? null : amplify.store('tags'));
       
@@ -79,68 +65,29 @@
       var self = this;
       var data = this.stored.models.shift();
       if (data) {
-        var tag = new Main.Models.Tag(data);
-        this.add(tag);
-        _.each(tag.get('albumKeys'), function(key) {
-          var album = Main.collection.models[key];
-          if (album) {
-            tag.addAlbum(album);
-            var index = _.indexOf(self.albumsToLoad, album);
-            if (index != -1) {
-              self.albumsToLoad.splice(index, 1);
-            }
-          }
-        });
-      }
-    },
-    
-    comparator: function(a, b) {
-      var al = a.get('count');
-      var bl = b.get('count');
-      if (al > bl) {
-        return -1;
-      } else if (bl > al) {
-        return 1;
-      } else if (a.get('name') > b.get('name')) {
-        return 1;
-      } else {
-        return -1;
+        this.addTag(data);
       }
     },
     
     addAlbum: function(album) {
-      var tags = this.filter(function(v, i) {
-        return _.indexOf(v.get('albumKeys'), album.get('key')) != -1;
-      });
-      
-      if (tags.length) {
-        _.each(tags, function(v, i) {
-          v.addAlbum(album);
-        });
-      } else {
-        this.albumsToLoad.push(album);
-        this.loadNextAlbum();
-      }
+      this.albumsToLoad.push(album);
+      this.loadNextAlbum();
     },
     
     addTag: function(config) {
-      var tags = this.where({
-        name: config.name
-      });
-      
-      var tag;
-      if (tags.length) {
-        tag = tags[0];
-      } else {
-        tag = new Main.Models.Tag({
-          name: config.name
-        });
+      var self = this;
+      var tag = this.models[config.name];
+      if (!tag) {
+        tag = new Main.Models.Tag(config);
+        this.models[config.name] = tag;
+        this.length++;
+        this.trigger('add', tag);
         
-        this.add(tag);
+        tag.on('change:count', _.debounce(function() {
+          self.trigger('change:count');
+        }, 10)); 
       }
       
-      tag.addAlbum(config.album);
-
       return tag;
     },
     
@@ -170,10 +117,12 @@
           if (v.count >= 3) {
             var tagName = v.name.toLowerCase().replace('-', ' ');
             if (_.indexOf(self.blacklist, tagName) == -1) {
-              self.addTag({
-                name: tagName,
-                album: album
+              var tag = self.addTag({
+                name: tagName
               });
+              
+              tag.addAlbumKey(album.get('key'));
+              album.addTag(tagName);
             }
           }
         });
@@ -184,9 +133,11 @@
     
     save: function() {
       amplify.store('tags', {
-        models: this.toJSON()
+        models: _.map(this.models, function(v, i) {
+          return v.toJSON();
+        })
       });
     }
-  });
+  }, Backbone.Events);
 
 })();

@@ -17,7 +17,7 @@
       }
 
       this.resetFlag = (location.search.search('reset=true') != -1); 
-      this.tags = new this.Models.TagCollection();
+      this.tags.initialize();
       this.collection.initialize();
       this.Views.Album.init();
 

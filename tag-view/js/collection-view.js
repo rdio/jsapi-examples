@@ -51,11 +51,29 @@
       
       this.renderTag('all', Main.collection.length, null);
       
-      Main.tags.sort();
-      Main.tags.each(function(v, i) {
-        var count = v.get('count');
+      var tags = _.map(Main.tags.models, function(v, k) {
+        return {
+          name: k,
+          count: v.get('albumKeys').length
+        };
+      });
+      
+      tags.sort(function(a, b) {
+        if (a.count > b.count) {
+          return -1;
+        } else if (b.count > a.count) {
+          return 1;
+        } else if (a.name > b.name) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+      
+      _.each(tags, function(v, i) {
+        var count = v.count;
         if (count > 1) {
-          self.renderTag(v.get('name'), count, v);
+          self.renderTag(v.name, count, v);
         }
       });
     },

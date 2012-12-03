@@ -39,6 +39,8 @@
       this.models[data.key] = album;
       this.length++;
       this.trigger('add', album);
+      
+      album.on('change:count', _.debounce(_.bind(this.save, this), 10));
     },
     
     loadMore: function() {
@@ -76,11 +78,13 @@
     },
     
     save: function() {
-      amplify.store('albums', {
+      var data = {
         models: _.map(this.models, function(v, i) {
           return v.toJSON();
         })
-      });
+      };
+      
+      amplify.store('albums', data);
     }
   }, Backbone.Events);
 
