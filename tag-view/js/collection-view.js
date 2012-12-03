@@ -24,6 +24,7 @@
       
       Main.collection.on('add', function(album) {
         self.addAlbum(album);
+        self.updateAlbumCovers();
       });
       
       Main.tags.on('add change:count', _.debounce(function() {
@@ -32,6 +33,7 @@
       }, 10));
       
       this.renderTags();
+      this.updateAlbumCovers();
         
       _.defer(function() {
         Main.tags._loadStored();
@@ -54,7 +56,8 @@
       var tags = _.map(Main.tags.models, function(v, k) {
         return {
           name: k,
-          count: v.get('albumKeys').length
+          count: v.get('albumKeys').length,
+          tag: v
         };
       });
       
@@ -73,7 +76,7 @@
       _.each(tags, function(v, i) {
         var count = v.count;
         if (count > 1) {
-          self.renderTag(v.name, count, v);
+          self.renderTag(v.name, count, v.tag);
         }
       });
     },
@@ -93,8 +96,23 @@
     updateAlbums: function() {
       var tag = this.selectedTag;
       _.each(this.albumViews, function(v, i) {
-        var show = (!tag || tag.get('albums').indexOf(v.model) != -1);
+        var show = (!tag || tag.get('albumKeys').indexOf(v.model.get('key')) != -1);
         v.toggle(show);
+      });
+
+      this.updateAlbumCovers();
+    },
+    
+    updateAlbumCovers: function() {
+      return;
+      var wh = $(window).height();
+      _.each(this.albumViews, function(v, i) {
+        var pos = v.$el.position();
+        if (pos.top < wh) {
+/*           if (!$album.css('background-image')) { */
+            v.$cover.css('background-image', v.model.get('icon'));
+/*           } */
+        }
       });
     }
   };

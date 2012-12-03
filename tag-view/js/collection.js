@@ -6,7 +6,7 @@
     initialize: function() {
       var self = this;
       this.start = 0;
-      this.count = 300;
+      this.count = 500;
       this.loading = false;
       this.done = false;
       this.models = {};

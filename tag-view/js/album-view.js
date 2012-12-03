@@ -7,9 +7,9 @@
     this.model = album;
     this.$el = $(Main.Views.Album.template(this.model.toJSON()));
       
-    var $cover = this.$el.find(".icon");
+    this.$cover = this.$el.find(".icon");
     if (Modernizr.touch) {  
-      $cover.click(function(event) {
+      this.$cover.click(function(event) {
         event.stopPropagation();
         if (!self.$el.hasClass("hover")) {
           $(".album").not(self.$el).removeClass("hover");
@@ -17,7 +17,7 @@
         }
       });
     } else {
-      $cover.hover(function() {
+      this.$cover.hover(function() {
         self.$el.addClass("hover");
       }, function() {
         self.$el.removeClass("hover");
