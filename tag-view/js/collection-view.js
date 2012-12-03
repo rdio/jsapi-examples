@@ -7,11 +7,14 @@
       var self = this;
       this.$el = $('#content');
       this.$albums = this.$el.find('.albums .inner');
-      this.$tags = this.$el.find('.tags .inner');
+      this.$allTags = this.$el.find('.tags');
       this.$albumTags = this.$el.find('.album-tags');
-      this.$allTags = this.$el.find('.all-tags');
+      this.$allTagsInner = this.$el.find('.tags .inner');
+      this.$albumTagsInner = this.$el.find('.album-tags .inner');
       this.albumViews = [];
       this.selectedTag = null;
+      
+      this.$albumTags.hide();
       
       this.$allTags.on("click", ".tag", function(event) {
         var $target = $(event.target);
@@ -25,17 +28,17 @@
         var album = $album.data('album');
 
         self.$allTags.hide();
-        self.$albumTags
-          .show()
+        self.$albumTags.show();
+        self.$albumTagsInner
           .empty()
           .append('<p><strong>Tags for ' + album.get('name') + ':</strong></p>');
         
         var tags = album.get('tags');
         if (!tags.length) {
-          self.$albumTags.append('<p>Not loaded yet</p>');  
+          self.$albumTagsInner.append('<p>Not loaded yet</p>');  
         } else {
           _.each(tags, function(v, i) {
-            self.$albumTags.append('<p>' + v + '</p>');
+            self.$albumTagsInner.append('<p>' + v + '</p>');
           });
         }
       });
@@ -73,7 +76,7 @@
     renderTags: function() {
       var self = this;
       
-      this.$allTags.empty();
+      this.$allTagsInner.empty();
       
       this.renderTag('all', Main.collection.length, null);
       
@@ -109,7 +112,7 @@
       var $tag = $('<p class="tag">' + name + ' (' + count + ')</p>')
         .data('tag', tag)
         .toggleClass('selected', this.selectedTag == tag)
-        .appendTo(this.$allTags);
+        .appendTo(this.$allTagsInner);
     },
     
     selectTag: function(tag) {
