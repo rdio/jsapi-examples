@@ -18,7 +18,7 @@
 
       this.resetFlag = (location.search.search('reset=true') != -1); 
       this.tags = new this.Models.TagCollection();
-      this.collection = new this.Models.Collection();
+      this.collection.initialize();
       this.Views.Album.init();
 
       R.ready(function() {

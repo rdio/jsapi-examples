@@ -82,13 +82,14 @@
         var tag = new Main.Models.Tag(data);
         this.add(tag);
         _.each(tag.get('albumKeys'), function(key) {
-          _.each(Main.collection.where({key: key}), function(album) {
+          var album = Main.collection.models[key];
+          if (album) {
             tag.addAlbum(album);
             var index = _.indexOf(self.albumsToLoad, album);
             if (index != -1) {
               self.albumsToLoad.splice(index, 1);
             }
-          });
+          }
         });
       }
     },

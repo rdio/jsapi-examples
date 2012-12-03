@@ -2,13 +2,15 @@
 
 (function() {
 
-  Main.Models.Collection = Backbone.Collection.extend({
+  Main.collection = _.extend({
     initialize: function() {
       var self = this;
       this.start = 0;
       this.count = 300;
       this.loading = false;
       this.done = false;
+      this.models = {};
+      this.length = 0;
       
       var stored = (Main.resetFlag ? null : amplify.store('albums'));
       if (stored && stored.models) {
@@ -29,13 +31,14 @@
         return;
       }
       
-      var albums = this.where({key: data.key});
-      if (albums.length) {
+      if (this.models[data.key]) {
         return;
       }
       
       var album = new Main.Models.Album(data);
-      this.add(album);
+      this.models[data.key] = album;
+      this.length++;
+      this.trigger('add', album);
     },
     
     loadMore: function() {
@@ -74,9 +77,11 @@
     
     save: function() {
       amplify.store('albums', {
-        models: this.toJSON()
+        models: _.map(this.models, function(v, i) {
+          return v.toJSON();
+        })
       });
     }
-  });
+  }, Backbone.Events);
 
 })();

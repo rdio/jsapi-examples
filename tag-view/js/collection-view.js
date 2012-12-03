@@ -18,7 +18,7 @@
         $target.addClass('selected');
       });
       
-      Main.collection.each(function(v, i) {
+      _.each(Main.collection.models, function(v, k) {
         self.addAlbum(v);
       });
       
