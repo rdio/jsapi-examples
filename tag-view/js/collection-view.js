@@ -34,10 +34,6 @@
       
       this.renderTags();
       this.updateAlbumCovers();
-        
-      _.defer(function() {
-        Main.tags._loadStored();
-      });
     },
     
     addAlbum: function(album) {

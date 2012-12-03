@@ -35,38 +35,19 @@
       this.length = 0;
       
       this.stored = (Main.resetFlag ? null : amplify.store('tags'));
+      if (this.stored && this.stored.models) {
+        _.each(this.stored.models, function(v, i) {
+          self.addTag(v);
+        });
+      }
       
-/*
       R.ready(function() {
-        self._loadStored();
+        self.loadNextAlbum();
       });
-*/
             
       this.on('add change:count', _.debounce(function() {
         self.save();
       }, 100));
-    },
-    
-    _loadStored: function() {
-      if (!this.stored || !this.stored.models || !this.stored.models.length) {
-        this.stored = null;
-        this.loadNextAlbum();
-        return;
-      }
-      
-      for(var i = 0; i < 50; i++) {
-        this._loadOneStored();
-      }
-      
-      _.delay(_.bind(this._loadStored, this), 100);
-    },
-    
-    _loadOneStored: function() {
-      var self = this;
-      var data = this.stored.models.shift();
-      if (data) {
-        this.addTag(data);
-      }
     },
     
     addAlbum: function(album) {
@@ -94,7 +75,7 @@
     loadNextAlbum: function() {
       var self = this;
       
-      if (this.loading || this.stored || !R.ready()) {
+      if (this.loading || !R.ready()) {
         return;
       }
       
@@ -114,9 +95,9 @@
       $.getJSON(url, function (data) {
         self.loading = false;
         _.each(data.toptags.tag, function(v, i) {
-          if (v.count >= 3) {
+          if (v.count >= 5) {
             var tagName = v.name.toLowerCase().replace('-', ' ');
-            if (_.indexOf(self.blacklist, tagName) == -1) {
+            if (_.indexOf(self.blacklist, tagName) == -1 && tagName !== album.get('artist').toLowerCase()) {
               var tag = self.addTag({
                 name: tagName
               });
