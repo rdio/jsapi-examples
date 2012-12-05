@@ -2,7 +2,9 @@
 
 (function() {
 
+  // ==========
   Main.Models.Album = Backbone.Model.extend({
+    // ----------
     initialize: function() {
       this.set({
         appUrl: this.get('shortUrl').replace("http", "rdio")
@@ -17,6 +19,7 @@
       }
     },
     
+    // ----------
     addTag: function(tag) {
       var tags = this.get('tags');
       if (_.indexOf(tags, tag) == -1) {

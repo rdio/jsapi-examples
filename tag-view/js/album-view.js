@@ -2,6 +2,7 @@
 
 (function() {
 
+  // ==========
   Main.Views.Album = function(album) {
     var self = this;
     this.model = album;
@@ -31,12 +32,14 @@
   };
     
   Main.Views.Album.prototype = {
+    // ----------
     toggle: function(flag) {
       this.$el.toggle(flag);
     }
   }; 
   
   _.extend(Main.Views.Album, {
+    // ----------
     init: function() {
       this.template = _.template($("#album-template").text());
     }

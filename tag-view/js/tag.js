@@ -2,13 +2,16 @@
 
 (function() {
 
+  // ==========
   Main.Models.Tag = Backbone.Model.extend({
+    // ----------
     initialize: function() {
       if (!this.get('albumKeys')) {
         this.set({albumKeys: []});
       }
     },
     
+    // ----------
     addAlbumKey: function(albumKey) {
       var albumKeys = this.get('albumKeys');
       if (_.indexOf(albumKeys, albumKey) == -1) {
@@ -17,6 +20,7 @@
       }
     },
     
+    // ----------
     toJSON: function() {
       return {
         name: this.get('name'),
@@ -25,7 +29,9 @@
     }
   });
 
+  // ==========
   Main.tags = _.extend({
+    // ----------
     initialize: function() {
       var self = this;
       this.albumsToLoad = [];
@@ -50,11 +56,13 @@
       }, 100));
     },
     
+    // ----------
     addAlbum: function(album) {
       this.albumsToLoad.push(album);
       this.loadNextAlbum();
     },
     
+    // ----------
     addTag: function(config) {
       var self = this;
       var tag = this.models[config.name];
@@ -72,6 +80,7 @@
       return tag;
     },
     
+    // ----------
     loadNextAlbum: function() {
       var self = this;
       
@@ -112,6 +121,7 @@
       });
     },
     
+    // ----------
     save: function() {
       amplify.store('tags', {
         models: _.map(this.models, function(v, i) {

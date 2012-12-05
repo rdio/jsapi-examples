@@ -2,7 +2,9 @@
 
 (function() {
 
+  // ==========
   Main.views.collection = {
+    // ----------
     init: function() {
       var self = this;
       this.$el = $('#content');
@@ -66,6 +68,7 @@
       this.updateAlbumCovers();
     },
     
+    // ----------
     addAlbum: function(album) {
       var albumView = new Main.Views.Album(album);
       albumView.$el.data('album', album);
@@ -73,6 +76,7 @@
       this.albumViews.push(albumView);      
     },
     
+    // ----------
     renderTags: function() {
       var self = this;
       
@@ -108,6 +112,7 @@
       });
     },
     
+    // ----------
     renderTag: function(name, count, tag) {
       var $tag = $('<p class="tag">' + name + ' (' + count + ')</p>')
         .data('tag', tag)
@@ -115,11 +120,13 @@
         .appendTo(this.$allTagsInner);
     },
     
+    // ----------
     selectTag: function(tag) {
       this.selectedTag = tag;
       this.updateAlbums();
     },
 
+    // ----------
     updateAlbums: function() {
       var self = this;
       var tag = this.selectedTag;
@@ -154,6 +161,7 @@
       this.updateAlbumCovers();
     },
     
+    // ----------
     updateAlbumCovers: function() {
 /*
       var wh = $(window).height();

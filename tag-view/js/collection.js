@@ -2,7 +2,9 @@
 
 (function() {
 
+  // ==========
   Main.collection = _.extend({
+    // ----------
     initialize: function() {
       var self = this;
       this.start = 0;
@@ -26,6 +28,7 @@
       });
     },
     
+    // ----------
     addAlbum: function(data) {
       if (!data.canStream) {
         return;
@@ -43,6 +46,7 @@
       album.on('change:count', _.debounce(_.bind(this.save, this), 10));
     },
     
+    // ----------
     loadMore: function() {
       var self = this;
       if (this.loading || this.done) {
@@ -77,6 +81,7 @@
       });      
     },
     
+    // ----------
     save: function() {
       var data = {
         models: _.map(this.models, function(v, i) {
