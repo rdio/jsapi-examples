@@ -24,7 +24,7 @@
       var tags = this.get('tags');
       if (_.indexOf(tags, tag) == -1) {
         tags.push(tag);
-        this.trigger('change:count');
+        this.trigger('add:tag');
       }
     }    
   });

@@ -58,7 +58,7 @@
       _.debounce(_.bind(self.updateAlbumCovers, self), 10);
     });
     
-    Main.tags.on('add change:count', _.debounce(function() {
+    Main.tags.on('add child:add:album', _.debounce(function() {
       self.renderTags();
       self.updateAlbums();
     }, 10));

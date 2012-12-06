@@ -44,7 +44,7 @@
       this.length++;
       this.trigger('add', album);
       
-      album.on('change:count', _.debounce(_.bind(this.save, this), 10));
+      album.on('add:tag', _.debounce(_.bind(this.save, this), 10));
     },
     
     // ----------

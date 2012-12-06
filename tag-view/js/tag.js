@@ -16,7 +16,7 @@
       var albumKeys = this.get('albumKeys');
       if (_.indexOf(albumKeys, albumKey) == -1) {
         albumKeys.push(albumKey);
-        this.trigger('change:count');
+        this.trigger('add:album');
       }
     },
     
@@ -51,7 +51,7 @@
         self.loadNextAlbum();
       });
             
-      this.on('add change:count', _.debounce(function() {
+      this.on('add child:add:album', _.debounce(function() {
         self.save();
       }, 100));
     },
@@ -72,8 +72,8 @@
         this.length++;
         this.trigger('add', tag);
         
-        tag.on('change:count', _.debounce(function() {
-          self.trigger('change:count');
+        tag.on('add:album', _.debounce(function() {
+          self.trigger('child:add:album');
         }, 10)); 
       }
       
