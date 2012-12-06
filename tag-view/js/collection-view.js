@@ -143,6 +143,8 @@
         var show = (!tag || tag.get('albumKeys').indexOf(v.model.get('key')) != -1);
         v.toggle(show);
 /*
+        Work in progress for multi-tag select
+        
         if (show) {
           self.shownAlbums.push(v.model);
           _.each(v.model.get('tags'), function(v2, i2) {

@@ -8,10 +8,9 @@ http://iangilman.com/rdio/tag-view/
 
 ## High
 
-* Clean up and add to examples
-
-* Be able to favorite certain tags
 * Multi-tag select
+* Make tag and album subviews for collection-view
+* Be able to favorite certain tags
 * Be able to see the tags for an album in a way that allows you to click on them to find other albums in your collection with the same tag
 * When you click a tag, only show the albums from that tag and also only the tags that those albums have (with updated counts)
 * Kevin N wants: http://iangilman.com/rdio/tag-view/rknla so you can see his collection/filters
