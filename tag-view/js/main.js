@@ -8,6 +8,10 @@
     Views: {},
     views: {},
     
+    // If you use this code, please change this to your own last.fm API key,
+    // which you can get at http://www.last.fm/api/account/create  
+    lastfmKey: 'c277ae1f0edb1b0aa6d1a2398c767d70',
+    
     // ----------
     init: function() {
       var self = this;

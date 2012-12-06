@@ -99,7 +99,9 @@
         + encodeURIComponent(album.get('artist'))
         + '&album='
         + encodeURIComponent(album.get('name'))
-        + '&api_key=c277ae1f0edb1b0aa6d1a2398c767d70&format=json&callback=?';
+        + '&api_key='
+        + Main.lastfmKey
+        + '&format=json&callback=?';
           
       $.getJSON(url, function (data) {
         self.loading = false;
