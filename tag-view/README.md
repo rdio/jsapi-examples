@@ -8,6 +8,7 @@ http://iangilman.com/rdio/tag-view/
 
 ## High
 
+* Update view less frequently when loading new tags from last.fm (otherwise make UI too slow)
 * Multi-tag select
 * Make tag and album subviews for collection-view
 * Be able to favorite certain tags
