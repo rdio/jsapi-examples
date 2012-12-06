@@ -8,7 +8,8 @@
     initialize: function() {
       var self = this;
       this.start = 0;
-      this.count = 500;
+      this.count = 100;
+      this.max = 600;
       this.loading = false;
       this.done = false;
       this.models = {};
@@ -73,7 +74,10 @@
             });
 
             self.save();
-/*             self.loadMore(); */
+            
+            if (self.length < self.max) {
+              self.loadMore();
+            }
           } else {
             self.done = true;
           }

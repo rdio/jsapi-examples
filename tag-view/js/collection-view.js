@@ -57,7 +57,7 @@
       
       Main.collection.on('add', function(album) {
         self.addAlbum(album);
-        _.defer(_.bind(self.updateAlbumCovers, self));
+        _.debounce(_.bind(self.updateAlbumCovers, self), 10);
       });
       
       Main.tags.on('add change:count', _.debounce(function() {

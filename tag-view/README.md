@@ -11,7 +11,6 @@ http://iangilman.com/rdio/tag-view/
 * Clean up and add to examples
 * Separate out and comment on last.fm key
 * Main.Views versus Main.views
-* Lazy load album covers
 * Be able to favorite certain tags
 * Multi-tag select
 * Be able to see the tags for an album in a way that allows you to click on them to find other albums in your collection with the same tag
