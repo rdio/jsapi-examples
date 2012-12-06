@@ -3,75 +3,74 @@
 (function() {
 
   // ==========
-  Main.views.collection = {
-    // ----------
-    init: function() {
-      var self = this;
-      this.$el = $('#content');
-      this.$albums = this.$el.find('.albums');
-      this.$albumsInner = this.$el.find('.albums .inner');
-      this.$allTags = this.$el.find('.tags');
-      this.$albumTags = this.$el.find('.album-tags');
-      this.$allTagsInner = this.$el.find('.tags .inner');
-      this.$albumTagsInner = this.$el.find('.album-tags .inner');
-      this.albumViews = [];
-      this.selectedTag = null;
-      
-      this.$albumTags.hide();
-      
-      this.$allTags.on("click", ".tag", function(event) {
-        var $target = $(event.target);
-        self.selectTag($target.data('tag'));
-        self.$el.find('.tag').not($target).removeClass('selected');
-        $target.addClass('selected');
-      });
-      
-      this.$albums.on('mouseenter', '.album', function(event) {
-        var $album = $(event.currentTarget);        
-        var album = $album.data('album');
-
-        self.$allTags.hide();
-        self.$albumTags.show();
-        self.$albumTagsInner
-          .empty()
-          .append('<p><strong>Tags for ' + album.get('name') + ':</strong></p>');
-        
-        var tags = album.get('tags');
-        if (!tags.length) {
-          self.$albumTagsInner.append('<p>Not loaded yet</p>');  
-        } else {
-          _.each(tags, function(v, i) {
-            self.$albumTagsInner.append('<p>' + v + '</p>');
-          });
-        }
-      });
-      
-      this.$albums.on('mouseleave', '.album', function(event) {
-        self.$allTags.show();
-        self.$albumTags.hide();
-      });
-      
-      _.each(Main.collection.models, function(v, k) {
-        self.addAlbum(v);
-      });
-      
-      Main.collection.on('add', function(album) {
-        self.addAlbum(album);
-        _.debounce(_.bind(self.updateAlbumCovers, self), 10);
-      });
-      
-      Main.tags.on('add change:count', _.debounce(function() {
-        self.renderTags();
-        self.updateAlbums();
-      }, 10));
-      
-      this.$albums
-        .bind("scroll", _.debounce(_.bind(self.updateAlbumCovers, self), 100));
-
-      this.renderTags();
-      this.updateAlbumCovers();
-    },
+  Main.Views.Collection = function() {
+    var self = this;
+    this.$el = $('#content');
+    this.$albums = this.$el.find('.albums');
+    this.$albumsInner = this.$el.find('.albums .inner');
+    this.$allTags = this.$el.find('.tags');
+    this.$albumTags = this.$el.find('.album-tags');
+    this.$allTagsInner = this.$el.find('.tags .inner');
+    this.$albumTagsInner = this.$el.find('.album-tags .inner');
+    this.albumViews = [];
+    this.selectedTag = null;
     
+    this.$albumTags.hide();
+    
+    this.$allTags.on("click", ".tag", function(event) {
+      var $target = $(event.target);
+      self.selectTag($target.data('tag'));
+      self.$el.find('.tag').not($target).removeClass('selected');
+      $target.addClass('selected');
+    });
+    
+    this.$albums.on('mouseenter', '.album', function(event) {
+      var $album = $(event.currentTarget);        
+      var album = $album.data('album');
+
+      self.$allTags.hide();
+      self.$albumTags.show();
+      self.$albumTagsInner
+        .empty()
+        .append('<p><strong>Tags for ' + album.get('name') + ':</strong></p>');
+      
+      var tags = album.get('tags');
+      if (!tags.length) {
+        self.$albumTagsInner.append('<p>Not loaded yet</p>');  
+      } else {
+        _.each(tags, function(v, i) {
+          self.$albumTagsInner.append('<p>' + v + '</p>');
+        });
+      }
+    });
+    
+    this.$albums.on('mouseleave', '.album', function(event) {
+      self.$allTags.show();
+      self.$albumTags.hide();
+    });
+    
+    _.each(Main.collection.models, function(v, k) {
+      self.addAlbum(v);
+    });
+    
+    Main.collection.on('add', function(album) {
+      self.addAlbum(album);
+      _.debounce(_.bind(self.updateAlbumCovers, self), 10);
+    });
+    
+    Main.tags.on('add change:count', _.debounce(function() {
+      self.renderTags();
+      self.updateAlbums();
+    }, 10));
+    
+    this.$albums
+      .bind("scroll", _.debounce(_.bind(self.updateAlbumCovers, self), 100));
+
+    this.renderTags();
+    this.updateAlbumCovers();
+  };
+  
+  Main.Views.Collection.prototype = {    
     // ----------
     addAlbum: function(album) {
       var albumView = new Main.Views.Album(album);

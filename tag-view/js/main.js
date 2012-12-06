@@ -6,7 +6,7 @@
   window.Main = {
     Models: {},
     Views: {},
-    views: {},
+    currentView: null,
     
     // If you use this code, please change this to your own last.fm API key,
     // which you can get at http://www.last.fm/api/account/create  
@@ -49,8 +49,9 @@
         .append($div);
         
       this.mode = mode;
-      if (mode in this.views) {
-        this.views[mode].init();
+      var viewClass = this.upperCaseInitial(this.mode);
+      if (viewClass in this.Views) {
+        this.currentView = new this.Views[viewClass]();
       }
     },
     
@@ -69,23 +70,16 @@
       var template = _.template(rawTemplate);
       var html = template(config);
       return $(html);
+    },
+
+    // ----------
+    upperCaseInitial: function(val) {
+      return val.replace(/^([a-z])/, function($0, $1) {
+        return $1.toUpperCase();
+      });
     }
   };
   
-  // ----------
-  Main.views.unauthenticated = {
-    init: function() {
-      $("#authenticate")
-        .click(function() {
-          R.authenticate(function(authenticated) {
-            if (authenticated) {
-              Main.go("collection");
-            }
-          });
-        });
-    }
-  };
-
   // ----------
   $(document).ready(function() {
     Main.init();
