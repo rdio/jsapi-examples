@@ -1,6 +1,6 @@
 # About
 
-This app displays last.fm tags for all of the albums in your collection and allows you to browse by tag.
+This app displays Last.fm tags for the albums in your Rdio collection and allows you to browse by tag.
 
 http://iangilman.com/rdio/tag-view/
 
