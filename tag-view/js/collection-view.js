@@ -8,7 +8,8 @@
     init: function() {
       var self = this;
       this.$el = $('#content');
-      this.$albums = this.$el.find('.albums .inner');
+      this.$albums = this.$el.find('.albums');
+      this.$albumsInner = this.$el.find('.albums .inner');
       this.$allTags = this.$el.find('.tags');
       this.$albumTags = this.$el.find('.album-tags');
       this.$allTagsInner = this.$el.find('.tags .inner');
@@ -56,7 +57,7 @@
       
       Main.collection.on('add', function(album) {
         self.addAlbum(album);
-        self.updateAlbumCovers();
+        _.defer(_.bind(self.updateAlbumCovers, self));
       });
       
       Main.tags.on('add change:count', _.debounce(function() {
@@ -64,6 +65,9 @@
         self.updateAlbums();
       }, 10));
       
+      this.$albums
+        .bind("scroll", _.debounce(_.bind(self.updateAlbumCovers, self), 100));
+
       this.renderTags();
       this.updateAlbumCovers();
     },
@@ -72,7 +76,7 @@
     addAlbum: function(album) {
       var albumView = new Main.Views.Album(album);
       albumView.$el.data('album', album);
-      this.$albums.append(albumView.$el);
+      this.$albumsInner.append(albumView.$el);
       this.albumViews.push(albumView);      
     },
     
@@ -157,23 +161,22 @@
         }
 */
       });
-
-      this.updateAlbumCovers();
+      
+      _.defer(_.bind(this.updateAlbumCovers, this));
     },
     
     // ----------
     updateAlbumCovers: function() {
-/*
       var wh = $(window).height();
+      var coverHeight = 200; // Hardcoded here for speed, and because we don't expect it to change
       _.each(this.albumViews, function(v, i) {
-        var pos = v.$el.position();
-        if (pos.top < wh) {
-          if (!$album.css('background-image')) {
-            v.$cover.css('background-image', v.model.get('icon'));
+        if (v.shown && !v.iconShown) {
+          var pos = v.$el.position();
+          if (pos.top < wh && pos.top + coverHeight > 0) {
+            v.showIcon();
           }
         }
       });
-*/
     }
   };
 

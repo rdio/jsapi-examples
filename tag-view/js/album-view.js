@@ -6,6 +6,8 @@
   Main.Views.Album = function(album) {
     var self = this;
     this.model = album;
+    this.shown = true;
+    this.iconShown = false;
     this.$el = $(Main.Views.Album.template(this.model.toJSON()));
       
     this.$cover = this.$el.find(".icon");
@@ -35,6 +37,13 @@
     // ----------
     toggle: function(flag) {
       this.$el.toggle(flag);
+      this.shown = flag;
+    },
+    
+    // ----------
+    showIcon: function() {
+      this.$cover.css('background-image', 'url("' + this.model.get('icon') + '")');
+      this.iconShown = true;
     }
   }; 
   
