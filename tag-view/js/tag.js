@@ -51,7 +51,7 @@
         self.loadNextAlbum();
       });
             
-      this.on('add child:add:album', _.debounce(function() {
+      this.on('add child:add:album', _.throttle(function() {
         self.save();
       }, 100));
     },
@@ -72,7 +72,7 @@
         this.length++;
         this.trigger('add', tag);
         
-        tag.on('add:album', _.debounce(function() {
+        tag.on('add:album', _.throttle(function() {
           self.trigger('child:add:album');
         }, 10)); 
       }

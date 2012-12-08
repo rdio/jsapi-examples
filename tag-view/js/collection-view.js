@@ -55,16 +55,16 @@
     
     Main.collection.on('add', function(album) {
       self.addAlbum(album);
-      _.debounce(_.bind(self.updateAlbumCovers, self), 10);
+      _.throttle(_.bind(self.updateAlbumCovers, self), 10);
     });
     
-    Main.tags.on('add child:add:album', _.debounce(function() {
+    Main.tags.on('add child:add:album', _.throttle(function() {
       self.renderTags();
       self.updateAlbums();
-    }, 10));
+    }, 1000));
     
     this.$albums
-      .bind("scroll", _.debounce(_.bind(self.updateAlbumCovers, self), 100));
+      .bind("scroll", _.throttle(_.bind(self.updateAlbumCovers, self), 100));
 
     this.renderTags();
     this.updateAlbumCovers();
