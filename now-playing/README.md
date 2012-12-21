@@ -11,7 +11,6 @@ http://iangilman.com/rdio/now-playing/
 ## Normal
 
 * Fade between images
-* True shuffle so we don't repeat
 * Include album cover
 * Google image search?
 * Some sort of message for no album

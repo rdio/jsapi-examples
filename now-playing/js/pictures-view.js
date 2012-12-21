@@ -12,7 +12,8 @@
         'z-index': 10
       });
       
-    this.artist = '';
+    this.artist = null;
+    this.albumCover = '';
     this.images = [];
     this.lastfmImages = [];
     this.pictureTimeout = null;
@@ -26,19 +27,26 @@
   Main.Views.Pictures.prototype = {
     // ----------
     checkArtist: function() {
+      var artist = '';
+      var albumCover = '';
       var track = R.player.playingTrack();
-      if (!track) {
-        return;
+      if (track) {
+        artist = track.get('artist') || '';
+        albumCover = track.get('icon').replace('200.jpg', '1200.jpg');
       }
       
-      var artist = track.get('artist');
-      if (artist == this.artist) {
+      if (artist === this.artist) {
         return;
       }
       
       this.artist = artist;
-      this.$artist.text(this.artist);
+      this.albumCover = albumCover;
+      this.$artist.text(this.artist || 'None');
       this.images = [];
+      if (this.albumCover) {
+        this.images.push(this.albumCover);
+      }
+      
       this.loadPictures(this.artist);
     },
     
@@ -53,7 +61,7 @@
       
       var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist='
         + encodeURIComponent(artist)
-        + '&api_key='
+        + '&limit=200&api_key='
         + Main.lastfmKey
         + '&format=json&callback=?';
           
