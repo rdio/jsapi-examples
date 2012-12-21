@@ -10,10 +10,13 @@ http://iangilman.com/rdio/now-playing/
 
 ## Normal
 
-* Google image search?
-* Weed out libs we're not using
 * If there are more than the first set of images, keep loading
-* Don't show images that are too low-res
-* On a small enough window (like on a phone) look for a small image and not necessarily just "original"
+* Album cover only view?
+* Show album and track titles
+* Show play/pause status
 
 ## Low
+
+* Don't show images that are too low-res
+* On a small enough window (like on a phone) look for a small image and not necessarily just "original"
+* IE 8 support
