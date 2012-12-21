@@ -1,0 +1,33 @@
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+p {
+  margin-top: 0;
+}
+#content {
+  margin: 0 auto;
+  height: 100%;
+}
+#no-rdio {
+  padding: 30px;
+  text-align: center;
+}
+#unauthenticated {
+  padding: 30px;
+  width: 600px;
+  margin: 0 auto;
+}
+#pictures {
+  height: 100%;
+}
+#pictures .picture {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Now Playing</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" type="text/css" href="lib/normalize.css">
+    <link rel="stylesheet/less" type="text/css" href="style/main.less">
+    <script src="http://rdio.localhost:8000/api/api.js?client_id=hPGp0bCLWWFd2dM7S68ZMA"></script>
+    <script src="lib/jquery-1.8.2.min.js"></script>
+    <script src="lib/modernizr.touch.js"></script>
+    <script src="lib/underscore-min.js"></script>
+    <script src="lib/backbone-min.js"></script>
+    <script src="lib/spin.min.js"></script>
+    <script src="lib/less-1.3.0.min.js"></script>
+    <script src="lib/amplify.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/unauthenticated-view.js"></script>
+    <script src="js/pictures-view.js"></script>
+
+    <script id="no-rdio-template" type="text/template">
+      <p>Unable to contact Rdio API. Please try again later and/or <a href="mailto:ian@iangilman.com">let me know</a>.</p>
+    </script>
+
+    <script id="unauthenticated-template" type="text/template">
+      <p>This app displays pictures of the artist for the currently playing album.</p>
+      <p>To get started, you'll have to <button id="authenticate">authorize</button>.</p>
+    </script>
+
+    <script id="pictures-template" type="text/template">
+      <div class="picture"></div>
+      <div class="picture"></div>
+      <div class="artist"></div>
+    </script>
+
+  </head>
+  <body>
+    <div id="content"></div>
+  </body>
+</html>
