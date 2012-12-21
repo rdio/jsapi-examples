@@ -7,9 +7,14 @@
     var self = this;
     this.$el = $('#content');
     this.$artist = this.$el.find('.artist');
-    this.$picture = this.$el.find('.picture').eq(0)
+    this.$currentPicture = this.$el.find('.picture').eq(0)
       .css({
         'z-index': 10
+      });
+
+    this.$nextPicture = this.$el.find('.picture').eq(1)
+      .css({
+        'z-index': 1
       });
       
     this.artist = null;
@@ -99,22 +104,47 @@
         this.images = _.shuffle(this.lastfmImages);
         url = this.images.shift();
         if (!url) {
-          return;
+          url = this.albumCover;
         }
       }
       
       $('<img>')
         .load(function() {
-          self.$picture.css({
-            'background-image': 'url("' + url + '")'
-          });
-
+          self.swapPictures(url);
           self.pictureTimeout = setTimeout(_.bind(self.changePicture, self), 3000);
         })
         .error(function() {
           self.changePicture();
         })
         .attr('src', url);
+    },
+    
+    // ----------
+    swapPictures: function(url) {
+      var self = this;
+    
+      this.$nextPicture.css({
+        'background-image': 'url("' + url + '")'
+      });
+      
+      this.$currentPicture.css({
+        opacity: 0
+      });
+      
+      setTimeout(function() {
+        self.$nextPicture.css({
+          'z-index': 10
+        });
+
+        self.$currentPicture.css({
+          'z-index': 1,
+          opacity: 1
+        });
+        
+        var temp = self.$nextPicture;
+        self.$nextPicture = self.$currentPicture;
+        self.$currentPicture = temp;
+      }, 1000);
     }
   };
 

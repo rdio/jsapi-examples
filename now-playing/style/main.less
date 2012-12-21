@@ -1,3 +1,12 @@
+// Mixins
+.transition(@config) {
+  -webkit-transition: @config;  /* Safari 3.2+, Chrome */
+  -moz-transition: @config;  /* Firefox 4-15 */
+  -o-transition: @config;  /* Opera 10.5–12.00 */
+  transition: @config;  /* Firefox 16+, Opera 12.50+ */
+}
+
+// General
 html,
 body {
   height: 100%;
@@ -8,6 +17,7 @@ p {
   margin-top: 0;
 }
 
+// Views
 #content {
   margin: 0 auto;
   height: 100%;
@@ -35,6 +45,7 @@ p {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
+    .transition(opacity 1s);
   }
   
   .artist {

@@ -10,10 +10,7 @@ http://iangilman.com/rdio/now-playing/
 
 ## Normal
 
-* Fade between images
-* Include album cover
 * Google image search?
-* Some sort of message for no album
 * Weed out libs we're not using
 * If there are more than the first set of images, keep loading
 * Don't show images that are too low-res
