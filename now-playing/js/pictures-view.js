@@ -23,6 +23,7 @@
     this.lastfmImages = [];
     this.pictureTimeout = null;
     this.currentImageUrl = '';
+    this.imageLoading = false;
 
     this.checkArtist();
     R.player.on('change:playingTrack', this.checkArtist, this);
@@ -95,15 +96,17 @@
     changePicture: function() {
       var self = this;
       
-      var fireNext = function() {
-        self.pictureTimeout = setTimeout(_.bind(self.changePicture, self), 3000);
-      };
-      
-      if (self.pictureTimeout) {
-        clearTimeout(self.pictureTimeout);
-        self.pictureTimeout = null;
+      if (self.pictureTimeout || this.imageLoading) {
+        return;
       }
 
+      var fireNext = function() {
+        self.pictureTimeout = setTimeout(function() {
+          self.pictureTimeout = null;
+          self.changePicture();
+        }, 3000);
+      };
+      
       var url = this.images.shift();
       if (!url) {
         this.images = _.shuffle(this.lastfmImages);
@@ -122,12 +125,15 @@
         return;
       }
       
+      this.imageLoading = true;
       $('<img>')
         .load(function() {
+          self.imageLoading = false;
           self.swapPictures(url);
           fireNext();
         })
         .error(function() {
+          self.imageLoading = false;
           self.changePicture();
         })
         .attr('src', url);
