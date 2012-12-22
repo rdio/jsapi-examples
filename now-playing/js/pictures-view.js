@@ -24,6 +24,8 @@
     this.pictureTimeout = null;
     this.currentImageUrl = '';
     this.imageLoading = false;
+    this.slideSpeed = 6000;
+    this.fadeSpeed = 2000; // Needs to be the same as the transition speed for .picture in the css
 
     this.checkArtist();
     R.player.on('change:playingTrack', this.checkArtist, this);
@@ -115,7 +117,7 @@
         self.pictureTimeout = setTimeout(function() {
           self.pictureTimeout = null;
           self.changePicture();
-        }, 3000);
+        }, self.slideSpeed);
       };
       
       var url = this.images.shift();
@@ -177,7 +179,7 @@
         var temp = self.$nextPicture;
         self.$nextPicture = self.$currentPicture;
         self.$currentPicture = temp;
-      }, 1000);
+      }, this.fadeSpeed);
     }
   };
 
