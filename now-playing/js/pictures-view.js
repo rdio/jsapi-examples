@@ -77,12 +77,23 @@
           return;
         }
         
+        var ww = $(window).width();
+        var wh = $(window).height();
+        var maxRatio = 5;
+        
         _.each(data.images.image, function(v, i) {
           if (!v || !v.sizes || !v.sizes.size || !v.sizes.size[0]) {
             return;
           }
           
-          var url = v.sizes.size[0]['#text'];
+          var item = v.sizes.size[0];
+          var width = parseInt(item.width, 10);
+          var height = parseInt(item.height, 10);
+          if (ww / width > maxRatio || wh / height > maxRatio) {
+            return;
+          }
+          
+          var url = item['#text'];
           if (url) {
             self.lastfmImages.push(url);
           }
