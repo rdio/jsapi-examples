@@ -24,7 +24,7 @@
       
       R.on('change:authenticated', function(authenticated) {
         if (authenticated) {
-          self.loadMore();
+          R.ready(_.bind(self.loadMore, self));
         }
       });
     },
