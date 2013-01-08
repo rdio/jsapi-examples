@@ -4,6 +4,8 @@ This app displays pictures of the artist for the currently playing album.
 
 http://iangilman.com/rdio/now-playing/
 
+Note that this app requires the "shared_playstate" permission, which you can ask for when you create your own app.
+
 # TODO
 
 ## High
