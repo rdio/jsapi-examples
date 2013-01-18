@@ -25,7 +25,7 @@
     this.lastfmImages = [];
     this.pictureTimeout = null;
     this.currentImageUrl = '';
-    this.imageLoading = false;
+    this.$loadingImage = null;
     this.slideSpeed = 6000;
     this.fadeSpeed = 2000; // Needs to be the same as the transition speed for .picture in the css
 
@@ -68,6 +68,8 @@
       if (location.search.search(/pics=false/i) == -1) {
         this.loadPictures(this.artist);
       }
+      
+      this.changePicture({force: true});
     },
     
     // ----------
@@ -117,10 +119,22 @@
     },
 
     // ----------
-    changePicture: function() {
+    changePicture: function(config) {
       var self = this;
+      config = config || {};
       
-      if (self.pictureTimeout || this.imageLoading) {
+      if (config.force) {
+        if (this.pictureTimeout) {
+          clearTimeout(this.pictureTimeout);
+          this.pictureTimeout = null;
+        }
+        
+        if (this.$loadingImage) {
+          this.$loadingImage.data('abort', true);
+          this.$loadingImage.attr('src', '');
+          this.$loadingImage = null;
+        }
+      } else if (this.pictureTimeout || this.$loadingImage) {
         return;
       }
 
@@ -149,18 +163,26 @@
         return;
       }
       
-      this.imageLoading = true;
-      $('<img>')
+      this.$loadingImage = $('<img>')
         .load(function() {
-          self.imageLoading = false;
+          if ($(this).data('abort')) {
+            return;
+          }
+          
+          self.$loadingImage = false;
           self.swapPictures(url);
           fireNext();
         })
         .error(function() {
-          self.imageLoading = false;
+          if ($(this).data('abort')) {
+            return;
+          }
+          
+          self.$loadingImage = false;
           self.changePicture();
-        })
-        .attr('src', url);
+        });
+        
+      this.$loadingImage.attr('src', url);
     },
     
     // ----------

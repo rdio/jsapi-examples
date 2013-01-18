@@ -15,8 +15,8 @@ Add `?pics=false` to the URL to just show the cover.
 ## Normal
 
 * If there are more than the first set of images, keep loading
-* Show album and track titles
 * Show play/pause status
+* Load two images at a time to deal with slow ones? Or have a timeout? Or load the next one right after the swap? 
 
 ## Low
 
