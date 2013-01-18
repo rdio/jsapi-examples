@@ -56,7 +56,9 @@
         this.images.push(this.albumCover);
       }
       
-      this.loadPictures(this.artist);
+      if (location.search.search(/pics=false/i) == -1) {
+        this.loadPictures(this.artist);
+      }
     },
     
     // ----------

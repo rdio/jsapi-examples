@@ -6,6 +6,8 @@ http://iangilman.com/rdio/now-playing/
 
 Note that this app requires the "shared_playstate" permission, which you can ask for when you create your own app.
 
+Add `?pics=false` to the URL to just show the cover.
+
 # TODO
 
 ## High
@@ -13,7 +15,6 @@ Note that this app requires the "shared_playstate" permission, which you can ask
 ## Normal
 
 * If there are more than the first set of images, keep loading
-* Album cover only view?
 * Show album and track titles
 * Show play/pause status
 
