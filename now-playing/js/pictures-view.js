@@ -7,6 +7,8 @@
     var self = this;
     this.$el = $('#content');
     this.$artist = this.$el.find('.artist');
+    this.$album = this.$el.find('.album');
+    this.$track = this.$el.find('.track');
     this.$currentPicture = this.$el.find('.picture').eq(0)
       .css({
         'z-index': 10
@@ -37,12 +39,19 @@
     // ----------
     checkArtist: function() {
       var artist = '';
+      var album = '';
+      var trackName = '';
       var albumCover = '';
       var track = R.player.playingTrack();
       if (track) {
         artist = track.get('artist') || '';
+        album = track.get('album') || '';
+        trackName = track.get('name') || '';
         albumCover = track.get('icon').replace('200.jpg', '1200.jpg');
       }
+      
+      this.$album.text(album);
+      this.$track.text(trackName);
       
       if (artist === this.artist) {
         return;

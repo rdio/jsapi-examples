@@ -48,7 +48,7 @@ p {
     .transition(opacity 2s); // If you change this, also change fadeSpeed in pictures-view.js
   }
   
-  .artist {
+  .info {
     position: absolute;
     left: 30px;
     bottom: 30px;
@@ -56,5 +56,13 @@ p {
     font-size: 30px;
     z-index: 100;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    
+    .artist {
+      font-weight: bold;
+    }
+    
+    .track {
+      color: rgba(255, 255, 255, 0.6);
+    }
   }
 }
