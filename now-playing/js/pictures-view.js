@@ -28,6 +28,7 @@
     this.$loadingImage = null;
     this.slideSpeed = 6000;
     this.fadeSpeed = 2000; // Needs to be the same as the transition speed for .picture in the css
+    this.showPictures = (location.search.search(/pics=false/i) == -1);
 
     this.checkArtist();
     R.player.on('change:playingTrack', this.checkArtist, this);
@@ -42,6 +43,9 @@
       var album = '';
       var trackName = '';
       var albumCover = '';
+      var artistChanged = false;
+      var albumChanged = false;
+
       var track = R.player.playingTrack();
       if (track) {
         artist = track.get('artist') || '';
@@ -52,24 +56,33 @@
       
       this.$album.text(album);
       this.$track.text(trackName);
-      
-      if (artist === this.artist) {
-        return;
+
+      if (albumCover !== this.albumCover) {
+        this.albumCover = albumCover;
+        albumChanged = true;
       }
-      
-      this.artist = artist;
-      this.albumCover = albumCover;
-      this.$artist.text(this.artist || 'None');
-      this.images = [];
-      if (this.albumCover) {
-        this.images.push(this.albumCover);
+
+      if (artist !== this.artist) {
+        this.artist = artist;
+        this.$artist.text(this.artist || 'None');
+        artistChanged = true;
       }
-      
-      if (location.search.search(/pics=false/i) == -1) {
-        this.loadPictures(this.artist);
+
+      if (artistChanged || albumChanged) {
+        if (artistChanged || !this.showPictures) {
+          this.images = [];        
+        }
+
+        if (this.albumCover && (albumChanged || !this.images.length)) {
+          this.images.unshift(this.albumCover);
+        }
+
+        if (artistChanged && this.showPictures) {
+          this.loadPictures(this.artist);
+        }        
+        
+        this.changePicture({force: true});
       }
-      
-      this.changePicture({force: true});
     },
     
     // ----------

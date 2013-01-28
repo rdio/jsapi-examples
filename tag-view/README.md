@@ -8,6 +8,7 @@ http://iangilman.com/rdio/tag-view/
 
 ## High
 
+* Each tag could link to http://rdiolab.herokuapp.com/lastfm/artist/top/tag/<tagName>
 * Multi-tag select
 * Make tag and album subviews for collection-view
 * Be able to favorite certain tags
