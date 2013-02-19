@@ -18,6 +18,8 @@
       .css({
         'z-index': 1
       });
+
+    this.collectionButton = new Main.CollectionButton(this.$el.find('.yes'));
       
     this.artist = null;
     this.albumCover = '';
