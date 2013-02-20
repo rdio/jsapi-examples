@@ -12,8 +12,11 @@ Add `?pics=false` to the URL to just show the cover.
 
 ## High
 
+* "Skip album" button
+
 ## Normal
 
+* Update "add to collection" button for albums that are in your collection, even those that don't have "al" type
 * If there are more than the first set of images, keep loading
 * Show play/pause status
 * Load two images at a time to deal with slow ones? Or have a timeout? Or load the next one right after the swap? 
