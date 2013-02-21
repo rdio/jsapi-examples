@@ -20,6 +20,11 @@
       });
 
     this.collectionButton = new Main.CollectionButton(this.$el.find('.yes'));
+
+    this.$el.find('.no')
+      .click(function() {
+        R.player.nextSource();
+      });
       
     this.artist = null;
     this.albumCover = '';

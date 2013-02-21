@@ -12,8 +12,6 @@ Add `?pics=false` to the URL to just show the cover.
 
 ## High
 
-* "Skip album" button
-
 ## Normal
 
 * Update "add to collection" button for albums that are in your collection, even those that don't have "al" type
