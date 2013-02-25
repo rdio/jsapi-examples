@@ -5,6 +5,8 @@
   // ==========
   Main.CollectionButton = function($el) {
     var self = this;
+    this.albumKey = '';
+
     this.$el = $el
       .click(function() {
         self.addToCollection();
@@ -22,6 +24,13 @@
   Main.CollectionButton.prototype = {
     // ----------
     checkSource: function(source) {
+      var key = (source ? source.get('key') : '');
+      if (key == this.albumKey) {
+        return;
+      }
+
+      this.albumKey = key;
+
       var type = (source ? source.get('type') : '');
       if (type == 'al') {
         // Note that this is not actually a good way of knowing if the album is already in your collection;
@@ -41,7 +50,7 @@
       this.$el
         .removeClass('disabled')
         .addClass('selected')
-        .prop('title', 'Already in collection');
+        .prop('title', 'In collection');
     },
 
     // ----------
