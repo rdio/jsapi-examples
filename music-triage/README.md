@@ -8,9 +8,11 @@ Note that the "dustbin" status of an album is stored only in your browser's loca
 
 # Todo: high
 
+* Show track listing on hover
+* Checkbox to auto-hide singles and remix albums
 * Album and artist name
 * Show track count (when album is shown big)
-* Save dustbin to server
+* Save dustbin to server. See: https://github.com/dasevilla/rdiocli/blob/master/rdiocli/oauth2/bearer.py
 * If you've removed an album from your collection, remove it from the local storage cache too
 * Only show albums that support full streaming.
 
