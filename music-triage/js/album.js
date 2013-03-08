@@ -6,7 +6,7 @@
   window.Album = function(config) {
     this.isSmall = false;
     this.key = (config.type == "a" ? config.key : config.albumKey); 
-    this.url = "http://rdio.com" + config.url; 
+    this.url = "http://www.rdio.com" + config.url; 
     this.icon = config.icon;
     this.trackKeys = _.clone(config.trackKeys);
     this.$el = null;
