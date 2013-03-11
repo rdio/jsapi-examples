@@ -32,13 +32,8 @@
       this.albumKey = key;
 
       var type = (source ? source.get('type') : '');
-      if (type == 'al') {
-        // Note that this is not actually a good way of knowing if the album is already in your collection;
-        // it's only an indication that you played the album from your collection... if you instead played
-        // it from somewhere else (even though it's part of your collection), it'll just be type 'a'.
-        // TODO: Select the button if the source is in your collection, regardless of where it was played from.
-        this.select();
-      } else if (type == 'a' || type == 'p' || type == 't') {
+      // TODO: Select the button if the source is in your collection.
+      if (type == 'a' || type == 'al' || type == 'p' || type == 't') {
         this.reset();
       } else {
         this.disable();
