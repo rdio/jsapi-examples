@@ -14,7 +14,7 @@
     init: function() {
       var self = this;
   
-      this.albumTemplate = _.template($("#album-template").text());
+      this.albumTemplate = _.template($.trim($("#album-template").text()));
       
       $("#authenticate")
         .click(function() {

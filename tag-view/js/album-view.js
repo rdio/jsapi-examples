@@ -50,7 +50,7 @@
   _.extend(Main.Views.Album, {
     // ----------
     init: function() {
-      this.template = _.template($("#album-template").text());
+      this.template = _.template($.trim($("#album-template").text()));
     }
   });
 

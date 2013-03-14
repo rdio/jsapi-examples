@@ -71,7 +71,7 @@ window.Main = {
   },
   
   template: function(name, config) {
-    var rawTemplate = $("#" + name + "-template").text();
+    var rawTemplate = $.trim($("#" + name + "-template").text());
     var template = _.template(rawTemplate);
     var html = template(config);
     return $(html);

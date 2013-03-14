@@ -9,7 +9,9 @@
       
       this.$input = $(".search input");
       this.$results = $(".results");
-      this.albumTemplate = _.template($("#album-template").text());
+
+      var rawTemplate = $.trim($("#album-template").text());
+      this.albumTemplate = _.template(rawTemplate);
 
       if (Modernizr.touch) {
         self.$results
