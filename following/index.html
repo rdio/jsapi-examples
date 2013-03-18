@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Following</title>
+    <link rel="stylesheet" type="text/css" href="lib/normalize.css">
+    <link rel="stylesheet/less" type="text/css" href="style/main.less">
+
+    <!-- Register your app at http://dev-beta.rdio.com/create/ and replace client_id below with yours  -->
+    <script src="http://rdio.localhost:8000/api/api.js?client_id=KF4FsLVc88T49LdaTt5lkw"></script>
+    <!-- <script src="https://www.rdio.com/api/api.js?client_id=KF4FsLVc88T49LdaTt5lkw"></script> -->
+
+    <script src="lib/jquery-1.9.1.min.js"></script>
+    <script src="lib/underscore-1.4.4.min.js"></script>
+    <script src="lib/spin.min.js"></script>
+    <script src="lib/less-1.3.0.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/unauthenticated-view.js"></script>
+    <script src="js/following-view.js"></script>
+
+    <script id="no-rdio-template" type="text/template">
+      <p>Unable to contact Rdio API. Please try again later and/or <a href="mailto:ian@iangilman.com">let me know</a>.</p>
+    </script>
+
+    <script id="unauthenticated-template" type="text/template">
+      <p>This app shows you which of the people you're following are online, and what they're listening to.</p>
+      <p>To get started, you'll have to <button id="authenticate">authorize</button>.</p>
+    </script>
+
+    <script id="following-template" type="text/template">
+      <p>People you're following who are online, and what they're listening to:</p>
+    </script>
+
+    <script id="person-template" type="text/template">
+      <div class="person">
+        <div class="album"></div>
+        <div class="icon"></div>
+      </div>
+    </script>
+
+  </head>
+  <body>
+    <div id="content"></div>
+  </body>
+</html>
