@@ -54,15 +54,22 @@
           'background-image': 'url("' + person.get('icon') + '")'
         });
 
+      var updateAlbumCover = function() {
+        var track = person.get('lastSongPlayed');
+        if (track) {
+          $person.find('.album')
+            .css({
+              'background-image': 'url("' + track.icon + '")'
+            });
+        }
+      };
+      
       person.on('change:lastSongPlayed', function(track) {
-        $person.find('.album')
-          .css({
-            'background-image': 'url("' + track.icon + '")'
-          });
+        updateAlbumCover();
       });
 
       person.trackField('lastSongPlayed');
-
+      updateAlbumCover();
       this.$people[key] = $person;
     },
 
