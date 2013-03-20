@@ -49,7 +49,11 @@
       var $person = Main.template('person')
         .appendTo(this.$el);
 
+      var personUrl = person.get('url');
       $person.find('.icon')
+        .prop({
+          href: (personUrl ? 'http://www.rdio.com' + personUrl : '')
+        })
         .css({
           'background-image': 'url("' + person.get('icon') + '")'
         });
@@ -57,7 +61,11 @@
       var updateAlbumCover = function() {
         var track = person.get('lastSongPlayed');
         if (track) {
+          var trackUrl = track.get('url');
           $person.find('.album')
+            .prop({
+              href: (trackUrl ? 'http://www.rdio.com' + trackUrl : '')
+            })
             .css({
               'background-image': 'url("' + track.icon + '")'
             });
