@@ -61,10 +61,9 @@
       var updateAlbumCover = function() {
         var track = person.get('lastSongPlayed');
         if (track) {
-          var trackUrl = track.get('url');
           $person.find('.album')
             .prop({
-              href: (trackUrl ? 'http://www.rdio.com' + trackUrl : '')
+              href: (track.url ? 'http://www.rdio.com' + track.url : '')
             })
             .css({
               'background-image': 'url("' + track.icon + '")'
