@@ -81,7 +81,9 @@
       extras: config.extras,
       onLoaded: config.onLoaded,
       onPartialLoad: config.onPartialLoad,
-      onError: config.onError 
+      onError: config.onError,
+      onAdded: config.onAdded,
+      onRemoved: config.onRemoved
     };
 
     if (!this._config.extras) {
@@ -95,6 +97,10 @@
     this._loading = false;
     this._done = false;
     this._albums = [];
+    this._albumsByKey = {};
+    this._newAlbums = [];
+    this._newAlbumsByKey = {};
+    this._firstTime = true;
     
     // var stored = (Main.resetFlag ? null : amplify.store('albums'));
     // if (stored && stored.models) {
@@ -103,14 +109,27 @@
     //   });
     // }
 
+    var whenAuthenticated = function() {
+      self._load();
+
+      R.currentUser.on('change:libraryVersion', function() {
+        self._start = 0;
+        self._loading = false;
+        self._done = false;
+        self._newAlbums = [];
+        self._newAlbumsByKey = {};
+        self._load();
+      });
+    };
+
     R.ready(function() {
       if (R.authenticated()) {
-        self._load();
+        whenAuthenticated();
       } else {
         var handler = function(authenticated) {
           if (authenticated) {
             R.off('change:authenticated', handler);
-            self._load();    
+            whenAuthenticated();    
           }
         };
 
@@ -147,19 +166,57 @@
         success: function(data) {
           self._loading = false;
           if (data.result.length) {
+            var album;
             for (var i = 0; i < data.result.length; i++) {
-              self._albums.push(data.result[i]);
+              album = data.result[i];
+              album.key = album.albumKey;
+              delete album.albumKey;
+              self._newAlbums.push(album);
+              self._newAlbumsByKey[album.key] = album;
             }
-
-            self.length = self._albums.length;
 
             self.save();
             self._start += self._count;
             self._load();
-            if (self._config.onPartialLoad) {
+            if (self._firstTime && self._config.onPartialLoad) {
               self._config.onPartialLoad(data.result);
             }
           } else {
+            if (!self._firstTime) {
+              var key;
+              if (self._config.onAdded) {
+                var added = [];
+                for (key in self._newAlbumsByKey) {
+                  if (!self._albumsByKey[key]) {
+                    added.push(self._newAlbumsByKey[key]);
+                  }
+                }
+
+                if (added.length) {
+                  self._config.onAdded(added);
+                }
+              }
+
+              if (self._config.onRemoved) {
+                var removed = [];
+                for (key in self._albumsByKey) {
+                  if (!self._newAlbumsByKey[key]) {
+                    removed.push(self._albumsByKey[key]);
+                  }
+                }
+              
+                if (removed.length) {
+                  self._config.onRemoved(removed);
+                }
+              }
+            }
+
+            self._albums = self._newAlbums;
+            self._albumsByKey = self._newAlbumsByKey;
+            self._newAlbums = [];
+            self._newAlbumsByKey = {};
+            self.length = self._albums.length;
+            self._firstTime = false;
             self._done = true;
             if (self._config.onLoaded) {
               self._config.onLoaded();

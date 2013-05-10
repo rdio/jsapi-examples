@@ -16,6 +16,12 @@
               .prop('src', albums[i].icon)
               .appendTo($content);
           }
+        },
+        onAdded: function(albums) {
+          console.log('added', albums);
+        },
+        onRemoved: function(albums) {
+          console.log('removed', albums);
         }
       });
     }
