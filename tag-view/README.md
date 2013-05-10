@@ -14,7 +14,7 @@ http://iangilman.com/rdio/tag-view/
 * Be able to favorite certain tags
 * Be able to see the tags for an album in a way that allows you to click on them to find other albums in your collection with the same tag
 * When you click a tag, only show the albums from that tag and also only the tags that those albums have (with updated counts)
-* Kevin N wants: http://iangilman.com/rdio/tag-view/rknla so you can see his collection/filters
+* Kevin N wants: http://iangilman.com/rdio/tag-view/rknla so you can see his collection/filters; also be able to link to a specific tag on a specific person
 * Raul A wants: play station or make playlist from a particular tag
 
 ## Normal
