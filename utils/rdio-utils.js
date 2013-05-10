@@ -82,6 +82,12 @@
       onError: config.onError 
     };
 
+    if (!this._config.extras) {
+      this._config.extras = '-*,releaseDate,duration,isClean,canStream,icon,'
+        + 'canSample,name,isExplicit,artist,url,albumKey,length,trackKeys,'
+        + 'rawArtistKey,artistUrl';
+    }
+
     this._start = 0;
     this._count = 100;
     this._loading = false;
