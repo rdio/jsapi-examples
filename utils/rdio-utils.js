@@ -40,6 +40,7 @@
     // - sort: what kind of sort to use when loading the collection
     // - extras: extras to use when loading the collection
     // - onLoaded: callback called when the collection has been loaded
+    // - onPartialLoad: callback called when some portion of the collection has been loaded
     // - onError: callback called if there's an error
     trackCollection: function(config) {
       return new CollectionTracker(config);
@@ -79,6 +80,7 @@
       sort: config.sort || 'playCount',
       extras: config.extras,
       onLoaded: config.onLoaded,
+      onPartialLoad: config.onPartialLoad,
       onError: config.onError 
     };
 
@@ -153,8 +155,11 @@
 
             self.save();
             self._start += self._count;
-          //   self._load();
-          // } else {
+            self._load();
+            if (self._config.onPartialLoad) {
+              self._config.onPartialLoad(data.result);
+            }
+          } else {
             self._done = true;
             if (self._config.onLoaded) {
               self._config.onLoaded();

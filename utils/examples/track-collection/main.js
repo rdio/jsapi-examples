@@ -8,11 +8,12 @@
       rdioUtils.authWidget($('.auth'));
 
       var collection = rdioUtils.trackCollection({
-        onLoaded: function() {
-          var $content = $('.content').empty();
-          for (var i = 0; i < collection.length; i++) {
+        onPartialLoad: function(albums) {
+          var $content = $('.content');
+          for (var i = 0; i < albums.length; i++) {
             $('<img>')
-              .prop('src', collection.at(i).icon)
+              .addClass('album')
+              .prop('src', albums[i].icon)
               .appendTo($content);
           }
         }
