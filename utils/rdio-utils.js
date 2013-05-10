@@ -110,15 +110,10 @@
     // }
 
     var whenAuthenticated = function() {
-      self._load();
+      self._startLoad();
 
       R.currentUser.on('change:libraryVersion', function() {
-        self._start = 0;
-        self._loading = false;
-        self._done = false;
-        self._newAlbums = [];
-        self._newAlbumsByKey = {};
-        self._load();
+        self._startLoad();
       });
     };
 
@@ -143,6 +138,16 @@
     // ----------
     at: function(index) {
       return this._albums[index];
+    },
+
+    // ----------
+    _startLoad: function() {
+      this._start = 0;
+      this._loading = false;
+      this._done = false;
+      this._newAlbums = [];
+      this._newAlbumsByKey = {};
+      this._load();
     },
 
     // ----------

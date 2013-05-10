@@ -7,7 +7,7 @@
     init: function() {
       rdioUtils.authWidget($('.auth'));
 
-      var collection = rdioUtils.trackCollection({
+      this.collection = rdioUtils.trackCollection({
         onPartialLoad: function(albums) {
           var $content = $('.content');
           for (var i = 0; i < albums.length; i++) {
