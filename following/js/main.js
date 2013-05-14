@@ -51,7 +51,12 @@
     // ----------
     spin: function(value) {
       if (value) {
-        this.spinner = new Spinner().spin($("body")[0]);     
+        this.spinner = new Spinner({
+          radius: 6,
+          length: 6,
+          width: 2,
+          color: '#444'
+        }).spin($("#spin-container")[0]);     
       } else {
         this.spinner.stop();
       }
