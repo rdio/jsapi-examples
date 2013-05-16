@@ -16,6 +16,8 @@ http://iangilman.com/rdio/tag-view/
 * When you click a tag, only show the albums from that tag and also only the tags that those albums have (with updated counts)
 * Kevin N wants: http://iangilman.com/rdio/tag-view/rknla so you can see his collection/filters
 * Raul A wants: play station or make playlist from a particular tag
+* Alex G wants: Some sort of progress bar to know how much of my collection has been loaded
+* Alex G wants: It should probably paralleize the last.fm requests, rather than do them in serial?
 
 ## Normal
 
