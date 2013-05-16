@@ -3,26 +3,49 @@
 (function() {
 
   window.Main = {
+    $albums: {},
+
     // ----------
     init: function() {
+      var self = this;
+      // if (!rdioUtils.startupChecks()) {
+        // return;
+      // }
+
       rdioUtils.authWidget($('.auth'));
 
       this.collection = rdioUtils.trackCollection({
         onPartialLoad: function(albums) {
-          var $content = $('.content');
-          for (var i = 0; i < albums.length; i++) {
-            $('<img>')
-              .addClass('album')
-              .prop('src', albums[i].icon)
-              .appendTo($content);
-          }
+          self.addAlbums(albums);
         },
         onAdded: function(albums) {
-          console.log('added', albums);
+          self.addAlbums(albums);
         },
         onRemoved: function(albums) {
-          console.log('removed', albums);
+          self.removeAlbums(albums);
         }
+      });
+    },
+
+    // ----------
+    addAlbums: function(albums) {
+      var self = this;
+
+      var $content = $('.content');
+      _.each(albums, function(v, i) {
+        self.$albums[v.key] = $('<img>')
+          .addClass('album')
+          .prop('src', v.icon)
+          .appendTo($content);
+      });
+    },
+
+    // ----------
+    removeAlbums: function(albums) {
+      var self = this;
+
+      _.each(albums, function(v, i) {
+        self.$albums[v.key].remove();
       });
     }
   };
