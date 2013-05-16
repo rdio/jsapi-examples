@@ -1,4 +1,4 @@
-/*globals R, Main, Spinner */
+/*globals R, Main, Spinner, rdioUtils */
 
 (function() {
 
@@ -12,8 +12,7 @@
     init: function() {
       var self = this;
       
-      if (!("R" in window)) {
-        this.go("no-rdio");
+      if (!rdioUtils.startupChecks()) {
         return;
       }
 

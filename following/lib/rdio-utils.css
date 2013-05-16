@@ -1,0 +1,11 @@
+.rdio-utils-dialog {
+  position: fixed;
+  top: 30px;
+  width: 500px;
+  left: 50%;
+  margin-left: -270px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #666;
+  z-index: 99999;
+}
