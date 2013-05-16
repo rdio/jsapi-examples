@@ -3,6 +3,7 @@
   <head>
     <title>Music Triage</title>
     <link rel="stylesheet" type="text/css" href="/lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/lib/rdio-utils.css">
     <link rel="stylesheet/less" type="text/css" href="/style/main.less">
 
     <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
@@ -14,6 +15,7 @@
     <script src="/lib/transformjs.1.0.beta.2.min.js"></script>
     <script src="/lib/zot.js"></script>
     <script src="/lib/spin.min.js"></script>
+    <script src="/lib/rdio-utils.js"></script>
     <script src="/js/music.js"></script>
     <script src="/js/album.js"></script>
     <script src="/js/main.js"></script>
@@ -29,9 +31,6 @@
     </script>
   </head>
   <body>
-    <div id="no-rdio">
-      <p>Unable to contact Rdio API.</p>
-    </div>
     <div id="unauthenticated">
       <p>I like to queue up a bunch of new music and listen to it throughout the day. Every day or two I go back through my history and add the albums I liked to my collection. This web app is tailored to that history triage. Albums you've listened to but haven't triaged show up in the middle. Hit the heart on an album to add that album to your collection; hit the X to discard it.</p>
       <p>To get started, you'll have to <button id="authenticate">authorize</button> this app.</p>

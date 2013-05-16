@@ -1,4 +1,4 @@
-/*globals R, Main, Spinner */
+/*globals R, Main, Spinner, rdioUtils */
 
 window.Main = {
   spinner: null,
@@ -27,20 +27,20 @@ window.Main = {
         }
       });
 
-    if (!("R" in window)) {
-      this.go("no-rdio");
-    } else {
-      R.ready(function() {
-        self.spin(false);
-        if (R.authenticated()) {
-          self.go("collection");
-        } else {
-          self.go("unauthenticated");
-        }          
-      });
-      
-      this.spin(true);
+    if (!rdioUtils.startupChecks()) {
+      return;
     }
+
+    R.ready(function() {
+      self.spin(false);
+      if (R.authenticated()) {
+        self.go("collection");
+      } else {
+        self.go("unauthenticated");
+      }          
+    });
+    
+    this.spin(true);
   },
   
   go: function(mode) {

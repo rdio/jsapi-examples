@@ -1,4 +1,4 @@
-/*globals R, Main, Modernizr */
+/*globals R, Main, Modernizr, rdioUtils */
 
 (function() {
 
@@ -35,8 +35,7 @@
           }
         });
         
-      if (!("R" in window)) {
-        $(".no-rdio").show();
+      if (!rdioUtils.startupChecks()) {
         return;
       }
 

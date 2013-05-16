@@ -1,4 +1,4 @@
-/*globals R, zot, Album, Main, Music, Spinner */
+/*globals R, zot, Album, Main, Music, Spinner, rdioUtils */
 
 (function() {
 
@@ -30,21 +30,21 @@
           self.layout();
         });
       
-      if (!("R" in window)) {
-        $("#no-rdio").show();
-      } else {
-        R.ready(function() {
-          Music.init();
-          if (R.authenticated()) {
-            self.becameAuthenticated();
-          } else {
-            self.spinner.stop();
-            $("#unauthenticated").show();
-          }          
-        });
-        
-        this.spinner = new Spinner().spin($("body")[0]);
+      if (!rdioUtils.startupChecks()) {
+        return;
       }
+
+      R.ready(function() {
+        Music.init();
+        if (R.authenticated()) {
+          self.becameAuthenticated();
+        } else {
+          self.spinner.stop();
+          $("#unauthenticated").show();
+        }          
+      });
+      
+      this.spinner = new Spinner().spin($("body")[0]);
     },
     
     becameAuthenticated: function() {
