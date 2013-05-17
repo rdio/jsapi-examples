@@ -15,7 +15,8 @@
       rdioUtils.authWidget($('.auth'));
 
       this.collection = rdioUtils.trackCollection({
-        onPartialLoad: function(albums) {
+        localStorage: true,
+        onAlbumsLoaded: function(albums) {
           self.addAlbums(albums);
         },
         onAdded: function(albums) {

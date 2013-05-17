@@ -39,8 +39,8 @@
     // config properties:
     // - sort: what kind of sort to use when loading the collection
     // - extras: extras to use when loading the collection
-    // - onLoaded: callback called when the collection has been loaded
-    // - onPartialLoad: callback called when some portion of the collection has been loaded
+    // - onLoadComplete: callback called when the collection has been loaded
+    // - onAlbumsLoaded: callback called when some portion of the collection has been loaded
     // - onError: callback called if there's an error
     trackCollection: function(config) {
       return new CollectionTracker(config);
@@ -79,11 +79,12 @@
     this._config = {
       sort: config.sort || 'playCount',
       extras: config.extras,
-      onLoaded: config.onLoaded,
-      onPartialLoad: config.onPartialLoad,
+      onLoadComplete: config.onLoadComplete,
+      onAlbumsLoaded: config.onAlbumsLoaded,
       onError: config.onError,
       onAdded: config.onAdded,
-      onRemoved: config.onRemoved
+      onRemoved: config.onRemoved,
+      localStorage: config.localStorage && window.localStorage && window.JSON
     };
 
     if (!this._config.extras) {
@@ -102,15 +103,36 @@
     this._newAlbumsByKey = {};
     this._firstTime = true;
     
-    // var stored = (Main.resetFlag ? null : amplify.store('albums'));
-    // if (stored && stored.models) {
-    //   _.each(stored.models, function(v, i) {
-    //     self.addAlbum(v);
-    //   });
-    // }
-
     var whenAuthenticated = function() {
-      self._startLoad();
+      if (self._config.localStorage) {
+        var data = localStorage.__rdioUtilsCollectionAlbums;
+        if (data) {
+          var albums = JSON.parse(data);
+          if (albums instanceof Array && albums.length) {
+            var album;
+            for (var i = 0; i < albums.length; i++) {
+              album = albums[i];
+              self._albumsByKey[album.key] = album;
+            }
+
+            self._albums = albums;
+            self._firstTime = false;
+
+            if (self._config.onAlbumsLoaded) {
+              self._config.onAlbumsLoaded(albums);
+            }
+
+            var libraryVersion = localStorage.__rdioUtilsCollectionVersion;
+            if (libraryVersion != R.currentUser.get('libraryVersion')) {
+              self._startLoad();
+            }
+          }
+        }
+      }
+
+      if (self._firstTime) {
+        self._startLoad();
+      }
 
       R.currentUser.on('change:libraryVersion', function() {
         self._startLoad();
@@ -180,11 +202,10 @@
               self._newAlbumsByKey[album.key] = album;
             }
 
-            self.save();
             self._start += self._count;
             self._load();
-            if (self._firstTime && self._config.onPartialLoad) {
-              self._config.onPartialLoad(data.result);
+            if (self._firstTime && self._config.onAlbumsLoaded) {
+              self._config.onAlbumsLoaded(data.result);
             }
           } else {
             if (!self._firstTime) {
@@ -223,8 +244,9 @@
             self.length = self._albums.length;
             self._firstTime = false;
             self._done = true;
-            if (self._config.onLoaded) {
-              self._config.onLoaded();
+            self._save();
+            if (self._config.onLoadComplete) {
+              self._config.onLoadComplete();
             }
           }
         },
@@ -238,14 +260,14 @@
     },
     
     // ----------
-    save: function() {
-      // var data = {
-      //   models: _.map(this.models, function(v, i) {
-      //     return v.toJSON();
-      //   })
-      // };
-      
-      // amplify.store('albums', data);
+    _save: function() {
+      if (!this._config.localStorage) {
+        return;
+      }
+
+      var data = JSON.stringify(this._albums);
+      localStorage.__rdioUtilsCollectionAlbums = data;
+      localStorage.__rdioUtilsCollectionVersion = R.currentUser.get('libraryVersion');
     }
   };
 
