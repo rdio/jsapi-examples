@@ -122,6 +122,10 @@
               self._config.onAlbumsLoaded(albums);
             }
 
+            if (self._config.onLoadComplete) {
+              self._config.onLoadComplete();
+            }
+
             var libraryVersion = localStorage.__rdioUtilsCollectionVersion;
             if (libraryVersion != R.currentUser.get('libraryVersion')) {
               self._startLoad();
