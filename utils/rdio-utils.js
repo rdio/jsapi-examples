@@ -38,7 +38,6 @@
     // ----------
     // config properties:
     // - sort: what kind of sort to use when loading the collection
-    // - extras: extras to use when loading the collection
     // - onLoadComplete: callback called when the collection has been loaded
     // - onAlbumsLoaded: callback called when some portion of the collection has been loaded
     // - onError: callback called if there's an error
@@ -78,7 +77,6 @@
     var self = this;
     this._config = {
       sort: config.sort || 'playCount',
-      extras: config.extras,
       onLoadComplete: config.onLoadComplete,
       onAlbumsLoaded: config.onAlbumsLoaded,
       onError: config.onError,
@@ -87,14 +85,7 @@
       localStorage: config.localStorage && window.localStorage && window.JSON
     };
 
-    if (!this._config.extras) {
-      this._config.extras = '-*,releaseDate,duration,isClean,canStream,icon,'
-        + 'canSample,name,isExplicit,artist,url,albumKey,length,trackKeys,'
-        + 'rawArtistKey,artistUrl';
-    }
-
     this._start = 0;
-    this._count = 100;
     this._loading = false;
     this._done = false;
     this._albums = [];
@@ -173,6 +164,17 @@
       this._done = false;
       this._newAlbums = [];
       this._newAlbumsByKey = {};
+
+      if (this._firstTime) {
+        this._count = 100;
+        this._extras = '-*,releaseDate,duration,isClean,canStream,icon,'
+          + 'canSample,name,isExplicit,artist,url,albumKey,length,trackKeys,'
+          + 'rawArtistKey,artistUrl';
+      } else {
+        this._count = 1000;
+        this._extras = '-*,albumKey';
+      }
+
       this._load();
     },
 
@@ -191,7 +193,7 @@
           user: R.currentUser.get("key"), 
           start: this._start,
           count: this._count,
-          extras: this._config.extras,
+          extras: this._extras,
           sort: this._config.sort
         },
         success: function(data) {
@@ -212,46 +214,68 @@
               self._config.onAlbumsLoaded(data.result);
             }
           } else {
-            if (!self._firstTime) {
+            var addedKeys = [];
+            var removedKeys = [];
+
+            if (self._firstTime) {
+              self._albums = self._newAlbums;
+              self._albumsByKey = self._newAlbumsByKey;
+            } else {
               var key;
-              if (self._config.onAdded) {
-                var added = [];
-                for (key in self._newAlbumsByKey) {
-                  if (!self._albumsByKey[key]) {
-                    added.push(self._newAlbumsByKey[key]);
-                  }
-                }
 
-                if (added.length) {
-                  self._config.onAdded(added);
+              // Added
+              for (key in self._newAlbumsByKey) {
+                if (!self._albumsByKey[key]) {
+                  addedKeys.push(key);
                 }
               }
 
-              if (self._config.onRemoved) {
-                var removed = [];
-                for (key in self._albumsByKey) {
-                  if (!self._newAlbumsByKey[key]) {
-                    removed.push(self._albumsByKey[key]);
-                  }
+              // Removed
+              for (key in self._albumsByKey) {
+                if (!self._newAlbumsByKey[key]) {
+                  removedKeys.push(key);
                 }
-              
-                if (removed.length) {
-                  self._config.onRemoved(removed);
+              }
+
+              // Reconcile
+              if (addedKeys.length > 100) {
+                self._startLoad({ fullLoad: true });
+                return;
+              } else {
+                // Actually add
+                if (addedKeys.length) {
+                  R.request({
+                    method: "get", 
+                    content: {
+                      keys: addedKeys.join(',')
+                      // extras: this.extras
+                    },
+                    success: function(data) {
+                      var addedAlbums = [];
+                      var album;
+                      for (var key in data.result) {
+                        album = data.result[key];
+                        addedAlbums.push(album);
+                        self._albums.push(album);
+                        self._albumsByKey[key] = album;
+                      }
+
+                      self._finishLoad(addedAlbums, removedKeys);
+                    },
+                    error: function(data) {
+                      self._loading = false;
+                      if (self._config.onError) {
+                        self._config.onError(data.message);
+                      }
+                    }
+                  });
+
+                  return;
                 }
               }
             }
 
-            self._albums = self._newAlbums;
-            self._albumsByKey = self._newAlbumsByKey;
-            self._newAlbums = [];
-            self._newAlbumsByKey = {};
-            self.length = self._albums.length;
-            self._firstTime = false;
-            self._done = true;
-            self._save();
-            if (self._config.onLoadComplete) {
-              self._config.onLoadComplete();
-            }
+            self._finishLoad([], removedKeys);
           }
         },
         error: function(data) {
@@ -261,6 +285,48 @@
           }
         }
       });      
+    },
+
+    // ----------
+    _finishLoad: function(addedAlbums, removedKeys) {
+      // Actually remove
+      var removedAlbums = [];
+      var key;
+
+      for (var i = 0; i < removedKeys.length; i++) {
+        key = removedKeys[i];
+        removedAlbums.push(this._albumsByKey[key]);
+        delete this._albumsByKey[key];
+        for (var j = 0; j < this._albums.length; j++) {
+          if (this._albums[j].key == key) {
+            this._albums.splice(j, 1);
+            break;
+          }
+        }
+      }
+
+      // Finish up
+      var wasFirstTime = this._firstTime;
+
+      this._newAlbums = [];
+      this._newAlbumsByKey = {};
+      this.length = this._albums.length;
+      this._firstTime = false;
+      this._done = true;
+      this._save();
+
+      // Send events
+      if (wasFirstTime && this._config.onLoadComplete) {
+        this._config.onLoadComplete();
+      }
+
+      if (addedAlbums.length && this._config.onAdded) {
+        this._config.onAdded(addedAlbums);
+      }
+
+      if (removedAlbums.length && this._config.onRemoved) {
+        this._config.onRemoved(removedAlbums);
+      }
     },
     
     // ----------
