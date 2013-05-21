@@ -17,13 +17,30 @@
       this.collection = rdioUtils.trackCollection({
         localStorage: true,
         onAlbumsLoaded: function(albums) {
-          self.addAlbums(albums);
+          self.log('onAlbumsLoaded: ' + albums.length + ' albums');
+          // self.addAlbums(albums);
         },
         onAdded: function(albums) {
-          self.addAlbums(albums);
+          self.log('onAdded: ' + albums.length + ' albums');
+          _.each(albums, function(v, i) {
+            self.log('+ ' + v.name + ' by ' + v.artist);
+          });
+
+          // self.addAlbums(albums);
         },
         onRemoved: function(albums) {
-          self.removeAlbums(albums);
+          self.log('onRemoved: ' + albums.length + ' albums');
+          _.each(albums, function(v, i) {
+            self.log('- ' + v.name + ' by ' + v.artist);
+          });
+
+          // self.removeAlbums(albums);
+        },
+        onLoadComplete: function() {
+          self.log('onLoadComplete: ' + self.collection.length + ' albums total');
+        },
+        onError: function(message) {
+          self.log('onError: ' + message);
         }
       });
     },
@@ -48,6 +65,13 @@
       _.each(albums, function(v, i) {
         self.$albums[v.key].remove();
       });
+    },
+
+    // ----------
+    log: function(message) {
+      $('<p>')
+        .text(message)
+        .appendTo('.log');
     }
   };
 
