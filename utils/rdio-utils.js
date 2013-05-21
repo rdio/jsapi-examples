@@ -94,6 +94,9 @@
     this._newAlbumsByKey = {};
     this._firstTime = true;
     
+    this._bigExtras = '-*,releaseDate,duration,isClean,canStream,icon,'
+      + 'canSample,name,isExplicit,artist,url,length,trackKeys,artistUrl';
+
     var whenAuthenticated = function() {
       if (self._config.localStorage) {
         var data = localStorage.__rdioUtilsCollectionAlbums;
@@ -172,9 +175,7 @@
 
       if (this._fullLoad) {
         this._count = 100;
-        this._extras = '-*,releaseDate,duration,isClean,canStream,icon,'
-          + 'canSample,name,isExplicit,artist,url,albumKey,length,trackKeys,'
-          + 'rawArtistKey,artistUrl';
+        this._extras = this._bigExtras + ',albumKey,rawArtistKey';
       } else {
         this._count = 1000;
         this._extras = '-*,albumKey';
@@ -207,8 +208,13 @@
             var album;
             for (var i = 0; i < data.result.length; i++) {
               album = data.result[i];
+
               album.key = album.albumKey;
               delete album.albumKey;
+
+              album.artistKey = album.rawArtistKey;
+              delete album.rawArtistKey;
+
               self._newAlbums.push(album);
               self._newAlbumsByKey[album.key] = album;
             }
@@ -242,41 +248,13 @@
                 }
               }
 
-              // Reconcile
-              if (addedKeys.length > 100) {
-                self._startLoad({ fullLoad: true });
+              // Grab full data for added albums
+              if (addedKeys.length) {
+                self._getAlbums(addedKeys, function(addedAlbums) {
+                  self._finishLoad(addedAlbums, removedKeys);
+                });
+
                 return;
-              } else {
-                // Actually add
-                if (addedKeys.length) {
-                  R.request({
-                    method: "get", 
-                    content: {
-                      keys: addedKeys.join(',')
-                      // extras: this.extras
-                    },
-                    success: function(data) {
-                      var addedAlbums = [];
-                      var album;
-                      for (var key in data.result) {
-                        album = data.result[key];
-                        addedAlbums.push(album);
-                        self._albums.push(album);
-                        self._albumsByKey[key] = album;
-                      }
-
-                      self._finishLoad(addedAlbums, removedKeys);
-                    },
-                    error: function(data) {
-                      self._loading = false;
-                      if (self._config.onError) {
-                        self._config.onError(data.message);
-                      }
-                    }
-                  });
-
-                  return;
-                }
               }
             }
 
@@ -293,12 +271,51 @@
     },
 
     // ----------
+    _getAlbums: function(keys, callback) {
+      var self = this;
+
+      var keysChunk = keys.slice(0, 100);
+      var keysRemainder = keys.slice(100);
+
+      R.request({
+        method: "get", 
+        content: {
+          keys: keysChunk.join(','),
+          extras: this._bigExtras + ',key,artistKey'
+        },
+        success: function(data) {
+          var addedAlbums = [];
+          var album;
+          for (var key in data.result) {
+            album = data.result[key];
+            addedAlbums.push(album);
+          }
+
+          if (keysRemainder.length) {
+            self._getAlbums(keysRemainder, function(moreAddedAlbums) {
+              callback(addedAlbums.concat(moreAddedAlbums));
+            });
+          } else {
+            callback(addedAlbums);
+          }
+        },
+        error: function(data) {
+          self._loading = false;
+          if (self._config.onError) {
+            self._config.onError(data.message);
+          }
+        }
+      });
+    },
+
+    // ----------
     _finishLoad: function(addedAlbums, removedKeys) {
+      var i;
+
       // Actually remove
       var removedAlbums = [];
       var key;
-
-      for (var i = 0; i < removedKeys.length; i++) {
+      for (i = 0; i < removedKeys.length; i++) {
         key = removedKeys[i];
         removedAlbums.push(this._albumsByKey[key]);
         delete this._albumsByKey[key];
@@ -308,6 +325,14 @@
             break;
           }
         }
+      }
+
+      // Actually add
+      var album;
+      for (i = 0; i < addedAlbums.length; i++) {
+        album = addedAlbums[i];
+        this._albums.push(album);
+        this._albumsByKey[album.key] = album;
       }
 
       // Finish up

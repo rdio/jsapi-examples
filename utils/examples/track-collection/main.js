@@ -72,6 +72,20 @@
       $('<p>')
         .text(message)
         .appendTo('.log');
+    },
+
+    // ----------
+    // For testing purposes only
+    _chop: function(count) {
+      var self = this;
+
+      var remove = this.collection._albums.slice(0, count);
+      this.collection._albums = this.collection._albums.slice(count);
+      _.each(remove, function(v, i) {
+        delete self.collection._albumsByKey[v.key];
+      });
+
+      this.collection._startLoad();
     }
   };
 
