@@ -87,7 +87,6 @@
 
     this._start = 0;
     this._loading = false;
-    this._done = false;
     this._albums = [];
     this._albumsByKey = {};
     this._newAlbums = [];
@@ -112,7 +111,6 @@
             self._albums = albums;
             self.length = self._albums.length;
             self._firstTime = false;
-            self._done = true;
 
             if (self._config.onAlbumsLoaded) {
               self._config.onAlbumsLoaded(albums);
@@ -163,17 +161,12 @@
     },
 
     // ----------
-    _startLoad: function(options) {
-      options = options || {};
-
+    _startLoad: function() {
       this._start = 0;
-      this._loading = false;
-      this._done = false;
       this._newAlbums = [];
       this._newAlbumsByKey = {};
-      this._fullLoad = options.fullLoad || this._firstTime;
 
-      if (this._fullLoad) {
+      if (this._firstTime) {
         this._count = 100;
         this._extras = this._bigExtras + ',albumKey,rawArtistKey';
       } else {
@@ -187,7 +180,7 @@
     // ----------
     _load: function() {
       var self = this;
-      if (this._loading || this._done) {
+      if (this._loading) {
         return;
       }
       
@@ -228,7 +221,7 @@
             var addedKeys = [];
             var removedKeys = [];
 
-            if (self._fullLoad) {
+            if (self._firstTime) {
               self._albums = self._newAlbums;
               self._albumsByKey = self._newAlbumsByKey;
             } else {
@@ -342,7 +335,6 @@
       this._newAlbumsByKey = {};
       this.length = this._albums.length;
       this._firstTime = false;
-      this._done = true;
       this._save();
 
       // Send events
