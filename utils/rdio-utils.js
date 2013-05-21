@@ -107,7 +107,9 @@
             }
 
             self._albums = albums;
+            self.length = self._albums.length;
             self._firstTime = false;
+            self._done = true;
 
             if (self._config.onAlbumsLoaded) {
               self._config.onAlbumsLoaded(albums);
@@ -158,14 +160,17 @@
     },
 
     // ----------
-    _startLoad: function() {
+    _startLoad: function(options) {
+      options = options || {};
+
       this._start = 0;
       this._loading = false;
       this._done = false;
       this._newAlbums = [];
       this._newAlbumsByKey = {};
+      this._fullLoad = options.fullLoad || this._firstTime;
 
-      if (this._firstTime) {
+      if (this._fullLoad) {
         this._count = 100;
         this._extras = '-*,releaseDate,duration,isClean,canStream,icon,'
           + 'canSample,name,isExplicit,artist,url,albumKey,length,trackKeys,'
@@ -217,7 +222,7 @@
             var addedKeys = [];
             var removedKeys = [];
 
-            if (self._firstTime) {
+            if (self._fullLoad) {
               self._albums = self._newAlbums;
               self._albumsByKey = self._newAlbumsByKey;
             } else {
