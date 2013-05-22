@@ -2,6 +2,7 @@
 
 (function() {
 
+  // ----------
   window.Main = {
     $albums: {},
 
@@ -18,52 +19,22 @@
         localStorage: true,
         onAlbumsLoaded: function(albums) {
           self.log('onAlbumsLoaded: ' + albums.length + ' albums');
-          // self.addAlbums(albums);
-        },
-        onAdded: function(albums) {
-          self.log('onAdded: ' + albums.length + ' albums');
-          _.each(albums, function(v, i) {
-            self.log('+ ' + v.name + ' by ' + v.artist);
-          });
-
-          // self.addAlbums(albums);
-        },
-        onRemoved: function(albums) {
-          self.log('onRemoved: ' + albums.length + ' albums');
-          _.each(albums, function(v, i) {
-            self.log('- ' + v.name + ' by ' + v.artist);
-          });
-
-          // self.removeAlbums(albums);
+          self.logAlbums(albums, '=');
         },
         onLoadComplete: function() {
           self.log('onLoadComplete: ' + self.collection.length + ' albums total');
         },
         onError: function(message) {
           self.log('onError: ' + message);
+        },
+        onAdded: function(albums) {
+          self.log('onAdded: ' + albums.length + ' albums');
+          self.logAlbums(albums, '+');
+        },
+        onRemoved: function(albums) {
+          self.log('onRemoved: ' + albums.length + ' albums');
+          self.logAlbums(albums, '-');
         }
-      });
-    },
-
-    // ----------
-    addAlbums: function(albums) {
-      var self = this;
-
-      var $content = $('.content');
-      _.each(albums, function(v, i) {
-        self.$albums[v.key] = $('<img>')
-          .addClass('album')
-          .prop('src', v.icon)
-          .appendTo($content);
-      });
-    },
-
-    // ----------
-    removeAlbums: function(albums) {
-      var self = this;
-
-      _.each(albums, function(v, i) {
-        self.$albums[v.key].remove();
       });
     },
 
@@ -75,20 +46,25 @@
     },
 
     // ----------
-    // For testing purposes only
-    _chop: function(count) {
+    logAlbums: function(albums, prefix) {
       var self = this;
 
-      var remove = this.collection._albums.slice(0, count);
-      this.collection._albums = this.collection._albums.slice(count);
-      _.each(remove, function(v, i) {
-        delete self.collection._albumsByKey[v.key];
+      _.each(albums, function(v, i) {
+        v.prefix = prefix;
+        self.template('album', v).appendTo('.log');
       });
+    },
 
-      this.collection._startLoad();
+    // ----------
+    template: function(name, config) {
+      var rawTemplate = $.trim($("#" + name + "-template").text());
+      var template = _.template(rawTemplate);
+      var html = template(config);
+      return $(html);
     }
   };
 
+  // ----------
   $(document).ready(function() {
     Main.init();
   });

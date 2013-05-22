@@ -6,7 +6,7 @@
     <link rel="stylesheet/less" type="text/css" href="main.less">
 
     <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
-    <script src="//www.rdio.com/api/api.js?client_id=-LFd7RCqdvYrIgW58Vq_oA&helper=../helper.html"></script>
+    <script src="//www.rdio.com/api/api.js?client_id=-LFd7RCqdvYrIgW58Vq_oA"></script>
 
     <script src="../lib/jquery-1.9.1.min.js"></script>
     <script src="../lib/underscore-1.4.4.min.js"></script>
@@ -14,10 +14,13 @@
     <script src="../../rdio-utils.js"></script>
     <script src="main.js"></script>
 
+    <script id="album-template" type="text/template">
+      <p><%= prefix %> <a href="http://www.rdio.com<%= url %>" target="_blank"><%= name %></a> by <a href="http://www.rdio.com<%= artistUrl %>" target="_blank"><%= artist %></a></p>
+    </script>
+
   </head>
   <body>
     <div class="auth"></div>
     <div class="log"></div>
-    <div class="content"></div>
   </body>
 </html>

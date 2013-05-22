@@ -69,3 +69,4 @@ rdioUtils.addToTopOfQueue('a171827');
 ** Interrupting a load with another load
 ** If library changes during initial load
 * Track the collection of any user?
+* Sort collectionAlbums by play count, date added, etc?
