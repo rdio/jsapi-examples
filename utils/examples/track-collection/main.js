@@ -14,7 +14,7 @@
 
       rdioUtils.authWidget($('.auth'));
 
-      this.collection = rdioUtils.trackCollection({
+      this.collection = rdioUtils.collectionAlbums({
         localStorage: true,
         onAlbumsLoaded: function(albums) {
           self.log('onAlbumsLoaded: ' + albums.length + ' albums');

@@ -5,6 +5,31 @@
 
 (function(R) {
 
+  var verbose = false;
+
+  // ----------
+  var log = function() {
+    /*globals console */
+    if (verbose && window.console && console.log) {
+      console.log.apply(console, arguments);
+    }
+  };
+
+  // ----------
+  var assert = function(condition, message) {
+    /*globals console */
+    if (!window.console) {
+      return;
+    }
+
+    if (console.assert) {
+      console.assert(condition, message);
+    } else if (condition && console.error) {
+      console.error('Rdio Utils assert failed: ' + message);
+    }
+  };
+
+  // ----------
   var bind = function(element, eventName, handler) {
     if(element.addEventListener)
       element.addEventListener(eventName, handler, true);
@@ -37,11 +62,10 @@
 
     // ----------
     // config properties:
-    // - sort: what kind of sort to use when loading the collection
     // - onLoadComplete: callback called when the collection has been loaded
     // - onAlbumsLoaded: callback called when some portion of the collection has been loaded
     // - onError: callback called if there's an error
-    trackCollection: function(config) {
+    collectionAlbums: function(config) {
       return new CollectionTracker(config);
     },
 
@@ -76,7 +100,6 @@
   var CollectionTracker = function(config) {
     var self = this;
     this._config = {
-      sort: config.sort || 'playCount',
       onLoadComplete: config.onLoadComplete,
       onAlbumsLoaded: config.onAlbumsLoaded,
       onError: config.onError,
@@ -86,7 +109,7 @@
     };
 
     this._start = 0;
-    this._loading = false;
+    this._loading = null;
     this._albums = [];
     this._albumsByKey = {};
     this._newAlbums = [];
@@ -132,8 +155,18 @@
         self._startLoad();
       }
 
-      R.currentUser.on('change:libraryVersion', function() {
-        self._startLoad();
+      R.currentUser.on('change:libraryVersion', function(value) {
+        log('change:libraryVersion: ' + value);
+        if (self._loading) {
+          self._loading.loadAgain = true;
+
+          if (!self._firstTime) {
+            assert(self._loading.request, '_loading.request must exist');
+            self._loading.request.abort();
+          }
+        } else {
+          self._startLoad();
+        }
       });
     };
 
@@ -162,9 +195,11 @@
 
     // ----------
     _startLoad: function() {
+      log('_startLoad');
       this._start = 0;
       this._newAlbums = [];
       this._newAlbumsByKey = {};
+      this._loading = {};
 
       if (this._firstTime) {
         this._count = 100;
@@ -179,24 +214,22 @@
 
     // ----------
     _load: function() {
+      log('_load');      
       var self = this;
-      if (this._loading) {
-        return;
-      }
-      
-      this._loading = true;
+      assert(this._loading, '_loading must exist');
+      assert(!this._loading.request, '_loading.request must not exist');
         
-      R.request({
+      this._loading.request = R.request({
         method: "getAlbumsInCollection", 
         content: {
           user: R.currentUser.get("key"), 
           start: this._start,
           count: this._count,
           extras: this._extras,
-          sort: this._config.sort
+          sort: 'playCount'
         },
         success: function(data) {
-          self._loading = false;
+          self._loading.request = null;
           if (data.result.length) {
             var album;
             for (var i = 0; i < data.result.length; i++) {
@@ -255,28 +288,36 @@
           }
         },
         error: function(data) {
-          self._loading = false;
-          if (self._config.onError) {
+          log('_load error: ' + data.status);
+          self._loading.request = null;
+          if (data.status != 'abort' && self._config.onError) {
             self._config.onError(data.message);
           }
+
+          self._loadingDone();
         }
       });      
     },
 
     // ----------
     _getAlbums: function(keys, callback) {
+      log('_getAlbums');
       var self = this;
+      assert(this._loading, '_loading must exist');
+      assert(!this._loading.request, '_loading.request must not exist');
 
-      var keysChunk = keys.slice(0, 100);
-      var keysRemainder = keys.slice(100);
+      var chunkSize = 200;
+      var keysChunk = keys.slice(0, chunkSize);
+      var keysRemainder = keys.slice(chunkSize);
 
-      R.request({
+      this._loading.request = R.request({
         method: "get", 
         content: {
           keys: keysChunk.join(','),
           extras: this._bigExtras + ',key,artistKey'
         },
         success: function(data) {
+          self._loading.request = null;
           var addedAlbums = [];
           var album;
           for (var key in data.result) {
@@ -293,10 +334,13 @@
           }
         },
         error: function(data) {
-          self._loading = false;
-          if (self._config.onError) {
+          log('_getAlbums error: ' + data.status);
+          self._loading.request = null;
+          if (data.status != 'abort' && self._config.onError) {
             self._config.onError(data.message);
           }
+
+          self._loadingDone();
         }
       });
     },
@@ -348,6 +392,23 @@
 
       if (removedAlbums.length && this._config.onRemoved) {
         this._config.onRemoved(removedAlbums);
+      }
+
+      // Final cleanup
+      this._loadingDone();
+    },
+
+    // ----------
+    _loadingDone: function() {
+      assert(this._loading, '_loading must exist');
+      assert(!this._loading.request, '_loading.request must not exist');
+
+      var loadAgain = this._loading.loadAgain;
+      
+      this._loading = null;
+      
+      if (loadAgain) {
+        this._startLoad();
       }
     },
     
