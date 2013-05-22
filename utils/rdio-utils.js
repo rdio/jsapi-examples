@@ -61,10 +61,6 @@
     },
 
     // ----------
-    // config properties:
-    // - onLoadComplete: callback called when the collection has been loaded
-    // - onAlbumsLoaded: callback called when some portion of the collection has been loaded
-    // - onError: callback called if there's an error
     collectionAlbums: function(config) {
       return new CollectionTracker(config);
     },
@@ -230,6 +226,7 @@
         },
         success: function(data) {
           self._loading.request = null;
+
           if (data.result.length) {
             var album;
             for (var i = 0; i < data.result.length; i++) {
@@ -245,11 +242,14 @@
               self._newAlbumsByKey[album.key] = album;
             }
 
-            self._start += self._count;
-            self._load();
             if (self._firstTime && self._config.onAlbumsLoaded) {
               self._config.onAlbumsLoaded(data.result);
             }
+          }
+          
+          if (data.result.length == self._count) {
+            self._start += self._count;
+            self._load();
           } else {
             var addedKeys = [];
             var removedKeys = [];
