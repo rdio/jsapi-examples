@@ -9,9 +9,10 @@
     // ----------
     init: function() {
       var self = this;
-      // if (!rdioUtils.startupChecks()) {
-        // return;
-      // }
+      
+      if (!rdioUtils.startupChecks()) {
+        return;
+      }
 
       rdioUtils.authWidget($('.auth'));
 
