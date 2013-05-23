@@ -110,6 +110,11 @@
           
           if (!data.result.length) {
             self.nextIndex = -1;
+
+            if (self.albums.length === 0) {
+              $('.history-error').show();
+            }
+
             return;
           }
           
