@@ -6,6 +6,24 @@ Some helper functions for the Rdio JavaScript API.
 
 To use, include `rdio-utils.js` and `rdio-utils.css` in your project. It adds a single object to the global space: `rdioUtils`.  See below for methods.
 
+### rdioUtils.startupChecks()
+
+Does various standard health checks, and notifies the user if there are issues. The notification is a simple dialog that you can style via the `.rdio-utils-dialog` CSS class. It's not terribly deluxe, so if you want something more advanced, you might just use the code as a reference for what to check.
+
+It checks:
+
+* If the Rdio API loaded at all.
+* If the user has cookies blocked.
+* If the user needs Flash but has it blocked or not installed.
+
+It returns `true` if the API exists on the page and false if it doesn't (i.e. Rdio is down).
+
+```
+if (!rdioUtils.startupChecks()) {
+  return;
+}
+``` 
+
 ### rdioUtils.collectionAlbums( config )
 
 Allows you to access all the albums in the user's collection, and notifies you when albums are added or removed.
