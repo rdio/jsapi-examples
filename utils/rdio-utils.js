@@ -137,9 +137,20 @@
       onAlbumsLoaded: config.onAlbumsLoaded,
       onError: config.onError,
       onAdded: config.onAdded,
-      onRemoved: config.onRemoved,
-      localStorage: config.localStorage && window.localStorage && window.JSON
+      onRemoved: config.onRemoved
     };
+
+    if (config.localStorage && window.JSON) {
+      // Determine if localStorage is available.
+      // See: https://gist.github.com/paulirish/5558557
+      try {
+        var testKey = '__rdioUtilsTestKey';
+        localStorage.setItem(testKey, testKey);
+        localStorage.removeItem(testKey);
+        this._config.localStorage = true;
+      } catch(e) {
+      }      
+    }
 
     this._start = 0;
     this._loading = null;
