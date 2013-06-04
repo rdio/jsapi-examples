@@ -30,8 +30,13 @@
           person.untrackPresence();
         });
 
+        var person;
         for (var a = 0; a < following.length; a++) {
-          following.at(a).trackPresence();
+          person = following.at(a);
+          person.trackPresence();
+          if (person.get('online')) {
+            self.addPerson(person);
+          }
         }
       });
     });
