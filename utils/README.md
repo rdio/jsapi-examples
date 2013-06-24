@@ -81,6 +81,7 @@ rdioUtils.addToTopOfQueue('a171827');
 
 ## TODO
 
+* "extras" for album collection (so you can retrieve specific info)
 * Playback UI
 * Album UI
 * Unit tests for collectionAlbums()
