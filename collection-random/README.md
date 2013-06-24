@@ -1,5 +1,6 @@
 # TODO:
 
+* Spinner for initial load
 * When you run our of indicies, refresh the list
 * Deal with collection add and remove events
 * Spinner for queuing
