@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Collection Random</title>
+    <link rel="stylesheet" type="text/css" href="../lib/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../utils/rdio-utils.css">
+    <link rel="stylesheet/less" type="text/css" href="main.less">
+
+    <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
+    <script src="//www.rdio.com/api/api.js?client_id=oAzRRshqViiroR2U8IfJgw"></script>
+
+    <script src="../lib/jquery-1.9.1.min.js"></script>
+    <script src="../lib/underscore-1.4.4.min.js"></script>
+    <script src="../lib/less-1.3.0.min.js"></script>
+    <script src="../utils/rdio-utils.js"></script>
+    <script src="main.js"></script>
+
+    <script id="album-template" type="text/template">
+      <div class="album">
+        <img src="<%= icon %>">
+        <p><a href="http://www.rdio.com<%= url %>" target="_blank"><%= name %></a> by <a href="http://www.rdio.com<%= artistUrl %>" target="_blank"><%= artist %></a></p>
+      </div>
+    </script>
+
+  </head>
+  <body>
+    <div class="header">
+      <button class="shuffle">Shuffle</button>
+      <div class="auth"></div>
+    </div>
+    <p>Click any album to add it to your queue.</p>
+    <div class="albums"></div>
+  </body>
+</html>
