@@ -15,6 +15,7 @@ module.exports = function(grunt) {
         releaseRoot = "../",
         sources = [
             "src/main.js",
+            "src/album-widget.js",
             "src/collection-tracker.js"
         ];
 

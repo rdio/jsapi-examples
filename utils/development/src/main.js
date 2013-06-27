@@ -1,4 +1,5 @@
-// RdioUtils - main.js
+// ----------------------------------------------------------------------------------
+// rdioUtils -- main.js
 // Copyright 2013, Rdio, Inc.
 // Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
@@ -105,6 +106,12 @@
           });
         }
       });
+    },
+
+    // ----------
+    albumWidget: function(album) {
+      var widget = new this.AlbumWidget(album);
+      return widget.element();
     },
 
     // ----------

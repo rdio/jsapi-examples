@@ -1,5 +1,5 @@
 {
-  "name": "RdioUtils",
+  "name": "rdioUtils",
   "version": "0.0.2",
   "description": "Some helper functions for the Rdio JavaScript API.",
   "devDependencies": {
