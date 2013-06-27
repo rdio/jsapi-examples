@@ -62,6 +62,13 @@ module.exports = function(grunt) {
     });
 
     // ----------
+    // Copy:build task.
+    // Copies the other files into the appropriate location in the build folder.
+    grunt.registerTask("copy:build", function() {
+        grunt.file.copy("src/rdio-utils.css", "build/rdio-utils.css");
+    });
+
+    // ----------
     // Copy:release task.
     // Copies the contents of the build folder into the release folder.
     grunt.registerTask("copy:release", function() {
@@ -78,7 +85,7 @@ module.exports = function(grunt) {
     // Build task.
     // Cleans out the build folder and builds the code and images into it, checking lint.
     grunt.registerTask("build", [
-        "clean:build", "jshint:beforeconcat", "concat", "jshint:afterconcat", "uglify"
+        "clean:build", "jshint:beforeconcat", "concat", "jshint:afterconcat", "uglify", "copy:build"
     ]);
 
     // ----------
