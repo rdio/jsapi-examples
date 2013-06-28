@@ -4,7 +4,7 @@ Some helper functions for the Rdio JavaScript API.
 
 ## Documentation
 
-To use, include `rdio-utils.js` and `rdio-utils.css` in your project. It adds a single object to the global space: `rdioUtils`.  See below for methods.
+To use, include `rdio-utils.min.js` and `rdio-utils.css` in your project. It adds a single object to the global space: `rdioUtils`.  See below for methods.
 
 ### rdioUtils.startupChecks()
 
@@ -78,14 +78,3 @@ Adds the given source to the top of the queue (rather than the bottom, which is 
 ```
 rdioUtils.addToTopOfQueue('a171827');
 ```
-
-## TODO
-
-* "extras" for album collection (so you can retrieve specific info)
-* Playback UI
-* Album UI
-* Unit tests for collectionAlbums()
- * Interrupting a load with another load
- * If library changes during initial load
-* Track the collection of any user?
-* Sort collectionAlbums by play count, date added, etc?

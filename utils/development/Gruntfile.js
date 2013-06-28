@@ -32,7 +32,9 @@ module.exports = function(grunt) {
                     + "//! Built on <%= grunt.template.today('yyyy-mm-dd') %>\n"
                     + "//! https://github.com/rdio/jsapi-examples/tree/master/utils\n"
                     + "//! Copyright 2013, Rdio, Inc.\n"
-                    + "//! Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php\n\n",
+                    + "//! Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php\n"
+                    + "\n"
+                    + "// NOTE: This is a built file; to edit the code, see the development folder.\n\n",
                 process: true
             },
             dist: {
