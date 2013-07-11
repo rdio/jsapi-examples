@@ -109,10 +109,10 @@
     },
 
     // ----------
-    albumWidget: function(album) {
-      var widget = new this.AlbumWidget(album);
-      return widget.element();
-    },
+    // albumWidget: function(album) {
+    //   var widget = new this.AlbumWidget(album);
+    //   return widget.element();
+    // },
 
     // ----------
     _log: function() {
@@ -132,7 +132,7 @@
       if (console.assert) {
         console.assert(condition, message);
       } else if (condition && console.error) {
-        console.error('Rdio Utils assert failed: ' + message);
+        console.error('[rdioUtils] assert failed: ' + message);
       }
     }
   };
