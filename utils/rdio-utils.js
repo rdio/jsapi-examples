@@ -1,6 +1,14 @@
-// Rdio Utils 0.0.1
+//! rdioUtils 0.0.2
+//! Built on 2013-07-11
+//! https://github.com/rdio/jsapi-examples/tree/master/utils
+//! Copyright 2013, Rdio, Inc.
+//! Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+// NOTE: This is a built file; to edit the code, see the development folder.
+
+// ----------------------------------------------------------------------------------
+// rdioUtils -- main.js
 // Copyright 2013, Rdio, Inc.
-// https://github.com/rdio/jsapi-examples/tree/master/utils
 // Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 (function(R) {
@@ -8,41 +16,21 @@
   var verbose = false;
 
   // ----------
-  var log = function() {
-    /*globals console */
-    if (verbose && window.console && console.log) {
-      console.log.apply(console, arguments);
-    }
-  };
-
-  // ----------
-  var assert = function(condition, message) {
-    /*globals console */
-    if (!window.console) {
-      return;
-    }
-
-    if (console.assert) {
-      console.assert(condition, message);
-    } else if (condition && console.error) {
-      console.error('Rdio Utils assert failed: ' + message);
-    }
-  };
-
-  // ----------
   var bind = function(element, eventName, handler) {
-    if(element.addEventListener)
+    if(element.addEventListener) {
       element.addEventListener(eventName, handler, true);
-    else
+    } else {
       element.attachEvent("on" + eventName, handler);
+    }
   };
   
   // ----------
   var unbind = function(element, eventName, handler) {
-    if(element.removeEventListener)
+    if(element.removeEventListener) {
       element.removeEventListener(eventName, handler, true);
-    else
+    } else {
       element.detachEvent("on" + eventName, handler);
+    }
   };
 
   // ----------
@@ -99,7 +87,7 @@
 
     // ----------
     collectionAlbums: function(config) {
-      return new CollectionTracker(config);
+      return new this.CollectionTracker(config);
     },
 
     // ----------
@@ -126,11 +114,65 @@
           });
         }
       });
+    },
+
+    // ----------
+    // albumWidget: function(album) {
+    //   var widget = new this.AlbumWidget(album);
+    //   return widget.element();
+    // },
+
+    // ----------
+    _log: function() {
+      /*globals console */
+      if (verbose && window.console && console.log) {
+        console.log.apply(console, arguments);
+      }
+    },
+
+    // ----------
+    _assert: function(condition, message) {
+      /*globals console */
+      if (!window.console) {
+        return;
+      }
+
+      if (console.assert) {
+        console.assert(condition, message);
+      } else if (condition && console.error) {
+        console.error('[rdioUtils] assert failed: ' + message);
+      }
     }
   };
 
+})(window.__rdio);
+
+// ----------------------------------------------------------------------------------
+// rdioUtils -- album-widget.js
+// Copyright 2013, Rdio, Inc.
+// Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+(function(R, rdioUtils) {
+
   // ----------
-  var CollectionTracker = function(config) {
+  rdioUtils.AlbumWidget = function(album) {
+  };
+
+  // ----------
+  rdioUtils.AlbumWidget.prototype = {
+  };
+
+})(window.__rdio, window.rdioUtils);
+
+// ----------------------------------------------------------------------------------
+// rdioUtils -- collection-tracker.js
+// Copyright 2013, Rdio, Inc.
+// Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
+
+(function(R, rdioUtils) {
+
+  // ----------
+  rdioUtils.CollectionTracker = function(config) {
     var self = this;
     this._config = {
       onLoadComplete: config.onLoadComplete,
@@ -200,12 +242,12 @@
       }
 
       R.currentUser.on('change:libraryVersion', function(value) {
-        log('change:libraryVersion: ' + value);
+        rdioUtils._log('change:libraryVersion: ' + value);
         if (self._loading) {
           self._loading.loadAgain = true;
 
           if (!self._firstTime) {
-            assert(self._loading.request, '_loading.request must exist');
+            rdioUtils._assert(self._loading.request, '_loading.request must exist');
             self._loading.request.abort();
           }
         } else {
@@ -231,7 +273,7 @@
   };
 
   // ----------
-  CollectionTracker.prototype = {
+  rdioUtils.CollectionTracker.prototype = {
     // ----------
     at: function(index) {
       return this._albums[index];
@@ -239,7 +281,7 @@
 
     // ----------
     _startLoad: function() {
-      log('_startLoad');
+      rdioUtils._log('_startLoad');
       this._start = 0;
       this._newAlbums = [];
       this._newAlbumsByKey = {};
@@ -258,10 +300,10 @@
 
     // ----------
     _load: function() {
-      log('_load');      
+      rdioUtils._log('_load');      
       var self = this;
-      assert(this._loading, '_loading must exist');
-      assert(!this._loading.request, '_loading.request must not exist');
+      rdioUtils._assert(this._loading, '_loading must exist');
+      rdioUtils._assert(!this._loading.request, '_loading.request must not exist');
         
       this._loading.request = R.request({
         method: "getAlbumsInCollection", 
@@ -336,7 +378,7 @@
           }
         },
         error: function(data) {
-          log('_load error: ' + data.status);
+          rdioUtils._log('_load error: ' + data.status);
           self._loading.request = null;
           if (data.status != 'abort' && self._config.onError) {
             self._config.onError(data.message);
@@ -349,10 +391,10 @@
 
     // ----------
     _getAlbums: function(keys, callback) {
-      log('_getAlbums');
+      rdioUtils._log('_getAlbums');
       var self = this;
-      assert(this._loading, '_loading must exist');
-      assert(!this._loading.request, '_loading.request must not exist');
+      rdioUtils._assert(this._loading, '_loading must exist');
+      rdioUtils._assert(!this._loading.request, '_loading.request must not exist');
 
       var chunkSize = 200;
       var keysChunk = keys.slice(0, chunkSize);
@@ -382,7 +424,7 @@
           }
         },
         error: function(data) {
-          log('_getAlbums error: ' + data.status);
+          rdioUtils._log('_getAlbums error: ' + data.status);
           self._loading.request = null;
           if (data.status != 'abort' && self._config.onError) {
             self._config.onError(data.message);
@@ -448,8 +490,8 @@
 
     // ----------
     _loadingDone: function() {
-      assert(this._loading, '_loading must exist');
-      assert(!this._loading.request, '_loading.request must not exist');
+      rdioUtils._assert(this._loading, '_loading must exist');
+      rdioUtils._assert(!this._loading.request, '_loading.request must not exist');
 
       var loadAgain = this._loading.loadAgain;
       
@@ -472,4 +514,4 @@
     }
   };
 
-})(window.__rdio);
+})(window.__rdio, window.rdioUtils);
