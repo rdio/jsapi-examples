@@ -8,24 +8,6 @@
   var verbose = false;
 
   // ----------
-  var bind = function(element, eventName, handler) {
-    if(element.addEventListener) {
-      element.addEventListener(eventName, handler, true);
-    } else {
-      element.attachEvent("on" + eventName, handler);
-    }
-  };
-  
-  // ----------
-  var unbind = function(element, eventName, handler) {
-    if(element.removeEventListener) {
-      element.removeEventListener(eventName, handler, true);
-    } else {
-      element.detachEvent("on" + eventName, handler);
-    }
-  };
-
-  // ----------
   function dialog(message) {
     var body = document.getElementsByTagName('body')[0];
     var el = document.createElement('div');
@@ -35,7 +17,7 @@
       + '</div><br><button>OK</button>';
 
     var button = el.getElementsByTagName('button')[0];
-    bind(button, 'click', function() {
+    rdioUtils._bind(button, 'click', function() {
       body.removeChild(el);
     });
 
@@ -84,6 +66,8 @@
 
     // ----------
     authWidget: function(el) {
+      var self = this;
+      
       if (el.jquery) {
         el = el[0];
       }
@@ -97,7 +81,7 @@
           showAuthenticated();
         } else {
           el.innerHTML = '<button>Sign In With Rdio</button>';
-          bind(el, 'click', function() {
+          self._bind(el, 'click', function() {
             R.authenticate(function(authenticated) {
               if (authenticated) {
                 showAuthenticated();
@@ -111,6 +95,24 @@
     // ----------
     albumWidget: function(album) {
       return new this.AlbumWidget(album);
+    },
+
+    // ----------
+    _bind: function(element, eventName, handler) {
+      if(element.addEventListener) {
+        element.addEventListener(eventName, handler, true);
+      } else {
+        element.attachEvent('on' + eventName, handler);
+      }
+    },
+    
+    // ----------
+    _unbind: function(element, eventName, handler) {
+      if(element.removeEventListener) {
+        element.removeEventListener(eventName, handler, true);
+      } else {
+        element.detachEvent('on' + eventName, handler);
+      }
     },
 
     // ----------

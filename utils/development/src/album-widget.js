@@ -7,10 +7,14 @@
 
   // ----------
   rdioUtils.AlbumWidget = function(album) {
+    if (!album || !album.url || !album.icon || !album.name || !album.artist 
+        || !album.artistUrl || !album.length || !album.key) {
+      throw new Error('Missing album or not enough info');
+    }
+    
     // TODO: Verify album has what we need
     // TODO: Escape all the values
     // TODO: Reject sources that aren't albums
-    // console.log(album);
     this._element = document.createElement('div');
     this._element.className = 'rdio-utils-album';
     this._element.innerHTML = ''
@@ -26,16 +30,14 @@
         + '<div class="rdio-utils-author rdio-utils-truncated"><a href="http://www.rdio.com' + album.artistUrl + '" target="_blank">' + album.artist + '</a></div>'
         + '<div class="rdio-utils-size rdio-utils-truncated">' + album.length + ' songs</div>';
 
-    // this._element.innerHTML = '<div>'
-    //   + message
-    //   + '</div><br><button>OK</button>';
+    var button = this._element.getElementsByClassName('rdio-utils-play')[0];
+    rdioUtils._bind(button, 'click', function(event) {
+      if (event.altKey || event.metaKey) {
+        R.player.queue.addPlayingSource();
+      }
 
-    // var button = this._element.getElementsByTagName('button')[0];
-    // bind(button, 'click', function() {
-    //   body.removeChild(this._element);
-    // });
-
-    // body.appendChild(this._element);
+      R.player.play({ source: album.key });
+    });
   };
 
   // ----------
