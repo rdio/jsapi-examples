@@ -54,7 +54,7 @@ module.exports = function(grunt) {
         },
         less: {
             build: {
-                src: [ 'src/rdio-utils.less' ],
+                src: [ 'src/main.less' ],
                 dest: 'build/rdio-utils.css'
             }
         },
