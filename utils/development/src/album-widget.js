@@ -7,9 +7,11 @@
 
   // ----------
   rdioUtils.AlbumWidget = function(album) {
-    if (!album || !album.url || !album.icon || !album.name || !album.artist 
-        || !album.artistUrl || !album.length || !album.key) {
-      throw new Error('Missing album or not enough info');
+    if (album && album.url && album.icon && album.name && album.artist 
+        && album.artistUrl && album.length && album.key) {
+      // TODO: Create a normal album
+    } else {
+      // TODO: Create a "broken" album
     }
 
     // TODO: Verify album has what we need
