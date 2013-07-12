@@ -26,8 +26,10 @@
               return;
             }
 
-            var widget = rdioUtils.albumWidget(response.result[0]);
-            $('body').append(widget.element());
+            _.each(response.result, function(v, i) {
+              var widget = rdioUtils.albumWidget(v);
+              $('body').append(widget.element());
+            });
           },
           error: function(response) {
             self.log(response.message);

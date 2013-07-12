@@ -11,7 +11,7 @@
         || !album.artistUrl || !album.length || !album.key) {
       throw new Error('Missing album or not enough info');
     }
-    
+
     // TODO: Verify album has what we need
     // TODO: Escape all the values
     // TODO: Reject sources that aren't albums
@@ -24,6 +24,7 @@
           + '</a>'
           + '<div class="rdio-utils-hover-overlay">'
             + '<div class="rdio-utils-play rdio-utils-btn"></div>'
+            // + '<div class="rdio-utils-action rdio-utils-btn"></div>'
           + '</div>'
         + '</div>'
         + '<div class="rdio-utils-title rdio-utils-truncated"><a href="http://www.rdio.com' + album.url + '" target="_blank">' + album.name + '</a></div>'
@@ -38,6 +39,11 @@
 
       R.player.play({ source: album.key });
     });
+
+    // button = this._element.getElementsByClassName('rdio-utils-action')[0];
+    // rdioUtils._bind(button, 'click', function(event) {
+    //   self._openActionMenu();
+    // });
   };
 
   // ----------
@@ -45,6 +51,10 @@
     // ----------
     element: function() {
       return this._element;
+    },
+
+    // ----------
+    _openActionMenu: function() {
     }
   };
 

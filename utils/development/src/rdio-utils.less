@@ -22,6 +22,7 @@
   vertical-align: top;
   position: relative;
   font-family: sans-serif;
+  cursor: pointer;
 
   a,
   a:visited {
@@ -68,16 +69,29 @@
   .rdio-utils-play {
     position: absolute;
     left: 50%;
-    bottom: 15px;
+    bottom: 32px;
     width: 42px;
     height: 42px;
     margin-left: -21px;
+    margin-bottom: -21px;
     background-image: url('rdio-utils-images/medium.png');
     cursor: pointer;
 
     &:hover {
       background-image: url('rdio-utils-images/medium-hover.png');
     }
+  }
+  
+  .rdio-utils-action {
+    position: absolute;
+    left: 50%;
+    bottom: 32px;
+    width: 33px;
+    height: 33px;
+    margin-left: 24px;
+    margin-bottom: -17px;
+    background-image: url('rdio-utils-images/plus.png');
+    cursor: pointer;
   }
   
   .rdio-utils-truncated {
