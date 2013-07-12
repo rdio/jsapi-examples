@@ -109,10 +109,9 @@
     },
 
     // ----------
-    // albumWidget: function(album) {
-    //   var widget = new this.AlbumWidget(album);
-    //   return widget.element();
-    // },
+    albumWidget: function(album) {
+      return new this.AlbumWidget(album);
+    },
 
     // ----------
     _log: function() {

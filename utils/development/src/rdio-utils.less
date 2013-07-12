@@ -1,0 +1,140 @@
+.rdio-utils-dialog {
+  position: fixed;
+  top: 30px;
+  width: 300px;
+  left: 50%;
+  margin-left: -170px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #666;
+  z-index: 99999;
+}
+
+.rdio-utils-album {
+  display: inline-block;
+  width: 202px;
+  margin: 0 10px 20px 10px;
+  overflow: hidden;
+  text-align: left;
+  font-size: 12px;
+  line-height: 18px;
+  vertical-align: top;
+  position: relative;
+  font-family: sans-serif;
+
+  a,
+  a:visited {
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:active {
+    text-decoration: underline;
+  }
+
+  .rdio-utils-icon {
+    width: 200px;
+    height: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .rdio-utils-station-icon {
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    float: left;
+  }
+
+  .rdio-utils-station-middle {
+    position: absolute;
+    left: 63px;
+    top: 63px;
+    width: 84px;
+    height: 84px;
+    float: none;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 100px;
+    background-image: url('../img/icon-station.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  
+  .rdio-utils-btn {
+    display: none;
+    z-index: 10;  
+  }
+  
+  .rdio-utils-cover {
+    position: relative;
+
+    &:hover .rdio-utils-btn {
+      display: block;
+    }
+  }
+
+  .rdio-utils-play {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    width: 35px;
+    height: 35px;
+    background-image: url('../img/play-buttons/large_halo.png');
+    cursor: pointer;
+
+    &:hover {
+      background-image: url('../img/play-buttons/large_halo_hover.png');
+    }
+
+    &:active {
+      background-image: url('../img/play-buttons/large_halo_active.png');
+    }
+  }
+  
+  .rdio-utils-truncated {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 200px;
+  }
+  
+  .rdio-utils-title {
+    margin-top: 4px;
+    color: #4B5C66;
+
+    a,
+    a:visited,
+    a:hover,
+    a:active {
+      color: #4B5C66;
+    }
+  }
+  
+  .rdio-utils-playlist-icon {
+    display: inline-block;
+    width: 11px;
+    height: 10px;
+    margin: 0 5px -2px 0;
+    background-image: url('../img/icon-playlist.png');
+  }
+
+  .rdio-utils-author,
+  .rdio-utils-size,
+  .rdio-utils-artists {
+    color: #89949B;
+
+    a,
+    a:visited,
+    a:hover,
+    a:active {
+      color: #89949B;
+    }
+  }
+
+  .rdio-utils-artists {
+    height: 36px;
+    overflow: hidden;
+  }
+}
