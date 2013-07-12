@@ -109,12 +109,11 @@
           self.spinner.stop();
           
           if (!data.result.length) {
-            self.nextIndex = -1;
-
-            if (self.albums.length === 0) {
+            if (self.nextIndex === 0) {
               $('.history-error').show();
             }
 
+            self.nextIndex = -1;
             return;
           }
           
