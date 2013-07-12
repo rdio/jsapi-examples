@@ -38,8 +38,11 @@
       $('.albums').empty();
       this.albums = [];
 
-      _.each(_.range(20), function(i) {
-        var album = self.collection.at(self.indicies.pop());
+      var addAlbum = function(album) {
+        if (!album.canStream) {
+          return;
+        }
+
         self.albums.push(album);
         var $album = self.template('album', album).appendTo('.albums');
         $album.find('img')
@@ -47,7 +50,11 @@
             R.player.queue.add(album.key);
             $album.fadeOut();
           });
-      });
+      };
+
+      while (this.albums.length < 20 && this.indicies.length) {
+        addAlbum(this.collection.at(this.indicies.pop()));
+      }
     },
 
     // ----------
