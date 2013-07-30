@@ -116,6 +116,17 @@
     },
 
     // ----------
+    _stopEvent: function(event) {    
+      if(event.preventDefault) {
+        event.preventDefault();    
+        event.stopPropagation();
+      } else {
+        event.cancelBubble = true;
+        event.returnValue = false;
+      }
+    },
+
+    // ----------
     _log: function() {
       /*globals console */
       if (verbose && window.console && console.log) {
