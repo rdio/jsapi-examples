@@ -127,6 +127,12 @@
     },
 
     // ----------
+    _escape: function(text) {
+      text = text + ''; // Make sure it's a string
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    },
+
+    // ----------
     _log: function() {
       /*globals console */
       if (verbose && window.console && console.log) {
