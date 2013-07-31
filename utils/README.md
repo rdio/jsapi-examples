@@ -61,6 +61,8 @@ var collection = rdioUtils.collectionAlbums({
 });
 ```
 
+You can see an example of this feature in action here: http://iangilman.com/rdio/utils/examples/collection/
+
 ### rdioUtils.authWidget( element )
 
 Turns the given element into a small Rdio authentication widget: if the user is authenticated, it shows their name. Otherwise it shows a "Sign In With Rdio" button which, when clicked, initiates the authentication sequence. If the authentication is successfull, the widget updates to show the user's name.
@@ -91,6 +93,8 @@ The `album` you pass in must have these properties:
 * url
 
 Note that the widget doesn't have the standard "Share" and "Action" buttons yet... we'll be adding those in if and when the JavaScript API supports their functionality.
+
+You can see an example of this feature in action here: http://iangilman.com/rdio/utils/examples/album-widget/
 
 ### rdioUtils.addToTopOfQueue( sourceKey )
 
