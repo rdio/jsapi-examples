@@ -41,3 +41,20 @@ You can also publish the built version to the folder above (where the stable bui
  * If library changes during initial load
 * Track the collection of any user?
 * Sort collectionAlbums by play count, date added, etc?
+
+### Album Widget
+
+* Accept Backbone-style album, straight object, or key
+* If you have to load, coalesce multiple keys into a single call if possible
+* Retina support
+* Collection badge (use collection tracker); make it optional
+* Explicit/clean tags
+* "Unavailable" and "preview"
+* Wishlist: social heat
+* Responsive
+* Share
+* Action Menu
+
+### Collection Tracker
+
+* Only one per session; multiple calls just get the same one

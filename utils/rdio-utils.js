@@ -1,5 +1,5 @@
-//! rdioUtils 0.0.2
-//! Built on 2013-07-11
+//! rdioUtils 0.0.3
+//! Built on 2013-07-31
 //! https://github.com/rdio/jsapi-examples/tree/master/utils
 //! Copyright 2013, Rdio, Inc.
 //! Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
@@ -16,24 +16,6 @@
   var verbose = false;
 
   // ----------
-  var bind = function(element, eventName, handler) {
-    if(element.addEventListener) {
-      element.addEventListener(eventName, handler, true);
-    } else {
-      element.attachEvent("on" + eventName, handler);
-    }
-  };
-  
-  // ----------
-  var unbind = function(element, eventName, handler) {
-    if(element.removeEventListener) {
-      element.removeEventListener(eventName, handler, true);
-    } else {
-      element.detachEvent("on" + eventName, handler);
-    }
-  };
-
-  // ----------
   function dialog(message) {
     var body = document.getElementsByTagName('body')[0];
     var el = document.createElement('div');
@@ -43,7 +25,7 @@
       + '</div><br><button>OK</button>';
 
     var button = el.getElementsByTagName('button')[0];
-    bind(button, 'click', function() {
+    rdioUtils._bind(button, 'click', function() {
       body.removeChild(el);
     });
 
@@ -92,6 +74,8 @@
 
     // ----------
     authWidget: function(el) {
+      var self = this;
+      
       if (el.jquery) {
         el = el[0];
       }
@@ -105,7 +89,7 @@
           showAuthenticated();
         } else {
           el.innerHTML = '<button>Sign In With Rdio</button>';
-          bind(el, 'click', function() {
+          self._bind(el, 'click', function() {
             R.authenticate(function(authenticated) {
               if (authenticated) {
                 showAuthenticated();
@@ -117,10 +101,44 @@
     },
 
     // ----------
-    // albumWidget: function(album) {
-    //   var widget = new this.AlbumWidget(album);
-    //   return widget.element();
-    // },
+    albumWidget: function(album) {
+      return new this.AlbumWidget(album);
+    },
+
+    // ----------
+    _bind: function(element, eventName, handler) {
+      if(element.addEventListener) {
+        element.addEventListener(eventName, handler, true);
+      } else {
+        element.attachEvent('on' + eventName, handler);
+      }
+    },
+    
+    // ----------
+    _unbind: function(element, eventName, handler) {
+      if(element.removeEventListener) {
+        element.removeEventListener(eventName, handler, true);
+      } else {
+        element.detachEvent('on' + eventName, handler);
+      }
+    },
+
+    // ----------
+    _stopEvent: function(event) {    
+      if(event.preventDefault) {
+        event.preventDefault();    
+        event.stopPropagation();
+      } else {
+        event.cancelBubble = true;
+        event.returnValue = false;
+      }
+    },
+
+    // ----------
+    _escape: function(text) {
+      text = text + ''; // Make sure it's a string
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    },
 
     // ----------
     _log: function() {
@@ -156,10 +174,71 @@
 
   // ----------
   rdioUtils.AlbumWidget = function(album) {
+    this._element = document.createElement('div');
+    this._element.className = 'rdio-utils-album';
+
+    this._broken = !(album && album.url && album.icon && album.name 
+      && album.artist && album.artistUrl && album.length && album.key
+      && /^(a|al)[0-9]/.test(album.key));
+
+    if (this._broken) {
+      this._element.innerHTML = ''
+        + '<div class="rdio-utils-album-cover">'
+          + '<div class="rdio-utils-album-icon"></div>'
+        + '</div>'
+        + '<div class="rdio-utils-album-title rdio-utils-truncated">Unknown Album</div>'
+        + '<div class="rdio-utils-album-author rdio-utils-truncated">&nbsp;</div>'
+        + '<div class="rdio-utils-album-size rdio-utils-truncated">&nbsp;</div>';
+
+      return;
+    }
+
+    this._element.innerHTML = ''
+        + '<div class="rdio-utils-album-cover">'
+          + '<a href="http://www.rdio.com' + rdioUtils._escape(album.url) + '" target="_blank">'
+            + '<div class="rdio-utils-album-icon" style="background-image: url(' + rdioUtils._escape(album.icon) + ')"></div>'
+            + '<div class="rdio-utils-album-hover-overlay">'
+              + '<div class="rdio-utils-album-play-btn"></div>'
+              // + '<div class="rdio-utils-album-action-btn"></div>'
+            + '</div>'
+          + '</a>'
+        + '</div>'
+        + '<div class="rdio-utils-album-title rdio-utils-truncated"><a href="http://www.rdio.com' + rdioUtils._escape(album.url) + '" target="_blank">' + rdioUtils._escape(album.name) + '</a></div>'
+        + '<div class="rdio-utils-album-author rdio-utils-truncated"><a href="http://www.rdio.com' + rdioUtils._escape(album.artistUrl) + '" target="_blank">' + rdioUtils._escape(album.artist) + '</a></div>'
+        + '<div class="rdio-utils-album-size rdio-utils-truncated">' + rdioUtils._escape(album.length) + ' songs</div>';
+
+    var button = this._element.getElementsByClassName('rdio-utils-album-play-btn')[0];
+    rdioUtils._bind(button, 'click', function(event) {
+      rdioUtils._stopEvent(event);
+
+      if (event.altKey || event.metaKey) {
+        R.player.queue.addPlayingSource();
+      }
+
+      R.player.play({ source: album.key });
+    });
+
+    // button = this._element.getElementsByClassName('rdio-utils-album-action-btn')[0];
+    // rdioUtils._bind(button, 'click', function(event) {
+    //   self._openActionMenu();
+    // });
   };
 
   // ----------
   rdioUtils.AlbumWidget.prototype = {
+    // ----------
+    element: function() {
+      return this._element;
+    },
+
+    // ----------
+    broken: function() {
+      return this._broken;
+    },
+
+    // ----------
+    _openActionMenu: function() {
+    }
   };
 
 })(window.__rdio, window.rdioUtils);

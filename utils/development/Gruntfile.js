@@ -7,6 +7,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-less');
 
     // ----------
     var packageJson = grunt.file.readJSON('package.json'),
@@ -51,8 +52,14 @@ module.exports = function(grunt) {
                 dest: minified
             }
         },
+        less: {
+            build: {
+                src: [ 'src/main.less' ],
+                dest: 'build/rdio-utils.css'
+            }
+        },
         watch: {
-            files: [ 'Gruntfile.js', 'src/*.js' ],
+            files: [ 'Gruntfile.js', 'src/*.js', 'src/*.less' ],
             tasks: 'build'
         },
         jshint: {
@@ -68,7 +75,9 @@ module.exports = function(grunt) {
     // Copy:build task.
     // Copies the other files into the appropriate location in the build folder.
     grunt.registerTask('copy:build', function() {
-        grunt.file.copy('src/rdio-utils.css', 'build/rdio-utils.css');
+        grunt.file.recurse('src/images', function(abspath, rootdir, subdir, filename) {
+            grunt.file.copy(abspath, 'build/rdio-utils-images/' + (subdir || '') + filename);
+        });
     });
 
     // ----------
@@ -88,7 +97,7 @@ module.exports = function(grunt) {
     // Build task.
     // Cleans out the build folder and builds the code and images into it, checking lint.
     grunt.registerTask('build', [
-        'clean:build', 'jshint:beforeconcat', 'concat', 'jshint:afterconcat', 'uglify', 'copy:build'
+        'clean:build', 'jshint:beforeconcat', 'concat', 'jshint:afterconcat', 'uglify', 'less', 'copy:build'
     ]);
 
     // ----------
