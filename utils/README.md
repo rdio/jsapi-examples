@@ -71,6 +71,27 @@ Turns the given element into a small Rdio authentication widget: if the user is 
 rdioUtils.authWidget($('.authenticate'));
 ```
 
+### rdioUtils.albumWidget( album )
+
+Given an `album` object that you might receive from `R.request()` calls or from `rdioUtils.collectionAlbums()`, gives you a standard Rdio album UI widget.
+
+Returns an AlbumWidget object which contains an element you can attach to the DOM. The AlbumWidget has these methods:
+
+* element(): returns the DOM element.
+* broken(): returns true if the album you provided did not have sufficient information.
+
+The `album` you pass in must have these properties:
+
+* artist
+* artistUrl
+* icon
+* key
+* length
+* name
+* url
+
+Note that the widget doesn't have the standard "Share" and "Action" buttons yet... we'll be adding those in if and when the JavaScript API supports their functionality.
+
 ### rdioUtils.addToTopOfQueue( sourceKey )
 
 Adds the given source to the top of the queue (rather than the bottom, which is where `R.player.queue.add()` puts it).

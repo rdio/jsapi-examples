@@ -12,7 +12,7 @@
 
     this._broken = !(album && album.url && album.icon && album.name 
       && album.artist && album.artistUrl && album.length && album.key
-      && (album.type == 'a' || album.type == 'al'));
+      && /^(a|al)[0-9]/.test(album.key));
 
     if (this._broken) {
       this._element.innerHTML = ''
