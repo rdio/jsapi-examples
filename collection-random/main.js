@@ -44,12 +44,19 @@
         }
 
         self.albums.push(album);
-        var $album = self.template('album', album).appendTo('.albums');
-        $album.find('img')
-          .click(function() {
+        var widget = rdioUtils.albumWidget(album);
+        var $widget = $(widget.element());
+        $('.albums').append($widget);
+
+        $('<div>')
+          .addClass('btn yes')
+          .click(function(event) {
+            event.preventDefault();
+            event.stopPropagation();
             R.player.queue.add(album.key);
-            $album.fadeOut();
-          });
+            $widget.fadeOut();
+          })
+          .appendTo($widget.find('.rdio-utils-album-hover-overlay'));
       };
 
       while (this.albums.length < 20 && this.indicies.length) {
