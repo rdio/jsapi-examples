@@ -4,7 +4,6 @@
 
   // ----------
   window.Main = {
-    $albums: {},
     albums: [],
 
     // ----------
@@ -16,6 +15,11 @@
       }
 
       rdioUtils.authWidget($('.auth'));
+
+      R.on('change:authenticated', function(authenticated) {
+        $('.authenticated, .shuffle').toggle(authenticated);
+        $('.unauthenticated').toggle(!authenticated);
+      });
 
       this.collection = rdioUtils.collectionAlbums({
         localStorage: true,
@@ -44,6 +48,7 @@
         }
 
         self.albums.push(album);
+
         var widget = rdioUtils.albumWidget(album);
         var $widget = $(widget.element());
         $('.albums').append($widget);
