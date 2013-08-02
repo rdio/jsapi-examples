@@ -67,4 +67,8 @@ You can also publish the built version to the folder above (where the stable bui
 * For tracks shorter than 10 seconds, we can't do the queue manipulation fast enough... maybe go to two ahead when dealing with tracks?
 * Sources that are unavailable or are just samples can also cause problems... mitigations?
 * Deal with when the queue runs out
-* 
+* Methods for manipulating the queue
+* Events for changes
+* How to deal with when others change the state behind your back?
+* How to clean up at end?
+* Good example app?

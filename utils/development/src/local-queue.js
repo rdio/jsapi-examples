@@ -8,7 +8,7 @@
   // ----------
   rdioUtils.LocalQueue = function() {
     var self = this;
-    
+
     this._keys = [];
     this._playing = false;
     this._playingKey = null;
@@ -22,6 +22,11 @@
         }
       });
     });
+
+    // if ("onpagehide" in window) {
+    // rdioUtils._bind(window, 'pagehide', function() {
+    //   self.destroy();
+    // });
   };
 
   // ----------

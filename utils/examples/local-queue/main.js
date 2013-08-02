@@ -33,8 +33,8 @@
             if (model.get('artist') == 'Shapeshifter') {
               R.player.queue.off('add', waitForQueue);
               // self.queue.add('t1269882'); // 4 seconds
-              self.queue.add('t1269898'); // 11 seconds
-              self.queue.add('t1269926'); // 28 seconds
+              // self.queue.add('t1269898'); // 11 seconds
+              // self.queue.add('t1269926'); // 28 seconds
               self.queue.add(albums[0].key);
               self.queue.add(albums[1].key);
               self.queue.add(albums[2].key);
