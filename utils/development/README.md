@@ -58,3 +58,13 @@ You can also publish the built version to the folder above (where the stable bui
 ### Collection Tracker
 
 * Only one per session; multiple calls just get the same one
+
+### Local Queue
+
+* What if the sources you're adding are already in the queue?
+* If you're already playing the source in question, reset it to the front?
+* Lots more error checking
+* For tracks shorter than 10 seconds, we can't do the queue manipulation fast enough... maybe go to two ahead when dealing with tracks?
+* Sources that are unavailable or are just samples can also cause problems... mitigations?
+* Deal with when the queue runs out
+* 

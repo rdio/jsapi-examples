@@ -10,6 +10,8 @@
     init: function() {
       var self = this;
       
+      this.firstTime = true;
+
       if (!rdioUtils.startupChecks()) {
         return;
       }
@@ -21,17 +23,40 @@
       this.collection = rdioUtils.collectionAlbums({
         localStorage: true,
         onAlbumsLoaded: function(albums) {
-          self.log('onAlbumsLoaded: ' + albums.length + ' albums');
-          self.queue.add(albums[0].key);
-          self.queue.add(albums[1].key);
-          self.queue.add(albums[2].key);
-          self.queue.play();
+          if (!self.firstTime) {
+            return;
+          }
+
+          self.firstTime = false;
+
+          var waitForQueue = function(model, collection, info) {
+            if (model.get('artist') == 'Shapeshifter') {
+              R.player.queue.off('add', waitForQueue);
+              // self.queue.add('t1269882'); // 4 seconds
+              self.queue.add('t1269898'); // 11 seconds
+              self.queue.add('t1269926'); // 28 seconds
+              self.queue.add(albums[0].key);
+              self.queue.add(albums[1].key);
+              self.queue.add(albums[2].key);
+              self.log('start play');
+              self.queue.play();
+              self.log('after play');
+            }
+          };
+
+          R.player.queue.on('add', waitForQueue);
         }
       });
 
       R.ready(function() {
-        R.player.on('all', function(eventName) {
+        R.player.on('all', function(eventName, value) {
           if (eventName != 'change:position') {
+            if (_.isObject(value) && value.attributes && value.attributes.name) {
+              eventName += ' ' + value.attributes.name;
+            } else {
+              eventName += ' ' + value;
+            }
+
             self.log('player: ' + eventName);
           }
         });
