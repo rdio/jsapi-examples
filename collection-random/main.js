@@ -9,7 +9,10 @@
     // ----------
     init: function() {
       var self = this;
-      
+
+      this.currentAlbums = [];
+      this.possibleAlbums = [];
+
       if (!rdioUtils.startupChecks()) {
         return;
       }
@@ -23,9 +26,12 @@
 
       this.collection = rdioUtils.collectionAlbums({
         localStorage: true,
-        onLoadComplete: function() {
-          self.indicies = _.shuffle(_.range(self.collection.length));
-          self.shuffle();
+        onAlbumsLoaded: function(albums) {
+          self.possibleAlbums = self.possibleAlbums.concat(albums);
+          self.indicies = _.shuffle(_.range(self.possibleAlbums.length));
+          if (!self.currentAlbums.length) {
+            self.shuffle();
+          }
         }
       });
 
@@ -40,14 +46,14 @@
       var self = this;
 
       $('.albums').empty();
-      this.albums = [];
+      this.currentAlbums = [];
 
       var addAlbum = function(album) {
         if (!album.canStream) {
           return;
         }
 
-        self.albums.push(album);
+        self.currentAlbums.push(album);
 
         var widget = rdioUtils.albumWidget(album);
         var $widget = $(widget.element());
@@ -64,8 +70,10 @@
           .appendTo($widget.find('.rdio-utils-album-hover-overlay'));
       };
 
-      while (this.albums.length < 20 && this.indicies.length) {
-        addAlbum(this.collection.at(this.indicies.pop()));
+      while (this.currentAlbums.length < 20 && this.indicies.length) {
+        var index = this.indicies.pop();
+        var album = this.possibleAlbums[index];
+        addAlbum(album);
       }
     },
 
