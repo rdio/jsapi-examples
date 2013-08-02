@@ -17,7 +17,8 @@ module.exports = function(grunt) {
         sources = [
             'src/main.js',
             'src/album-widget.js',
-            'src/collection-tracker.js'
+            'src/collection-tracker.js',
+            'src/local-queue.js'
         ];
 
     // ----------

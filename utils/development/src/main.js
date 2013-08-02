@@ -98,6 +98,11 @@
     },
 
     // ----------
+    localQueue: function() {
+      return new this.LocalQueue();
+    },
+
+    // ----------
     _bind: function(element, eventName, handler) {
       if(element.addEventListener) {
         element.addEventListener(eventName, handler, true);
