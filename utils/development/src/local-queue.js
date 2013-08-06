@@ -12,21 +12,17 @@
     this._keys = [];
     this._playing = false;
     this._playingKey = null;
-    this._nextKey = null;
 
     R.ready(function() {
       R.player.on('change:playingSource', function(playingSource) {
-        if (playingSource && playingSource.get('key') === self._nextKey) {
-          self._playingKey = self._nextKey;
-          self._queueNext(self._keys.shift());
+        if (self._playing) {
+          if (!playingSource || playingSource.get('key') != self._playingKey) {
+            self._playing = false;
+            self.play();
+          }
         }
       });
     });
-
-    // if ("onpagehide" in window) {
-    // rdioUtils._bind(window, 'pagehide', function() {
-    //   self.destroy();
-    // });
   };
 
   // ----------
@@ -35,11 +31,6 @@
     destroy: function() {
       if (!this._playing) {
         return;
-      }
-
-      var queueSource = R.player.queue.at(0);
-      if (queueSource && queueSource.get('key') === this._nextKey) {
-        R.player.queue.remove(0);
       }
 
       var playingSource = R.player.playingSource();
@@ -59,33 +50,45 @@
     play: function() {
       var self = this;
 
-      if (this._playing) {
+      if (this._playing || !this._keys.length) {
         return;
       }
 
-      this._playingKey = this._keys.shift();
+      this._forceMaster(function() {
+        self._playingKey = self._keys.shift();
 
-      R.player.queue.addPlayingSource();
-      R.player.play({ source: this._playingKey });
-      this._queueNext(this._keys.shift());
-      this._playing = true;
+        R.player.queue.addPlayingSource();
+        R.player.play({ source: self._playingKey });
+        self._playing = true;
+      });
     },
 
     // ----------
-    _queueNext: function(key) {
-      var self = this;
+    next: function() {
+      var playingSource = R.player.playingSource();
+      if (this._playing && playingSource && playingSource.get('key') == this._playingKey && this._keys.length) {
+        this._playingKey = this._keys.shift();
+        R.player.play({ source: this._playingKey });
+      } else {
+        this.play();
+      }
+    },
 
-      this._nextKey = key;
+    // ----------
+    _forceMaster: function(continuation) {
+      if (R.player.isMaster()) {
+        continuation();
+      } else {
+        var handler = function(isMaster) {
+          if (isMaster) {
+            R.player.off('change:isMaster', handler);
+            continuation();
+          }
+        };
 
-      var queueAddHandler = function(model, collection, info) {
-        if (model.get('key') == self._nextKey) {
-          R.player.queue.off('add', queueAddHandler);
-          R.player.queue.move(info.index, 0);
-        }
-      };
-
-      R.player.queue.on('add', queueAddHandler);
-      R.player.queue.add(this._nextKey);
+        R.player.on('change:isMaster', handler);
+        R.player.startMasterTakeover();
+      }
     }
   };
 

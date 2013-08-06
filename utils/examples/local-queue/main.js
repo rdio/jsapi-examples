@@ -10,7 +10,8 @@
     init: function() {
       var self = this;
       
-      this.firstTime = true;
+      this.albums = [];
+      this.albumsByTrackKey = {};
 
       if (!rdioUtils.startupChecks()) {
         return;
@@ -20,59 +21,73 @@
 
       this.queue = rdioUtils.localQueue();
 
-      this.collection = rdioUtils.collectionAlbums({
-        localStorage: true,
-        onAlbumsLoaded: function(albums) {
-          if (!self.firstTime) {
-            return;
-          }
-
-          self.firstTime = false;
-
-          var waitForQueue = function(model, collection, info) {
-            if (model.get('artist') == 'Shapeshifter') {
-              R.player.queue.off('add', waitForQueue);
-              // self.queue.add('t1269882'); // 4 seconds
-              // self.queue.add('t1269898'); // 11 seconds
-              // self.queue.add('t1269926'); // 28 seconds
-              self.queue.add(albums[0].key);
-              self.queue.add(albums[1].key);
-              self.queue.add(albums[2].key);
-              self.log('start play');
-              self.queue.play();
-              self.log('after play');
-            }
-          };
-
-          R.player.queue.on('add', waitForQueue);
-        }
-      });
-
       R.ready(function() {
         R.player.on('all', function(eventName, value) {
-          if (eventName != 'change:position') {
-            if (_.isObject(value) && value.attributes && value.attributes.name) {
-              eventName += ' ' + value.attributes.name;
-            } else {
-              eventName += ' ' + value;
-            }
+          // if (eventName != 'change:position') {
+          //   if (_.isObject(value) && value.attributes && value.attributes.name) {
+          //     eventName += ' ' + value.attributes.name;
+          //   } else {
+          //     eventName += ' ' + value;
+          //   }
 
-            self.log('player: ' + eventName);
-          }
+          //   self.log('player: ' + eventName);
+          // }
         });
 
         R.player.queue.on('all', function(eventName, model) {
-          if (model && model.attributes && model.attributes.artist) {
-            eventName += ' ' + model.attributes.artist;
+        //   if (model && model.attributes && model.attributes.artist) {
+        //     eventName += ' ' + model.attributes.artist;
+        //   }
+
+        //   self.log('player.queue: ' + eventName);
+        });
+
+        R.player.on('change:playingSource', function(playingSource) {
+          var album = null;
+          if (playingSource) {
+            var key = playingSource.get('key');
+            album = self.albumsByTrackKey[key];
           }
 
-          self.log('player.queue: ' + eventName);
+          if (album) {
+            $('.album').html(rdioUtils.albumWidget(album).element());
+          } else {
+            $('.album').empty();
+          }
+        });
+
+        R.request({
+          method: 'getNewReleases',
+          content: {
+            count: 100
+          },
+          success: function(data) {
+            self.albums = data.result;
+
+            _.each(self.albums, function(v, i) {
+              var key = v.trackKeys[0];
+              self.queue.add(key);
+              self.albumsByTrackKey[key] = v;
+            });
+
+            self.queue.play();
+          }
         });
       });
 
       $('.stop')
         .click(function() {
           self.queue.destroy();
+        });
+
+      $('.skip')
+        .click(function() {
+          R.player.position(R.player.playingTrack().get('duration') - 15);
+        });
+
+      $('.next')
+        .click(function() {
+          self.queue.next();
         });
     },
 
