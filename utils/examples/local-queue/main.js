@@ -73,22 +73,22 @@
             self.queue.play();
           }
         });
+
+        $('.stop')
+          .click(function() {
+            self.queue.stop();
+          });
+
+        $('.skip')
+          .click(function() {
+            R.player.position(R.player.playingTrack().get('duration') - 15);
+          });
+
+        $('.next')
+          .click(function() {
+            self.queue.next();
+          });
       });
-
-      $('.stop')
-        .click(function() {
-          self.queue.destroy();
-        });
-
-      $('.skip')
-        .click(function() {
-          R.player.position(R.player.playingTrack().get('duration') - 15);
-        });
-
-      $('.next')
-        .click(function() {
-          self.queue.next();
-        });
     },
 
     // ----------

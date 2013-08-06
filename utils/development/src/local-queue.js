@@ -28,7 +28,7 @@
   // ----------
   rdioUtils.LocalQueue.prototype = {
     // ----------
-    destroy: function() {
+    stop: function() {
       if (!this._playing) {
         return;
       }
