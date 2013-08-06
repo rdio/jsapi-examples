@@ -22,25 +22,7 @@
       this.queue = rdioUtils.localQueue();
 
       R.ready(function() {
-        R.player.on('all', function(eventName, value) {
-          // if (eventName != 'change:position') {
-          //   if (_.isObject(value) && value.attributes && value.attributes.name) {
-          //     eventName += ' ' + value.attributes.name;
-          //   } else {
-          //     eventName += ' ' + value;
-          //   }
-
-          //   self.log('player: ' + eventName);
-          // }
-        });
-
-        R.player.queue.on('all', function(eventName, model) {
-        //   if (model && model.attributes && model.attributes.artist) {
-        //     eventName += ' ' + model.attributes.artist;
-        //   }
-
-        //   self.log('player.queue: ' + eventName);
-        });
+        // self.startLogging();
 
         R.player.on('change:playingSource', function(playingSource) {
           var album = null;
@@ -88,6 +70,31 @@
           .click(function() {
             self.queue.next();
           });
+      });
+    },
+
+    // ----------
+    startLogging: function() {
+      var self = this;
+      
+      R.player.on('all', function(eventName, value) {
+        if (eventName != 'change:position') {
+          if (_.isObject(value) && value.attributes && value.attributes.name) {
+            eventName += ' ' + value.attributes.name;
+          } else {
+            eventName += ' ' + value;
+          }
+
+          self.log('player: ' + eventName);
+        }
+      });
+
+      R.player.queue.on('all', function(eventName, model) {
+        if (model && model.attributes && model.attributes.artist) {
+          eventName += ' ' + model.attributes.artist;
+        }
+
+        self.log('player.queue: ' + eventName);
       });
     },
 

@@ -12,13 +12,22 @@
     this._keys = [];
     this._playing = false;
     this._playingKey = null;
+    this._keyFromQueue = '';
 
     R.ready(function() {
+      R.player.queue.on('remove', function(source, collection, info) {
+        if (info.index === 0) {
+          self._keyFromQueue = source.get('key');
+        }
+      });
+
       R.player.on('change:playingSource', function(playingSource) {
         if (self._playing) {
           if (!playingSource || playingSource.get('key') != self._playingKey) {
             self._playing = false;
-            self.play();
+            if (playingSource.get('key') == self._keyFromQueue) {
+              self.play();
+            }
           }
         }
       });
