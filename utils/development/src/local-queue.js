@@ -6,9 +6,11 @@
 (function(R, rdioUtils) {
 
   // ----------
-  rdioUtils.LocalQueue = function() {
+  rdioUtils.LocalQueue = function(config) {
     var self = this;
 
+    this._onPlay = config.onPlay;
+    this._onStop = config.onStop;
     this._keys = [];
     this._playing = false;
     this._playingKey = null;
@@ -24,9 +26,13 @@
       R.player.on('change:playingSource', function(playingSource) {
         if (self._playing) {
           if (!playingSource || playingSource.get('key') != self._playingKey) {
-            self._playing = false;
-            if (playingSource.get('key') == self._keyFromQueue) {
-              self.play();
+            if (playingSource.get('key') == self._keyFromQueue && self._keys.length) {
+              self._play();
+            } else {
+              self._playing = false;
+              if (self._onStop) {
+                self._onStop();
+              }
             }
           }
         }
@@ -48,6 +54,9 @@
       }
 
       this._playing = false;
+      if (this._onStop) {
+        this._onStop();
+      }
     },
 
     // ----------
@@ -57,30 +66,44 @@
 
     // ----------
     play: function() {
-      var self = this;
-
       if (this._playing || !this._keys.length) {
         return;
       }
+
+      this._play();
+    },
+
+    // ----------
+    next: function() {
+      if (!this._keys.length) {
+        return;
+      }
+
+      var playingSource = R.player.playingSource();
+      if (this._playing && playingSource && playingSource.get('key') == this._playingKey) {
+        this._playingKey = this._keys.shift();
+        R.player.play({ source: this._playingKey });
+      } else {
+        this._play();
+      }
+    },
+
+    // ----------
+    _play: function() {
+      var self = this;
 
       this._forceMaster(function() {
         self._playingKey = self._keys.shift();
 
         R.player.queue.addPlayingSource();
         R.player.play({ source: self._playingKey });
-        self._playing = true;
-      });
-    },
 
-    // ----------
-    next: function() {
-      var playingSource = R.player.playingSource();
-      if (this._playing && playingSource && playingSource.get('key') == this._playingKey && this._keys.length) {
-        this._playingKey = this._keys.shift();
-        R.player.play({ source: this._playingKey });
-      } else {
-        this.play();
-      }
+        var starting = !self._playing;
+        self._playing = true;
+        if (starting && self._onPlay) {
+          self._onPlay();
+        }
+      });
     },
 
     // ----------

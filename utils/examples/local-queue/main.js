@@ -17,9 +17,14 @@
         return;
       }
 
-      rdioUtils.authWidget($('.auth'));
-
-      this.queue = rdioUtils.localQueue();
+      this.queue = rdioUtils.localQueue({
+        onPlay: function() {
+          $('.stop, .skip').prop('disabled', false);
+        },
+        onStop: function() {
+          $('.stop, .skip').prop('disabled', true);
+        }
+      });
 
       R.ready(function() {
         // self.startLogging();
@@ -53,6 +58,8 @@
             });
 
             self.queue.play();
+            $('.loading').hide();
+            $('.controls').fadeIn();
           }
         });
 
@@ -76,7 +83,7 @@
     // ----------
     startLogging: function() {
       var self = this;
-      
+
       R.player.on('all', function(eventName, value) {
         if (eventName != 'change:position') {
           if (_.isObject(value) && value.attributes && value.attributes.name) {

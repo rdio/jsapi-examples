@@ -98,8 +98,8 @@
     },
 
     // ----------
-    localQueue: function() {
-      return new this.LocalQueue();
+    localQueue: function(config) {
+      return new this.LocalQueue(config);
     },
 
     // ----------
