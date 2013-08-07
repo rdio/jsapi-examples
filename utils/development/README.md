@@ -61,7 +61,6 @@ You can also publish the built version to the folder above (where the stable bui
 
 ### Local Queue
 
-* Document it
 * Publish and point example at the right place
 * More local queue manipulation features and events
 * More bulletproof

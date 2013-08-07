@@ -103,3 +103,29 @@ Adds the given source to the top of the queue (rather than the bottom, which is 
 ```
 rdioUtils.addToTopOfQueue('a171827');
 ```
+
+### rdioUtils.localQueue( config )
+
+When using the shared_playstate permission, your app may want to maintain a queue of things it's going to play without disrupting the user's Rdio queue. This method return a LocalQueue object that allows you to do that. 
+
+Fill it up with the keys for sources you want to play using `add(sourceKey)` and then tell it `play()`. Once it's playing, it's in charge of playback, feeding Rdio each new source as the last one ends. If you want to stop your queue and let Rdio go back to playing what's in the user's Rdio queue, use `stop()`.
+
+Note that in order for this to work properly, your app needs to have "master" status (i.e. the one actually playing the music). The LocalQueue takes care of this automatically.
+
+```
+var queue = rdioUtils.localQueue({
+  onPlay: function() {
+    // Called when the LocalQueue starts playing.
+  },
+  onStop: function() {
+    // Called when the LocalQueue stops playing.
+  }  
+});
+```
+
+The LocalQueue has these methods:
+
+* add( sourceKey ): Adds the given sourceKey to the LocalQueue.
+* next(): Plays the next source in the LocalQueue.
+* play(): Puts the LocalQueue in charge of playback, starting at the front of the queue.
+* stop(): The LocalQueue relenquishes control of playback, returning it to the Rdio queue.
