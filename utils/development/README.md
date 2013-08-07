@@ -61,14 +61,11 @@ You can also publish the built version to the folder above (where the stable bui
 
 ### Local Queue
 
-* What if the sources you're adding are already in the queue?
+* More bulletproof
+ * Should we be able to cancel things in flight for forceMaster?
+ * Double check the values we get from the API
+ * What if the local queue is manipulated while _play forceMaster is in flight?
+* More local queue manipulation features and events
+* Document it
+* Publish and point example at the right place
 * If you're already playing the source in question, reset it to the front?
-* Lots more error checking
-* For tracks shorter than 10 seconds, we can't do the queue manipulation fast enough... maybe go to two ahead when dealing with tracks?
-* Sources that are unavailable or are just samples can also cause problems... mitigations?
-* Deal with when the queue runs out
-* Methods for manipulating the queue
-* Events for changes
-* How to deal with when others change the state behind your back?
-* How to clean up at end?
-* Good example app?
