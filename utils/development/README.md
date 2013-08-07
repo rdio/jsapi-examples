@@ -61,11 +61,10 @@ You can also publish the built version to the folder above (where the stable bui
 
 ### Local Queue
 
+* Document it
+* Publish and point example at the right place
+* More local queue manipulation features and events
 * More bulletproof
  * Should we be able to cancel things in flight for forceMaster?
  * Double check the values we get from the API
  * What if the local queue is manipulated while _play forceMaster is in flight?
-* More local queue manipulation features and events
-* Document it
-* Publish and point example at the right place
-* If you're already playing the source in question, reset it to the front?

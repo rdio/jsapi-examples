@@ -95,7 +95,11 @@
       this._forceMaster(function() {
         self._playingKey = self._keys.shift();
 
-        R.player.queue.addPlayingSource();
+        var playingSource = R.player.playingSource();
+        if (!playingSource || playingSource.get('key') != self._playingKey) {
+          R.player.queue.addPlayingSource();
+        }
+
         R.player.play({ source: self._playingKey });
 
         var starting = !self._playing;
