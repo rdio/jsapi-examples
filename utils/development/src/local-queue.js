@@ -97,13 +97,15 @@
         return;
       }
 
-      var playingSource = R.player.playingSource();
-      var key = this._keys.shift();
-      if (this._playingKey && playingSource && playingSource.get('key') == this._playingKey) {
-        this._play(key, { replace: true });
-      } else {
-        this._play(key);
-      }
+      this._forceReady(function() {
+        var playingSource = R.player.playingSource();
+        var key = self._keys.shift();
+        if (self._playingKey && playingSource && playingSource.get('key') == self._playingKey) {
+          self._play(key, { replace: true });
+        } else {
+          self._play(key);
+        }
+      });
     },
 
     // ----------
@@ -140,18 +142,29 @@
 
     // ----------
     _forceMaster: function(continuation) {
-      if (R.player.isMaster()) {
+      this._forceReady(function() {
+        if (R.player.isMaster()) {
+          continuation();
+        } else {
+          var handler = function(isMaster) {
+            if (isMaster) {
+              R.player.off('change:isMaster', handler);
+              continuation();
+            }
+          };
+
+          R.player.on('change:isMaster', handler);
+          R.player.startMasterTakeover();
+        }
+      });
+    },
+
+    // ----------
+    _forceReady: function(continuation) {
+      if (R.ready()) {
         continuation();
       } else {
-        var handler = function(isMaster) {
-          if (isMaster) {
-            R.player.off('change:isMaster', handler);
-            continuation();
-          }
-        };
-
-        R.player.on('change:isMaster', handler);
-        R.player.startMasterTakeover();
+        R.ready(continuation);
       }
     }
   };
