@@ -19,10 +19,14 @@
 
       this.queue = rdioUtils.localQueue({
         onPlay: function() {
-          $('.stop, .skip').prop('disabled', false);
+          // self.log('onPlay');
+          $('.skip').prop('disabled', false);
+          $('.stop').text('Stop');
         },
         onStop: function() {
-          $('.stop, .skip').prop('disabled', true);
+          // self.log('onStop');
+          $('.skip').prop('disabled', true);
+          $('.stop').text('Play');
         }
       });
 
@@ -65,7 +69,11 @@
 
         $('.stop')
           .click(function() {
-            self.queue.stop();
+            if (self.queue.playing()) {
+              self.queue.stop();
+            } else {
+              self.queue.play();
+            }
           });
 
         $('.skip')

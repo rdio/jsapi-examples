@@ -128,4 +128,5 @@ The LocalQueue has these methods:
 * add( sourceKey ): Adds the given sourceKey to the LocalQueue.
 * next(): Plays the next source in the LocalQueue.
 * play(): Puts the LocalQueue in charge of playback, starting at the front of the queue.
+* playing(): Returns true if the LocalQueue is in charge of playback.
 * stop(): The LocalQueue relenquishes control of playback, returning it to the Rdio queue.
