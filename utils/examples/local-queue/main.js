@@ -18,56 +18,56 @@
       }
 
       this.queue = rdioUtils.localQueue({
-        onPlay: function() {
-          // self.log('onPlay');
+        onStart: function() {
           $('.skip').prop('disabled', false);
-          $('.stop').text('Stop');
+          $('.toggle').text('Stop');
         },
         onStop: function() {
-          // self.log('onStop');
           $('.skip').prop('disabled', true);
-          $('.stop').text('Play');
+          $('.toggle').text('Play');
+          $('.playing-track').empty();
+        },
+        onPlay: function(key) {
+          $('.playing-track').empty();
+          var album = self.albumsByTrackKey[key];
+          if (album) {
+            self.template('playing-track', album).appendTo('.playing-track');
+          }
+        },
+        onRemove: function(key, index) {
+          var album = self.albumsByTrackKey[key];
+          if (album && album.$el) {
+            album.$el.remove();
+            album.$el = null;
+          }
         }
       });
 
       R.ready(function() {
         // self.startLogging();
 
-        R.player.on('change:playingSource', function(playingSource) {
-          var album = null;
-          if (playingSource) {
-            var key = playingSource.get('key');
-            album = self.albumsByTrackKey[key];
-          }
-
-          if (album) {
-            $('.album').html(rdioUtils.albumWidget(album).element());
-          } else {
-            $('.album').empty();
-          }
-        });
-
         R.request({
           method: 'getNewReleases',
           content: {
-            count: 100
+            count: 30,
+            extras: 'tracks'
           },
           success: function(data) {
             self.albums = data.result;
 
             _.each(self.albums, function(v, i) {
+              v.$el = self.template('queue-track', v).appendTo('.queue-tracks');
               var key = v.trackKeys[0];
               self.queue.add(key);
               self.albumsByTrackKey[key] = v;
             });
 
-            self.queue.play();
             $('.loading').hide();
             $('.controls').fadeIn();
           }
         });
 
-        $('.stop')
+        $('.toggle')
           .click(function() {
             if (self.queue.playing()) {
               self.queue.stop();

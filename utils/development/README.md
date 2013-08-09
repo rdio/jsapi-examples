@@ -63,6 +63,8 @@ You can also publish the built version to the folder above (where the stable bui
 
 * Publish and point example at the right place
 * More local queue manipulation features and events
+* Support multiple queues per page
+* Tests
 * More bulletproof
  * Should we be able to cancel things in flight for forceMaster?
  * Double check the values we get from the API

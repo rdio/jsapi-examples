@@ -9,8 +9,10 @@
   rdioUtils.LocalQueue = function(config) {
     var self = this;
 
-    this._onPlay = config.onPlay;
+    this._onStart = config.onStart;
     this._onStop = config.onStop;
+    this._onPlay = config.onPlay;
+    this._onRemove = config.onRemove;
     this._keys = [];
     this._playing = false;
     this._playingKey = null;
@@ -27,7 +29,7 @@
         if (self._playing) {
           if (!playingSource || playingSource.get('key') != self._playingKey) {
             if (playingSource.get('key') == self._keyFromQueue && self._keys.length) {
-              self._play(self._keys.shift());
+              self._play(self.remove());
             } else {
               self._playing = false;
               self._playingKey = null;
@@ -76,12 +78,27 @@
     },
 
     // ----------
+    remove: function(index) {
+      index = index || 0;
+      if (index >= this._keys.length) {
+        return null;
+      }
+
+      var key = this._keys.splice(index, 1)[0];
+      if (this._onRemove) {
+        this._onRemove(key, index);
+      }
+
+      return key;
+    },
+
+    // ----------
     play: function() {
       if (this._playing) {
         return;
       }
 
-      var key = this._playingKey || this._keys.shift();
+      var key = this._playingKey || this.remove();
       if (!key) {
         return;
       }
@@ -99,7 +116,7 @@
 
       this._forceReady(function() {
         var playingSource = R.player.playingSource();
-        var key = self._keys.shift();
+        var key = self.remove();
         if (self._playingKey && playingSource && playingSource.get('key') == self._playingKey) {
           self._play(key, { replace: true });
         } else {
@@ -119,6 +136,7 @@
       options = options || {};
 
       this._forceMaster(function() {
+        var newKey = (key != self._playingKey);
         self._playingKey = key;
 
         var playingSource = R.player.playingSource();
@@ -134,8 +152,12 @@
 
         var starting = !self._playing;
         self._playing = true;
-        if (starting && self._onPlay) {
-          self._onPlay();
+        if (starting && self._onStart) {
+          self._onStart();
+        }
+
+        if (newKey && self._onPlay) {
+          self._onPlay(self._playingKey);
         }
       });
     },
