@@ -12,6 +12,7 @@
     this._onStart = config.onStart;
     this._onStop = config.onStop;
     this._onPlay = config.onPlay;
+    this._onAdd = config.onAdd;
     this._onRemove = config.onRemove;
     this._keys = [];
     this._playing = false;
@@ -75,6 +76,9 @@
     // ----------
     add: function(key) {
       this._keys.push(key);
+      if (this._onAdd) {
+        this._onAdd(key);
+      }
     },
 
     // ----------
@@ -114,9 +118,10 @@
         return;
       }
 
+      var key = self.remove();
+
       this._forceReady(function() {
         var playingSource = R.player.playingSource();
-        var key = self.remove();
         if (self._playingKey && playingSource && playingSource.get('key') == self._playingKey) {
           self._play(key, { replace: true });
         } else {

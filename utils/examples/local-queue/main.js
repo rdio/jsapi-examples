@@ -34,6 +34,24 @@
             self.template('playing-track', album).appendTo('.playing-track');
           }
         },
+        onAdd: function(key) {
+          var album = self.albumsByTrackKey[key];
+          if (album) {
+            album.$el = self.template('queue-track', album).appendTo('.queue-tracks');
+
+            album.$el.find('.remove')
+              .click(function() {
+                // TODO: Figure out which index it is
+                alert('Not implemented');
+              });
+
+            album.$el.find('.play')
+              .click(function() {
+                // TODO: Figure out which index it is
+                alert('Not implemented');
+              });
+          }
+        },
         onRemove: function(key, index) {
           var album = self.albumsByTrackKey[key];
           if (album && album.$el) {
@@ -56,10 +74,9 @@
             self.albums = data.result;
 
             _.each(self.albums, function(v, i) {
-              v.$el = self.template('queue-track', v).appendTo('.queue-tracks');
               var key = v.trackKeys[0];
-              self.queue.add(key);
               self.albumsByTrackKey[key] = v;
+              self.queue.add(key);
             });
 
             $('.loading').hide();
