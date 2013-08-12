@@ -14,9 +14,9 @@
     this._onPlay = config.onPlay;
     this._onAdd = config.onAdd;
     this._onRemove = config.onRemove;
-    this._keys = [];
+    this._sources = [];
     this._playing = false;
-    this._playingKey = null;
+    this._playingSource = null;
     this._keyFromQueue = '';
 
     R.ready(function() {
@@ -28,12 +28,12 @@
 
       R.player.on('change:playingSource', function(playingSource) {
         if (self._playing) {
-          if (!playingSource || playingSource.get('key') != self._playingKey) {
-            if (playingSource.get('key') == self._keyFromQueue && self._keys.length) {
+          if (!self._playingSourceIsPlaying()) {
+            if (playingSource.get('key') == self._keyFromQueue && self._sources.length) {
               self._play(self.remove());
             } else {
               self._playing = false;
-              self._playingKey = null;
+              self._playingSource = null;
               if (self._onStop) {
                 self._onStop();
               }
@@ -61,13 +61,12 @@
         return;
       }
 
-      var playingSource = R.player.playingSource();
-      if (playingSource && playingSource.get('key') === this._playingKey) {
+      if (this._playingSourceIsPlaying()) {
         R.player.nextSource();
       }
 
       this._playing = false;
-      this._playingKey = null;
+      this._playingSource = null;
       if (this._onStop) {
         this._onStop();
       }
@@ -75,59 +74,85 @@
 
     // ----------
     add: function(key) {
-      this._keys.push(key);
+      var source = {
+        key: key
+      };
+
+      this._sources.push(source);
       if (this._onAdd) {
-        this._onAdd(key);
+        this._onAdd(source);
       }
     },
 
     // ----------
-    remove: function(index) {
-      index = index || 0;
-      if (index >= this._keys.length) {
+    remove: function(indexOrSource) {
+      var index = -1;
+
+      if (typeof indexOrSource === 'undefined') {
+        if (this._sources.length) {
+          index = 0;
+        }
+      } else if (typeof indexOrSource === 'number') {
+        if (indexOrSource >= 0 && indexOrSource < this._sources.length) {
+          index = indexOrSource;
+        }
+      } else {
+        // Assume it's a source
+        for (var i = 0; i < this._sources.length; i++) {
+          if (this._sources[i] === indexOrSource) {
+            index = i;
+            break;
+          }
+        }
+      }
+
+      if (index === -1) {
         return null;
       }
 
-      var key = this._keys.splice(index, 1)[0];
+      var source = this._sources.splice(index, 1)[0];
       if (this._onRemove) {
-        this._onRemove(key, index);
+        this._onRemove(source, index);
       }
 
-      return key;
+      return source;
     },
 
     // ----------
-    play: function() {
-      if (this._playing) {
-        return;
-      }
+    play: function(indexOrSource) {
+      var self = this;
 
-      var key = this._playingKey || this.remove();
-      if (!key) {
-        return;
-      }
+      var source;
+      if (typeof indexOrSource === 'undefined') {
+        if (this._playing) {
+          return;
+        }
 
-      this._play(key);
+        source = this._playingSource || this.remove();
+        if (!source) {
+          return;
+        }
+
+        this._play(source);
+      } else {
+        source = this.remove(indexOrSource);
+        if (!source) {
+          return;
+        }
+
+        this._forceReady(function() {
+          if (self._playingSourceIsPlaying()) {
+            self._play(source, { replace: true });
+          } else {
+            self._play(source);
+          }
+        });
+      }
     },
 
     // ----------
     next: function() {
-      var self = this;
-
-      if (!this._keys.length) {
-        return;
-      }
-
-      var key = self.remove();
-
-      this._forceReady(function() {
-        var playingSource = R.player.playingSource();
-        if (self._playingKey && playingSource && playingSource.get('key') == self._playingKey) {
-          self._play(key, { replace: true });
-        } else {
-          self._play(key);
-        }
-      });
+      this.play(0);
     },
 
     // ----------
@@ -136,21 +161,26 @@
     },
 
     // ----------
-    _play: function(key, options) {
+    _playingSourceIsPlaying: function() {
+      var playingSource = R.player.playingSource();
+      return (this._playingSource && playingSource && playingSource.get('key') == this._playingSource.key);
+    },
+
+    // ----------
+    _play: function(source, options) {
       var self = this;
       options = options || {};
 
       this._forceMaster(function() {
-        var newKey = (key != self._playingKey);
-        self._playingKey = key;
+        var newSource = (source != self._playingSource);
+        self._playingSource = source;
 
-        var playingSource = R.player.playingSource();
-        if (!playingSource || playingSource.get('key') != self._playingKey) {
+        if (!self._playingSourceIsPlaying()) {
           if (!options.replace) {
             R.player.queue.addPlayingSource();
           }
 
-          R.player.play({ source: self._playingKey });
+          R.player.play({ source: self._playingSource.key });
         } else {
           R.player.play();
         }
@@ -161,8 +191,8 @@
           self._onStart();
         }
 
-        if (newKey && self._onPlay) {
-          self._onPlay(self._playingKey);
+        if (newSource && self._onPlay) {
+          self._onPlay(self._playingSource);
         }
       });
     },

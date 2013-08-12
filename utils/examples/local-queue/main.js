@@ -27,33 +27,31 @@
           $('.toggle').text('Play');
           $('.playing-track').empty();
         },
-        onPlay: function(key) {
+        onPlay: function(source) {
           $('.playing-track').empty();
-          var album = self.albumsByTrackKey[key];
+          var album = self.albumsByTrackKey[source.key];
           if (album) {
             self.template('playing-track', album).appendTo('.playing-track');
           }
         },
-        onAdd: function(key) {
-          var album = self.albumsByTrackKey[key];
+        onAdd: function(source) {
+          var album = self.albumsByTrackKey[source.key];
           if (album) {
             album.$el = self.template('queue-track', album).appendTo('.queue-tracks');
 
             album.$el.find('.remove')
               .click(function() {
-                // TODO: Figure out which index it is
-                alert('Not implemented');
+                self.queue.remove(source);
               });
 
             album.$el.find('.play')
               .click(function() {
-                // TODO: Figure out which index it is
-                alert('Not implemented');
+                self.queue.play(source);
               });
           }
         },
-        onRemove: function(key, index) {
-          var album = self.albumsByTrackKey[key];
+        onRemove: function(source, index) {
+          var album = self.albumsByTrackKey[source.key];
           if (album && album.$el) {
             album.$el.remove();
             album.$el = null;
