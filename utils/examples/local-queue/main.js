@@ -100,6 +100,11 @@
           .click(function() {
             self.queue.next();
           });
+
+        $('.clear')
+          .click(function() {
+            self.queue.clear();
+          });
       });
     },
 

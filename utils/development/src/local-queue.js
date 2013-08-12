@@ -161,6 +161,23 @@
     },
 
     // ----------
+    at: function(index) {
+      return this._sources[index];
+    },
+
+    // ----------
+    length: function() {
+      return this._sources.length;
+    },
+
+    // ----------
+    clear: function() {
+      while(this._sources.length) {
+        this.remove();
+      }
+    },
+
+    // ----------
     _playingSourceIsPlaying: function() {
       var playingSource = R.player.playingSource();
       return (this._playingSource && playingSource && playingSource.get('key') == this._playingSource.key);
