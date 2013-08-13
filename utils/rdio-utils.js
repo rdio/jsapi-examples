@@ -365,6 +365,13 @@
     },
 
     // ----------
+    each: function(iterator) {
+      for (var i = 0; i < this._albums.length; i++) {
+        iterator(this._albums[i], i);
+      }
+    },
+
+    // ----------
     _startLoad: function() {
       rdioUtils._log('_startLoad');
       this._start = 0;
