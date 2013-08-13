@@ -28,6 +28,7 @@
       }      
     }
 
+    this.length = 0;
     this._start = 0;
     this._loading = null;
     this._albums = [];
@@ -111,6 +112,13 @@
     // ----------
     at: function(index) {
       return this._albums[index];
+    },
+
+    // ----------
+    each: function(iterator) {
+      for (var i = 0; i < this._albums.length; i++) {
+        iterator(this._albums[i], i);
+      }
     },
 
     // ----------
