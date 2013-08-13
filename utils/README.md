@@ -101,5 +101,5 @@ You can see an example of this feature in action here: http://iangilman.com/rdio
 Adds the given source to the top of the queue (rather than the bottom, which is where `R.player.queue.add()` puts it).
 
 ```
-rdioUtils.addToTopOfQueue('a171827');
+rdioUtils.addToTopOfQueue('a3032151'); // Alice In Chains - The Devil Put Dinosaurs Here
 ```
