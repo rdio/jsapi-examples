@@ -1,5 +1,9 @@
 Rdio Utils Changelog:
 
+0.0.5:
+
+* Added .localQueue().
+
 0.0.4:
 
 * Added .each() to CollectionAlbums.

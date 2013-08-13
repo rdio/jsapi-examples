@@ -1,4 +1,4 @@
-//! rdioUtils 0.0.4
+//! rdioUtils 0.0.5
 //! Built on 2013-08-13
 //! https://github.com/rdio/jsapi-examples/tree/master/utils
 //! Copyright 2013, Rdio, Inc.
