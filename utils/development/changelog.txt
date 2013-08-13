@@ -1,0 +1,17 @@
+Rdio Utils Changelog:
+
+0.0.4:
+
+* Added .each() to CollectionAlbums.
+
+0.0.3:
+
+* Added .albumWidget().
+
+0.0.2:
+
+* First version with build system.
+
+0.0.1:
+
+* Initial release.

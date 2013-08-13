@@ -1,5 +1,5 @@
-//! rdioUtils 0.0.3
-//! Built on 2013-07-31
+//! rdioUtils 0.0.4
+//! Built on 2013-08-13
 //! https://github.com/rdio/jsapi-examples/tree/master/utils
 //! Copyright 2013, Rdio, Inc.
 //! Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
@@ -273,6 +273,7 @@
       }      
     }
 
+    this.length = 0;
     this._start = 0;
     this._loading = null;
     this._albums = [];
@@ -356,6 +357,13 @@
     // ----------
     at: function(index) {
       return this._albums[index];
+    },
+
+    // ----------
+    each: function(iterator) {
+      for (var i = 0; i < this._albums.length; i++) {
+        iterator(this._albums[i], i);
+      }
     },
 
     // ----------
