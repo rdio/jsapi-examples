@@ -42,10 +42,6 @@ var collection = rdioUtils.collectionAlbums({
   },
   onLoadComplete: function() {
     // Called when the initial load is complete.
-
-    for (var i = 0; i < collection.length; i++) {
-      console.log(collection.at(i).name);
-    }
   },
   onError: function(message) {
     // Called with any loading errors.
@@ -61,11 +57,32 @@ var collection = rdioUtils.collectionAlbums({
 });
 ```
 
-* each( iterator( source, index ) ): Calls the iterator function once per item in the LocalQueue, passing the source and index.
+Each album in the collection object is a plain JavaScript object with these properties:
+
+* artist
+* artistKey
+* artistUrl
+* canSample
+* canStream
+* duration
+* icon
+* isClean
+* isExplicit
+* key
+* length
+* name
+* releaseDate
+* trackKeys
+* url
+
+The collection object itself has these methods:
+
+* at( index ): Returns the album at the given index.
+* each( iterator( album, index ) ): Calls the iterator function once per album in the collection, passing the album and index.
 
 ... and this property:
 
-* length: The number of sources in the LocalQueue.
+* length: The number of sources in the collection.
 
 You can see an example of this feature in action here: http://iangilman.com/rdio/utils/examples/collection/
 
