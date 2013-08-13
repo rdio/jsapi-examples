@@ -62,10 +62,8 @@ You can also publish the built version to the folder above (where the stable bui
 ### Local Queue
 
 * Publish and point example at the right place
-* More local queue manipulation features and events
 * Support multiple queues per page
 * Tests
 * More bulletproof
- * Should we be able to cancel things in flight for forceMaster?
+ * Should we be able to cancel things in flight for forceMaster? For instance, what if you're not master and you fire off a play and a stop in rapid succession; the play will arrive after the stop.
  * Double check the values we get from the API
- * What if the local queue is manipulated while _play forceMaster is in flight?
