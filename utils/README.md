@@ -149,3 +149,5 @@ The LocalQueue has these methods:
 ... and this property:
 
 * length: The number of sources in the LocalQueue.
+
+You can see an example of this feature in action here: http://iangilman.com/rdio/utils/examples/local-queue/
