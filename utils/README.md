@@ -139,9 +139,13 @@ The LocalQueue has these methods:
 * add( sourceKey, [ index ] ): Adds the given sourceKey to the LocalQueue at the given index (or at the end if no index is provided).
 * at( index ): Returns the source at the given index.
 * clear(): Removes all sources from the LocalQueue.
-* length(): Returns the number of sources in the LocalQueue.
+* each( iterator( source, index ) ): Calls the iterator function once per item in the LocalQueue, passing the source and index.
 * next(): Plays the next source in the LocalQueue.
 * play( [ indexOrSource ] ): Puts the LocalQueue in charge of playback, starting at the given index or source (or the front of the queue if none specified).
 * playing(): Returns true if the LocalQueue is in charge of playback.
 * remove( [ indexOrSource ] ): Removes the source specified, or the first item if none specified.
 * stop(): The LocalQueue relenquishes control of playback, returning it to the Rdio queue.
+
+... and this property:
+
+* length: The number of sources in the LocalQueue.

@@ -9,6 +9,7 @@
   rdioUtils.LocalQueue = function(config) {
     var self = this;
 
+    this.length = 0;
     this._onStart = config.onStart;
     this._onStop = config.onStop;
     this._onPlay = config.onPlay;
@@ -85,6 +86,8 @@
         this._sources.splice(index, 0, source);
       }
 
+      this.length = this._sources.length;
+
       if (this._onAdd) {
         this._onAdd(source, index);
       }
@@ -117,6 +120,8 @@
       }
 
       var source = this._sources.splice(index, 1)[0];
+      this.length = this._sources.length;
+
       if (this._onRemove) {
         this._onRemove(source, index);
       }
@@ -172,8 +177,10 @@
     },
 
     // ----------
-    length: function() {
-      return this._sources.length;
+    each: function(iterator) {
+      for (var i = 0; i < this._sources.length; i++) {
+        iterator(this._sources[i], i);
+      }
     },
 
     // ----------

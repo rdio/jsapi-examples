@@ -28,6 +28,7 @@
       }      
     }
 
+    this.length = 0;
     this._start = 0;
     this._loading = null;
     this._albums = [];
