@@ -34,27 +34,41 @@
             self.template('playing-track', album).appendTo('.playing-track');
           }
         },
-        onAdd: function(source) {
+        onAdd: function(source, index) {
           var album = self.albumsByTrackKey[source.key];
           if (album) {
-            album.$el = self.template('queue-track', album).appendTo('.queue-tracks');
+            source.$el = self.template('queue-track', album);
 
-            album.$el.find('.remove')
+            source.$el.find('.remove')
               .click(function() {
                 self.queue.remove(source);
               });
 
-            album.$el.find('.play')
+            source.$el.find('.play')
               .click(function() {
                 self.queue.play(source);
               });
+
+            source.$el.find('.top')
+              .click(function() {
+                self.queue.remove(source);
+                self.queue.add(source.key, 0);
+              });
+
+            if (index === 0) {
+              source.$el.prependTo('.queue-tracks');
+            } else {
+              var sourceBefore = self.queue.at(index - 1);
+              if (sourceBefore && sourceBefore.$el) {
+                source.$el.insertAfter(sourceBefore.$el);
+              }
+            }
           }
         },
         onRemove: function(source, index) {
-          var album = self.albumsByTrackKey[source.key];
-          if (album && album.$el) {
-            album.$el.remove();
-            album.$el = null;
+          if (source.$el) {
+            source.$el.remove();
+            source.$el = null;
           }
         }
       });

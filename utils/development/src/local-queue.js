@@ -73,14 +73,20 @@
     },
 
     // ----------
-    add: function(key) {
+    add: function(key, index) {
       var source = {
         key: key
       };
 
-      this._sources.push(source);
+      if (typeof index === 'undefined' || index < 0 || index >= this._sources.length) {
+        index = this._sources.length;
+        this._sources.push(source);
+      } else {
+        this._sources.splice(index, 0, source);
+      }
+
       if (this._onAdd) {
-        this._onAdd(source);
+        this._onAdd(source, index);
       }
     },
 
