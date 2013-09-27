@@ -33,7 +33,6 @@ You can also publish the built version to the folder above (where the stable bui
 ## TO DO:
 
 * Tests
-* "extras" for album collection (so you can retrieve specific info)
 * Playback UI
 * Album UI
 * Unit tests for collectionAlbums()
@@ -57,4 +56,5 @@ You can also publish the built version to the folder above (where the stable bui
 
 ### Collection Tracker
 
+* Devin wants "extras" for album collection (so you can retrieve specific info)
 * Only one per session; multiple calls just get the same one
