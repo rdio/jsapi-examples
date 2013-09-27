@@ -135,7 +135,7 @@ Fill it up with the keys for sources you want to play using `add(sourceKey)` and
 
 Once added to the LocalQueue, the sourceKey is stored in an object hereafter referred to as a `source`. Sources have a single property, `key`, but the source objects themselves are unique, unlike keys which can appear multiple times in the same LocalQueue. This allows you to easily keep track of each source in the queue, even if your queue has multiple copies of the same track or album.
 
-Note that in order for this to work properly, your app needs to have "master" status (i.e. the one actually playing the music). The LocalQueue takes care of this automatically.
+Note that in order for the LocalQueue to work properly, your app needs to have "master" status (i.e. the one actually playing the music). The LocalQueue takes care of this automatically.
 
 ```
 var queue = rdioUtils.localQueue({
@@ -167,7 +167,7 @@ The LocalQueue has these methods:
 * play( [ indexOrSource ] ): Puts the LocalQueue in charge of playback, starting at the given index or source (or the front of the queue if none specified).
 * playing(): Returns true if the LocalQueue is in charge of playback.
 * remove( [ indexOrSource ] ): Removes the source specified, or the first item if none specified.
-* stop(): The LocalQueue relenquishes control of playback, returning it to the Rdio queue.
+* stop(): The LocalQueue relinquishes control of playback, returning it to the Rdio queue.
 
 ... and this property:
 
