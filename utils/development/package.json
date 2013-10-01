@@ -1,6 +1,6 @@
 {
   "name": "rdioUtils",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Some helper functions for the Rdio JavaScript API.",
   "devDependencies": {
     "grunt": "~0.4.0",

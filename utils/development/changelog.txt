@@ -1,5 +1,9 @@
 Rdio Utils Changelog:
 
+0.0.6:
+
+* .albumWidget() now uses R.router.navigate() for links.
+
 0.0.5:
 
 * Added .localQueue().
