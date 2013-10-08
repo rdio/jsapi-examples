@@ -105,7 +105,7 @@
     // ----------
     _bind: function(element, eventName, handler) {
       if(element.addEventListener) {
-        element.addEventListener(eventName, handler, true);
+        element.addEventListener(eventName, handler, false);
       } else {
         element.attachEvent('on' + eventName, handler);
       }
@@ -114,7 +114,7 @@
     // ----------
     _unbind: function(element, eventName, handler) {
       if(element.removeEventListener) {
-        element.removeEventListener(eventName, handler, true);
+        element.removeEventListener(eventName, handler, false);
       } else {
         element.detachEvent('on' + eventName, handler);
       }
