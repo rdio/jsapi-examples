@@ -1,5 +1,5 @@
-//! rdioUtils 0.0.6
-//! Built on 2013-09-30
+//! rdioUtils 0.0.7
+//! Built on 2013-10-08
 //! https://github.com/rdio/jsapi-examples/tree/master/utils
 //! Copyright 2013, Rdio, Inc.
 //! Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
@@ -113,7 +113,7 @@
     // ----------
     _bind: function(element, eventName, handler) {
       if(element.addEventListener) {
-        element.addEventListener(eventName, handler, true);
+        element.addEventListener(eventName, handler, false);
       } else {
         element.attachEvent('on' + eventName, handler);
       }
@@ -122,7 +122,7 @@
     // ----------
     _unbind: function(element, eventName, handler) {
       if(element.removeEventListener) {
-        element.removeEventListener(eventName, handler, true);
+        element.removeEventListener(eventName, handler, false);
       } else {
         element.detachEvent('on' + eventName, handler);
       }
