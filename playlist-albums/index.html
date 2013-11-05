@@ -19,11 +19,23 @@
       <p><%= name %> from <%= owner %></p>
     </script>
 
+    <script id="user-playlists-template" type="text/template">
+      <p><%= username %>'s playlists:</p>
+      <ul>
+        <% _.each(playlists, function(v, i) { %>
+          <li><a href="<%= v.url %>"><%= v.name %></a></li>
+        <% }); %>
+      </ul>
+    </script>
+
   </head>
   <body>
     <div class="header">
       <form class="url-form">
-        Enter the URL for an Rdio playlist: <input class="url" type="text"><button class="go">Open</button>
+        Enter the URL for an Rdio playlist: <input class="url" type="text"><button>Go</button>
+      </form>
+      <form class="user-form">
+        Or enter an Rdio username: <input class="user" type="text"><button>Go</button>
       </form>
     </div>
     <div class="content">

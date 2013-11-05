@@ -15,8 +15,13 @@
       $('.url-form')
         .submit(function(event) {
           event.preventDefault();
-          event.stopPropagation();
           self.go();
+        });
+
+      $('.user-form')
+        .submit(function(event) {
+          event.preventDefault();
+          self.goForUser();
         });
 
       setTimeout(function() {
@@ -71,6 +76,54 @@
         }
       });
     },
+
+    goForUser: function() {
+      var self = this;
+      var user = $('.user').val();
+      if (!user) {
+        return;
+      }
+
+      R.ready(function() {
+        self.loadUser(user);
+      });
+    },
+
+    loadUser: function(user) {
+      var self = this;
+
+      $('.albums').empty();
+      R.request({
+        method: 'findUser',
+        content: {
+          vanityName: user
+        },
+        success: function(data) {
+          var username = data.result.firstName + ' ' + data.result.lastName;
+          R.request({
+            method: 'getUserPlaylists',
+            content: {
+              user: data.result.key,
+              count: 100
+            },
+            success: function(data) {
+              var $playlists = self.template('user-playlists', {
+                username: username,
+                playlists: data.result
+              }).appendTo('.albums');
+
+              $playlists.find('a')
+                .click(function(event) {
+                  event.preventDefault();
+                  var $target = $(event.target);
+                  self.load($target.prop('href'));
+                });
+            }
+          });
+        }
+      });
+    },
+
 
     // ----------
     template: function(name, config) {
