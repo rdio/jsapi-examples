@@ -4,27 +4,18 @@
 
   // ----------
   window.Main = {
-    albums: [],
-
     // ----------
     init: function() {
       var self = this;
-
-      this.currentAlbums = [];
-      this.possibleAlbums = [];
 
       if (!rdioUtils.startupChecks()) {
         return;
       }
 
-      $('.go')
-        .click(function() {
-          self.go();
-        });
-
       $('.url-form')
         .submit(function(event) {
           event.preventDefault();
+          event.stopPropagation();
           self.go();
         });
 
@@ -47,35 +38,36 @@
     },
 
     load: function(url) {
+      var self = this;
+
       $('.albums').empty();
-      // console.time('load');
       R.request({
         method: 'getObjectFromUrl',
         content: {
           url: url,
-          extras: 'tracks'// 'tracks,-tracks.*,tracks.albumKey'
+          extras: '[{"field": "tracks", "extras": ["-*","albumKey"]}]'
         },
         success: function(data) {
-          // console.log(data);
-          var albums = {};
-          _.each(data.result.tracks, function(v, i) {
-            if (!albums[v.albumKey]) {
-              var album = albums[v.albumKey] = {
-                icon: v.icon,
-                name: v.album,
-                artist: v.albumArtist,
-                url: v.albumUrl,
-                artistUrl: v.artistUrl,
-                length: 1,
-                key: v.albumKey
-              };
+          self.template('playlist-info', data.result).appendTo('.albums');
 
-              var widget = rdioUtils.albumWidget(album);
-              var $widget = $(widget.element());
-              $('.albums').append($widget);
+          var albumKeys = _.uniq(_.map(data.result.tracks, function(v, i) {
+            return v.albumKey;
+          }));
+
+          R.request({
+            method: 'get',
+            content: {
+              keys: albumKeys.join(','),
+              extras: '-*,icon,name,artist,url,artistUrl,length,key'
+            },
+            success: function(data) {
+              _.each(data.result, function(v, k) {
+                var widget = rdioUtils.albumWidget(v);
+                var $widget = $(widget.element());
+                $('.albums').append($widget);
+              });
             }
           });
-          // console.timeEnd('load');
         }
       });
     },
