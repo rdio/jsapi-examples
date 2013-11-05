@@ -19,16 +19,36 @@
 
       $('.go')
         .click(function() {
-          var url = $('.url').val();
-          url = url.replace(/^http:\/\/www\.rdio\.com/i, '');
-          R.ready(function() {
-            self.load(url);
-          });
+          self.go();
         });
+
+      $('.url-form')
+        .submit(function(event) {
+          event.preventDefault();
+          self.go();
+        });
+
+      setTimeout(function() {
+        $('.url').focus();
+      }, 1);
+    },
+
+    go: function() {
+      var self = this;
+      var url = $('.url').val();
+      if (!url) {
+        return;
+      }
+
+      url = url.replace(/^http:\/\/www\.rdio\.com/i, '');
+      R.ready(function() {
+        self.load(url);
+      });
     },
 
     load: function(url) {
       $('.albums').empty();
+      // console.time('load');
       R.request({
         method: 'getObjectFromUrl',
         content: {
@@ -46,7 +66,7 @@
                 artist: v.albumArtist,
                 url: v.albumUrl,
                 artistUrl: v.artistUrl,
-                length: 0,
+                length: 1,
                 key: v.albumKey
               };
 
@@ -55,6 +75,7 @@
               $('.albums').append($widget);
             }
           });
+          // console.timeEnd('load');
         }
       });
     },
