@@ -16,7 +16,7 @@
     <script src="main.js"></script>
 
     <script id="playlist-info-template" type="text/template">
-      <p><%= name %> from <%= owner %></p>
+      <p><%= name %> from <a href="#"><%= owner %></a></p>
     </script>
 
     <script id="user-playlists-template" type="text/template">
@@ -31,11 +31,11 @@
   </head>
   <body>
     <div class="header">
-      <form class="url-form">
-        Enter the URL for an Rdio playlist: <input class="url" type="text"><button>Go</button>
-      </form>
       <form class="user-form">
-        Or enter an Rdio username: <input class="user" type="text"><button>Go</button>
+        Enter an Rdio username: <input class="user" type="text"><button>Go</button>
+      </form>
+      <form class="url-form">
+        Or enter the URL for an Rdio playlist: <input class="url" type="text"><button>Go</button>
       </form>
     </div>
     <div class="content">

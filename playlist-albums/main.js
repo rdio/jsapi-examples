@@ -25,7 +25,7 @@
         });
 
       setTimeout(function() {
-        $('.url').focus();
+        $('.user').focus();
       }, 1);
     },
 
@@ -53,7 +53,13 @@
           extras: '[{"field": "tracks", "extras": ["-*","albumKey"]}]'
         },
         success: function(data) {
-          self.template('playlist-info', data.result).appendTo('.albums');
+          var $info = self.template('playlist-info', data.result).appendTo('.albums');
+
+          $info.find('a')
+            .click(function(event) {
+              event.preventDefault();
+              self.loadUserByKey(data.result.ownerKey, data.result.owner);
+            });
 
           var albumKeys = _.uniq(_.map(data.result.tracks, function(v, i) {
             return v.albumKey;
@@ -92,7 +98,6 @@
     loadUser: function(user) {
       var self = this;
 
-      $('.albums').empty();
       R.request({
         method: 'findUser',
         content: {
@@ -100,30 +105,36 @@
         },
         success: function(data) {
           var username = data.result.firstName + ' ' + data.result.lastName;
-          R.request({
-            method: 'getUserPlaylists',
-            content: {
-              user: data.result.key,
-              count: 100
-            },
-            success: function(data) {
-              var $playlists = self.template('user-playlists', {
-                username: username,
-                playlists: data.result
-              }).appendTo('.albums');
-
-              $playlists.find('a')
-                .click(function(event) {
-                  event.preventDefault();
-                  var $target = $(event.target);
-                  self.load($target.prop('href'));
-                });
-            }
-          });
+          self.loadUserByKey(data.result.key, username);
         }
       });
     },
 
+    loadUserByKey: function(key, username) {
+      var self = this;
+      
+      $('.albums').empty();
+      R.request({
+        method: 'getUserPlaylists',
+        content: {
+          user: key,
+          count: 100
+        },
+        success: function(data) {
+          var $playlists = self.template('user-playlists', {
+            username: username,
+            playlists: data.result
+          }).appendTo('.albums');
+
+          $playlists.find('a')
+            .click(function(event) {
+              event.preventDefault();
+              var $target = $(event.target);
+              self.load($target.prop('href'));
+            });
+        }
+      });
+    },
 
     // ----------
     template: function(name, config) {
