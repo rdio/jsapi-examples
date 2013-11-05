@@ -17,35 +17,45 @@
         return;
       }
 
-      R.ready(function() {
-        R.request({
-          method: 'getObjectFromUrl',
-          content: {
-            url: '/people/Kittarlin/playlists/7009964/F_Mendelssohn/',
-            extras: 'tracks'// 'tracks,-tracks.*,tracks.albumKey'
-          },
-          success: function(data) {
-            // console.log(data);
-            var albums = {};
-            _.each(data.result.tracks, function(v, i) {
-              if (!albums[v.albumKey]) {
-                var album = albums[v.albumKey] = {
-                  icon: v.icon,
-                  name: v.album,
-                  artist: v.albumArtist,
-                  url: v.albumUrl,
-                  artistUrl: v.artistUrl,
-                  length: 10,
-                  key: v.albumKey
-                };
-
-                var widget = rdioUtils.albumWidget(album);
-                var $widget = $(widget.element());
-                $('.albums').append($widget);
-              }
-            });
-          }
+      $('.go')
+        .click(function() {
+          var url = $('.url').val();
+          url = url.replace(/^http:\/\/www\.rdio\.com/i, '');
+          R.ready(function() {
+            self.load(url);
+          });
         });
+    },
+
+    load: function(url) {
+      $('.albums').empty();
+      R.request({
+        method: 'getObjectFromUrl',
+        content: {
+          url: url,
+          extras: 'tracks'// 'tracks,-tracks.*,tracks.albumKey'
+        },
+        success: function(data) {
+          // console.log(data);
+          var albums = {};
+          _.each(data.result.tracks, function(v, i) {
+            if (!albums[v.albumKey]) {
+              var album = albums[v.albumKey] = {
+                icon: v.icon,
+                name: v.album,
+                artist: v.albumArtist,
+                url: v.albumUrl,
+                artistUrl: v.artistUrl,
+                length: 0,
+                key: v.albumKey
+              };
+
+              var widget = rdioUtils.albumWidget(album);
+              var $widget = $(widget.element());
+              $('.albums').append($widget);
+            }
+          });
+        }
       });
     },
 
