@@ -12,6 +12,22 @@
         return;
       }
 
+      rdioUtils.authWidget($('.auth-widget'));
+      R.on('change:authenticated', function() {
+        R.ready(function() {
+          if (!R.authenticated()) {
+            return;
+          }
+
+          var url = R.currentUser.get('url');
+          $('.auth-widget').wrapInner('<a href="#' + url + '">');
+
+          if (!location.hash.replace(/^#/, '')) {
+            location.hash = url;
+          }          
+        });
+      });
+
       $('.url').val('');
       $('.url-form')
         .submit(function(event) {
