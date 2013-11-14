@@ -12,23 +12,49 @@
         return;
       }
 
+      $('.url').val('');
       $('.url-form')
         .submit(function(event) {
           event.preventDefault();
           self.go();
+          $('.url').val('');
         });
 
+      $('.user').val('');
       $('.user-form')
         .submit(function(event) {
           event.preventDefault();
           self.goForUser();
+          $('.user').val('');
         });
 
       setTimeout(function() {
         $('.user').focus();
       }, 1);
+
+      R.ready(function() {
+        self.hashChanged();
+        $(window).bind('hashchange', function(event) {
+          self.hashChanged();
+        });  
+      });
     },
 
+    // ----------
+    hashChanged: function() {
+      var hash = location.hash.replace(/^#/, '');
+      if (!/^\/people\//.test(hash)) {
+        return;
+      }
+
+      if (/\/playlists\//.test(hash)) {
+        this.load(hash);
+      } else {
+        this.loadUser(hash);      
+      }
+    },
+
+    // ----------
     go: function() {
       var self = this;
       var url = $('.url').val();
@@ -37,11 +63,10 @@
       }
 
       url = url.replace(/^http:\/\/www\.rdio\.com/i, '');
-      R.ready(function() {
-        self.load(url);
-      });
+      location.hash = url;
     },
 
+    // ----------
     load: function(url) {
       var self = this;
 
@@ -54,12 +79,6 @@
         },
         success: function(data) {
           var $info = self.template('playlist-info', data.result).appendTo('.albums');
-
-          $info.find('a')
-            .click(function(event) {
-              event.preventDefault();
-              self.loadUserByKey(data.result.ownerKey, data.result.owner);
-            });
 
           var albumKeys = _.uniq(_.map(data.result.tracks, function(v, i) {
             return v.albumKey;
@@ -83,6 +102,7 @@
       });
     },
 
+    // ----------
     goForUser: function() {
       var self = this;
       var user = $('.user').val();
@@ -90,18 +110,17 @@
         return;
       }
 
-      R.ready(function() {
-        self.loadUser(user);
-      });
+      location.hash = '/people/' + user + '/';
     },
 
-    loadUser: function(user) {
+    // ----------
+    loadUser: function(url) {
       var self = this;
 
       R.request({
-        method: 'findUser',
+        method: 'getObjectFromUrl',
         content: {
-          vanityName: user
+          url: url
         },
         success: function(data) {
           var username = data.result.firstName + ' ' + data.result.lastName;
@@ -110,6 +129,7 @@
       });
     },
 
+    // ----------
     loadUserByKey: function(key, username) {
       var self = this;
       
@@ -125,13 +145,6 @@
             username: username,
             playlists: data.result
           }).appendTo('.albums');
-
-          $playlists.find('a')
-            .click(function(event) {
-              event.preventDefault();
-              var $target = $(event.target);
-              self.load($target.prop('href'));
-            });
         }
       });
     },

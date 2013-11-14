@@ -16,14 +16,14 @@
     <script src="main.js"></script>
 
     <script id="playlist-info-template" type="text/template">
-      <p><%= name %> from <a href="#"><%= owner %></a></p>
+      <p><%= name %> from <a href="#<%= ownerUrl %>"><%= owner %></a></p>
     </script>
 
     <script id="user-playlists-template" type="text/template">
       <p><%= username %>'s playlists:</p>
       <ul>
         <% _.each(playlists, function(v, i) { %>
-          <li><a href="<%= v.url %>"><%= v.name %></a></li>
+          <li><a href="#<%= v.url %>"><%= v.name %></a></li>
         <% }); %>
       </ul>
     </script>
