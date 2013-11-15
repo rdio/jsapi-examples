@@ -55,11 +55,13 @@
           return;
         }
 
-        drag.startY = touches[0].clientY;
+        drag.startY = touches[0].pageY;
         drag.id = touches[0].identifier;
       } else {
-        drag.startY = event.clientY;            
+        drag.startY = event.pageY;            
       }
+
+      drag.y = drag.startY;
 
       this._drag = drag;
       $(window).bind(this._moveEventName, this._boundMoveHandler);
@@ -67,12 +69,38 @@
       this.$el.addClass('dragging');
       event.preventDefault();
       event.stopPropagation();
+
+      requestAnimationFrame(_.bind(this._scrollCheck, this));
+    },
+
+    // ----------
+    _scrollCheck: function() {
+      if (!this._drag) {
+        return;
+      }
+
+      var $window = $(window);
+      var wh = $window.height();
+      var scrollTop = $window.scrollTop();
+      var y = this._drag.y - scrollTop;
+      var adjust = 0;
+      if (y > wh - 80) {
+        adjust = 3;
+      } else if (y < 80) {
+        adjust = -3;
+      } 
+
+      if (adjust) {
+        $window.scrollTop(scrollTop + adjust);
+        this._drag.y += adjust;
+        this._updateForDrag();
+      }
+
+      requestAnimationFrame(_.bind(this._scrollCheck, this));
     },
 
     // ----------
     _moveHandler: function(event) {
-      var y;
-
       if (Modernizr.touch) {
         var touches = event.originalEvent.changedTouches;
         var touch = _.findWhere(touches, { identifier: this._drag.id });
@@ -80,12 +108,20 @@
           return;
         }
 
-        y = touch.clientY;
+        this._drag.y = touch.pageY;
       } else {
-        y = event.clientY;
+        this._drag.y = event.pageY;
       }
 
-      var offset = y - this._drag.startY;
+      this._updateForDrag();
+
+      event.preventDefault();
+      event.stopPropagation();
+    },
+
+    // ----------
+    _updateForDrag: function() {
+      var offset = this._drag.y - this._drag.startY;
       this.$el.css({
         top: offset
       });
@@ -106,9 +142,6 @@
           this.queue.shift(start, count, -1);          
         }
       }
-
-      event.preventDefault();
-      event.stopPropagation();
     },
 
     // ----------

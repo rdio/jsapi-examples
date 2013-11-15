@@ -10,6 +10,7 @@ http://iangilman.com/rdio/mobile-queue/
 * Long press
 * Don't allow a second drag while one is in progress
 * Don't update during drag
+* Optimize for next album... pop top item off of queue right away?
 
 * Clean up code so it's a proper example
 * Should animate into position when you drop
