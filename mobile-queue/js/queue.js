@@ -22,16 +22,10 @@
     },
 
     // ----------
-    shiftDown: function(index, count) {
-      // console.log(index, count);
-      if (count <= 0) {
-        return;
-      }
-
-      var first = index - (count - 1);
-      var last = index;
+    shift: function(start, count, shift) {
+      var last = start + (count - 1);
       _.each(this.items, function(v, i) {
-        v.shift(i >= first && i <= last ? 1 : 0);
+        v.shift(i >= start && i <= last ? shift : 0);
       });
     },
 

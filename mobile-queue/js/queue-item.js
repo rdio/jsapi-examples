@@ -90,11 +90,20 @@
         top: offset
       });
 
+      var count, start;
       if (offset < 0) {
-        var count = Math.max(0, Math.floor((-offset - 40) / 80) + 1);
+        count = Math.max(0, Math.floor((-offset - 40) / 80) + 1);
         if (this._drag.shift !== -count) {
           this._drag.shift = -count;
-          this.queue.shiftDown(this.queue.index(this) - 1, count);          
+          start = this.queue.index(this) - count;
+          this.queue.shift(start, count, 1);          
+        }
+      } else {
+        count = Math.max(0, Math.floor((offset - 40) / 80) + 1);
+        if (this._drag.shift !== count) {
+          this._drag.shift = count;
+          start = this.queue.index(this) + 1;
+          this.queue.shift(start, count, -1);          
         }
       }
 
