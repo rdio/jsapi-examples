@@ -62,6 +62,7 @@
       }
 
       drag.y = drag.startY;
+      drag.oldY = drag.startY;
 
       this._drag = drag;
       $(window).bind(this._moveEventName, this._boundMoveHandler);
@@ -93,8 +94,9 @@
       if (adjust) {
         $window.scrollTop(scrollTop + adjust);
         this._drag.y += adjust;
-        this._updateForDrag();
       }
+
+      this._updateForDrag();
 
       requestAnimationFrame(_.bind(this._scrollCheck, this));
     },
@@ -113,14 +115,18 @@
         this._drag.y = event.pageY;
       }
 
-      this._updateForDrag();
-
       event.preventDefault();
       event.stopPropagation();
     },
 
     // ----------
     _updateForDrag: function() {
+      if (this._drag.y === this._drag.oldY) {
+        return;
+      }
+
+      this._drag.oldY = this._drag.y;
+
       var offset = this._drag.y - this._drag.startY;
       this.$el.css({
         top: offset

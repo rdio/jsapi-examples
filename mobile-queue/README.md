@@ -6,7 +6,6 @@ http://iangilman.com/rdio/mobile-queue/
 
 # TODO:
 
-* Scroll while you drag
 * Long press
 * Don't allow a second drag while one is in progress
 * Don't update during drag
@@ -17,6 +16,7 @@ http://iangilman.com/rdio/mobile-queue/
 * Test adding items in the middle to make sure we're doing the right thing
 * Indicator that things are updating
 * If updates are coming in from elsewhere, hold off on determining drag indices
+* Item is jittery when scrolling during drag
 
 # Features
 
