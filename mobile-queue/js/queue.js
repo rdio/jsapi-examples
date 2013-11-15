@@ -46,7 +46,7 @@
     // ----------
     move: function(item, shift) {
       var index = this.index(item);
-      var newIndex = Math.max(0, index + shift);
+      var newIndex = Math.min(this.items.length - 1, Math.max(0, index + shift));
 
       this.items.splice(index, 1);
       this.items.splice(newIndex, 0, item);

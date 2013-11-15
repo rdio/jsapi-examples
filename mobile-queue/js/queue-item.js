@@ -82,13 +82,14 @@
 
       var $window = $(window);
       var wh = $window.height();
+      var bodyHeight = $('body').height();
       var scrollTop = $window.scrollTop();
       var y = this._drag.y - scrollTop;
       var adjust = 0;
-      if (y > wh - 80) {
-        adjust = 3;
-      } else if (y < 80) {
-        adjust = -3;
+      if (y > wh - 80 && scrollTop < bodyHeight - wh) {
+        adjust = Math.min((bodyHeight - wh) - scrollTop, 3);
+      } else if (y < 80 && scrollTop > 0) {
+        adjust = Math.max(-scrollTop, -3);
       } 
 
       if (adjust) {

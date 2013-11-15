@@ -17,6 +17,7 @@ http://iangilman.com/rdio/mobile-queue/
 * Indicator that things are updating
 * If updates are coming in from elsewhere, hold off on determining drag indices
 * Item is jittery when scrolling during drag
+* Variable scroll speed depending on where you are
 
 # Features
 
