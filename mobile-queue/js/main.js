@@ -92,10 +92,13 @@
 
     // ----------
     spin: function(value) {
+      var $container = $('.spin-container');
       if (value) {
-        this.spinner = new Spinner().spin($('.spin-container')[0]);     
+        $container.show();
+        this.spinner = new Spinner().spin($container[0]);     
       } else {
         this.spinner.stop();
+        $container.hide();
       }
     },
     
