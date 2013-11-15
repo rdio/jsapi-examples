@@ -92,9 +92,10 @@
 
       if (offset < 0) {
         var count = Math.max(0, Math.floor((-offset - 40) / 80) + 1);
-        this._drag.shift = -count;
-        // console.log(count, offset);
-        this.queue.shiftDown(this.queue.index(this) - 1, count);
+        if (this._drag.shift !== -count) {
+          this._drag.shift = -count;
+          this.queue.shiftDown(this.queue.index(this) - 1, count);          
+        }
       }
 
       event.preventDefault();

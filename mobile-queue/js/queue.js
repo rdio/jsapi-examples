@@ -28,9 +28,10 @@
         return;
       }
 
-      var section = this.items.slice(index - (count - 1), index + 1);
-      _.each(section, function(v, i) {
-        v.shift(1);
+      var first = index - (count - 1);
+      var last = index;
+      _.each(this.items, function(v, i) {
+        v.shift(i >= first && i <= last ? 1 : 0);
       });
     },
 

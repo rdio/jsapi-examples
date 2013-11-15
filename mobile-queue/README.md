@@ -7,12 +7,8 @@ http://iangilman.com/rdio/mobile-queue/
 # TODO:
 
 * Clean up code so it's a proper example
-* Touch events
-* Can't move same item twice
-* If you drag up and then back down again, they don't shift back
 * Can't drag down
 * Should animate into position when you drop
-* Mousemove and mouseup should be on whole window
 * Scroll while you drag
 * Actually rearrange the real queue
 * Update "Now Playing" 
@@ -20,6 +16,7 @@ http://iangilman.com/rdio/mobile-queue/
 * Spinner to start
 * Queue remove events
 * Test adding items in the middle to make sure we're doing the right thing
+* Don't allow a second drag while one is in progress
 
 # Features
 
