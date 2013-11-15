@@ -22,6 +22,15 @@
     },
 
     // ----------
+    remove: function(index) {
+      var item = this.items[index];
+      this.items.splice(index, 1);
+      if (item) {
+        item.$el.remove();        
+      }
+    },
+
+    // ----------
     index: function(item) {
       return _.indexOf(this.items, item);
     },

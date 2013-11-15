@@ -77,8 +77,8 @@
         }
       });
 
-      R.player.queue.on('remove', function() {
-        console.log('remove', arguments);
+      R.player.queue.on('remove', function(model, collection, info) {
+        self.queue.remove(info.index);
       });
     },
 
@@ -92,7 +92,6 @@
 
     // ----------
     updateQueue: function() {
-      // console.log('reset');
       this.queue.empty();
       $('.queue').empty();
 

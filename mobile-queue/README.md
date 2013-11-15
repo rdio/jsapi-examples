@@ -6,7 +6,6 @@ http://iangilman.com/rdio/mobile-queue/
 
 # TODO:
 
-* Queue remove events
 * Scroll while you drag
 * Long press
 * Don't allow a second drag while one is in progress
