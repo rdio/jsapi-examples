@@ -12,6 +12,8 @@
         return;
       }
 
+      this.queue = new this.Queue();
+
       R.ready(function() {
         if (R.authenticated()) {
           self.start();
@@ -32,7 +34,7 @@
     // ----------
     start: function() {
       var self = this;
-      
+
       $('.authenticated').show();
       $('.now-playing img').prop('src', R.player.playingSource().get('icon'));
 
@@ -50,6 +52,7 @@
 
     // ----------
     updateQueue: function() {
+      console.log('reset');
       $('.queue').empty();
 
       for (var i = 0; i < R.player.queue.length(); i++) {
@@ -59,45 +62,7 @@
 
     // ----------
     newQueueItem: function(data, index) {
-      var $item = this.template('queue-item', data);
-
-      if (index === 0) {
-        $item.prependTo('.queue');
-      } else {
-        var $before = $('.queue .queue-item').eq(index - 1);
-        if ($before.length) {
-          $item.insertAfter($before);
-        } else {
-          $item.appendTo('.queue');
-        }
-      } 
-
-      var drag = null;
-
-      var moveHandler = function(event) {
-        $item.css({
-          top: event.clientY - drag.startY
-        });
-      };
-
-      var upHandler = function(event) {
-        $item.unbind('mousemove', moveHandler);
-        $item.unbind('mouseup', upHandler);
-        $item.removeClass('dragging');
-        drag = null;
-      };
-
-      $item.find('.grip')
-        .mousedown(function(event) {
-          drag = {
-            startX: event.clientX,
-            startY: event.clientY
-          };
-
-          $item.mousemove(moveHandler);
-          $item.mouseup(upHandler);
-          $item.addClass('dragging');
-        });
+      this.queue.newItem(data, index);
     },
 
     // ----------
