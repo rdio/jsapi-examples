@@ -40,11 +40,38 @@
       this.updateNowPlaying();
       R.player.on('change:playingSource', this.updateNowPlaying, this);
 
+      var doResetEnd = function() {
+        self._queueReset = false;
+        self.updateQueue();        
+      };
+
+      var timeout;
+      var checkResetEnd = function() {
+        if (R.player.queue.length() === self.queue.items.length) {
+          doResetEnd();
+          return;
+        }
+
+        clearTimeout(timeout);
+        timeout = setTimeout(doResetEnd, 3000);
+      };
+
       this.updateQueue();
-      R.player.queue.on('reset', this.updateQueue, this);
+      R.player.queue.on('reset', function() {
+        if (self.queue.items.length) {
+          self._queueReset = true;
+          checkResetEnd();
+        } else {
+          self.updateQueue();
+        }
+      });
       
       R.player.queue.on('add', function(model, collection, info) {
-        self.newQueueItem(model.toJSON(), info.index);
+        if (self._queueReset) {
+          checkResetEnd();
+        } else {
+          self.newQueueItem(model.toJSON(), info.index);         
+        }
       });
 
       R.player.queue.on('remove', function() {
@@ -62,11 +89,12 @@
 
     // ----------
     updateQueue: function() {
-      console.log('reset');
+      // console.log('reset');
+      this.queue.empty();
       $('.queue').empty();
 
       for (var i = 0; i < R.player.queue.length(); i++) {
-        this.newQueueItem(R.player.queue.at(i).toJSON());
+        this.newQueueItem(R.player.queue.at(i).toJSON(), i);
       }
     },
 

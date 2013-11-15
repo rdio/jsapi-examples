@@ -17,6 +17,11 @@
     },
 
     // ----------
+    empty: function() {
+      this.items = [];
+    },
+
+    // ----------
     index: function(item) {
       return _.indexOf(this.items, item);
     },
@@ -33,13 +38,17 @@
     move: function(item, shift) {
       var index = this.index(item);
       var newIndex = Math.max(0, index + shift);
+
       this.items.splice(index, 1);
       this.items.splice(newIndex, 0, item);
+
       item.$el.remove();
       this.insertAt(item, newIndex);
       _.each(this.items, function(v, i) {
         v.shift(0, true);
       });
+
+      R.player.queue.move(index, newIndex);
     },
 
     // ----------
