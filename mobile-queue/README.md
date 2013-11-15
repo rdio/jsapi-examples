@@ -8,7 +8,6 @@ http://iangilman.com/rdio/mobile-queue/
 
 * Long press
 * Don't allow a second drag while one is in progress
-* Don't update during drag
 * Optimize for next album... pop top item off of queue right away?
 
 * Clean up code so it's a proper example
@@ -18,6 +17,7 @@ http://iangilman.com/rdio/mobile-queue/
 * If updates are coming in from elsewhere, hold off on determining drag indices
 * Item is jittery when scrolling during drag
 * Variable scroll speed depending on where you are
+* Do all animations with transform instead of top?
 
 # Features
 

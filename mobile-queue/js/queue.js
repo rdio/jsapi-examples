@@ -4,6 +4,7 @@
   var component = Main.Queue = function() {
     this.items = [];
     this.$el = $('.queue');
+    this.dragging = false;
   };
 
   // ----------
@@ -19,6 +20,22 @@
     // ----------
     empty: function() {
       this.items = [];
+    },
+
+    // ----------
+    reset: function() {
+      if (this.dragging) {
+        this._pendingReset = true;
+        return;
+      }
+
+      this._pendingReset = false;
+      this.empty();
+      $('.queue').empty();
+
+      for (var i = 0; i < R.player.queue.length(); i++) {
+        this.newItem(R.player.queue.at(i).toJSON(), i);
+      }
     },
 
     // ----------
@@ -45,7 +62,21 @@
 
     // ----------
     move: function(item, shift) {
+      if (!shift) {
+        return;
+      }
+
       var index = this.index(item);
+
+      if (this._pendingReset) {
+        this.reset();
+      }
+
+      item = this.items[index];
+      if (!item) {
+        return;
+      }
+
       var newIndex = Math.min(this.items.length - 1, Math.max(0, index + shift));
 
       this.items.splice(index, 1);

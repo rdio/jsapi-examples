@@ -45,7 +45,7 @@
 
       var doResetEnd = function() {
         self._queueReset = false;
-        self.updateQueue();        
+        self.queue.reset();        
       };
 
       var timeout;
@@ -59,13 +59,13 @@
         timeout = setTimeout(doResetEnd, 3000);
       };
 
-      this.updateQueue();
+      this.queue.reset();
       R.player.queue.on('reset', function() {
         if (self.queue.items.length) {
           self._queueReset = true;
           checkResetEnd();
         } else {
-          self.updateQueue();
+          self.queue.reset();
         }
       });
       
@@ -73,7 +73,7 @@
         if (self._queueReset) {
           checkResetEnd();
         } else {
-          self.newQueueItem(model.toJSON(), info.index);         
+          self.queue.newItem(model.toJSON(), info.index);         
         }
       });
 
@@ -88,21 +88,6 @@
       if (playingSource) {
         $('.now-playing img').prop('src', playingSource.get('icon'));        
       }
-    },
-
-    // ----------
-    updateQueue: function() {
-      this.queue.empty();
-      $('.queue').empty();
-
-      for (var i = 0; i < R.player.queue.length(); i++) {
-        this.newQueueItem(R.player.queue.at(i).toJSON(), i);
-      }
-    },
-
-    // ----------
-    newQueueItem: function(data, index) {
-      this.queue.newItem(data, index);
     },
 
     // ----------

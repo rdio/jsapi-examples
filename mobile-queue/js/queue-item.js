@@ -64,6 +64,7 @@
       drag.y = drag.startY;
       drag.oldY = drag.startY;
 
+      this.queue.dragging = true;
       this._drag = drag;
       $(window).bind(this._moveEventName, this._boundMoveHandler);
       $(window).bind(this._upEventName, this._boundUpHandler);
@@ -161,8 +162,6 @@
         }
       }
 
-      this.queue.move(this, this._drag.shift);
-
       this.$el.css({
         top: 0
       });
@@ -170,6 +169,9 @@
       $(window).unbind(this._moveEventName, this._boundMoveHandler);
       $(window).unbind(this._upEventName, this._boundUpHandler);
       this.$el.removeClass('dragging');
+
+      this.queue.dragging = false;
+      this.queue.move(this, this._drag.shift);
       this._drag = null;
 
       event.preventDefault();
