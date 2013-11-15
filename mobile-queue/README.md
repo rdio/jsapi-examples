@@ -6,7 +6,6 @@ http://iangilman.com/rdio/mobile-queue/
 
 # TODO:
 
-* Spinner to start
 * Queue remove events
 * Scroll while you drag
 * Long press

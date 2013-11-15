@@ -14,7 +14,10 @@
 
       this.queue = new this.Queue();
 
+      this.spin(true);
+
       R.ready(function() {
+        self.spin(false);
         if (R.authenticated()) {
           self.start();
         } else {
@@ -103,6 +106,15 @@
       this.queue.newItem(data, index);
     },
 
+    // ----------
+    spin: function(value) {
+      if (value) {
+        this.spinner = new Spinner().spin($('.spin-container')[0]);     
+      } else {
+        this.spinner.stop();
+      }
+    },
+    
     // ----------
     template: function(name, config) {
       var rawTemplate = $.trim($("#" + name + "-template").text());
