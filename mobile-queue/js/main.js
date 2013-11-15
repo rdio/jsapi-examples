@@ -36,7 +36,9 @@
       var self = this;
 
       $('.authenticated').show();
-      $('.now-playing img').prop('src', R.player.playingSource().get('icon'));
+
+      this.updateNowPlaying();
+      R.player.on('change:playingSource', this.updateNowPlaying, this);
 
       this.updateQueue();
       R.player.queue.on('reset', this.updateQueue, this);
@@ -48,6 +50,14 @@
       R.player.queue.on('remove', function() {
         console.log('remove', arguments);
       });
+    },
+
+    // ----------
+    updateNowPlaying: function() {
+      var playingSource = R.player.playingSource();
+      if (playingSource) {
+        $('.now-playing img').prop('src', playingSource.get('icon'));        
+      }
     },
 
     // ----------
