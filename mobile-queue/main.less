@@ -11,6 +11,15 @@
           box-shadow: @config; /* Chrome 6+, Firefox 4+, IE 9+, iOS 5+, Opera 10.50+ */
 }
 
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .truncated-line {
   white-space: nowrap;
   -ms-text-overflow: ellipsis;
@@ -56,6 +65,7 @@
     width: 100%;
     overflow: hidden;
     background-color: white;
+    .no-select;
 
     &.dragging {
       z-index: 100;
@@ -84,5 +94,21 @@
     height: 60px;
     background-color: #eee;
     margin: 10px;
+  }
+}
+
+.menu {
+  display: none;
+  position: fixed;
+  left: 10px;
+  top: 100px;
+  right: 10px;
+  z-index: 100;
+  background-color: white;
+  .box-shadow(0 10px 20px 0 rgba(0, 0, 0, 0.5));
+
+  .item {
+    padding: 10px 20px;
+    border-bottom: 1px solid #eee;
   }
 }

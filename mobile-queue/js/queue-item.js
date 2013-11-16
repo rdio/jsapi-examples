@@ -39,8 +39,31 @@
 
     // ----------
     bindEvents: function() {
+      var self = this;
+
       this.$el.find('.grip')
         .bind(this._downEventName, this._boundDownHandler);
+
+      this.$el
+        .bind(this._downEventName, function() {
+          var $window = $(window);
+          var scrollTop = $window.scrollTop();
+
+          var timeout = setTimeout(function() {
+            if (Math.abs($window.scrollTop() - scrollTop) > 5) {
+              return;
+            }
+
+            Main.menu.show(self);
+          }, 1000);
+
+          var upHandler = function() {
+            clearTimeout(timeout);
+            $(window).unbind(this._upEventName, upHandler);
+          };
+
+          $(window).bind(this._upEventName, upHandler);
+        });
     },
 
     // ----------

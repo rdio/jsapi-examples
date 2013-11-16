@@ -13,6 +13,7 @@
       }
 
       this.queue = new this.Queue();
+      this.menu = new this.Menu();
 
       this.spin(true);
 
