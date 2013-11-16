@@ -6,7 +6,11 @@ http://iangilman.com/rdio/mobile-queue/
 
 # TODO:
 
-* Long press
+* Position menu near album
+* Click outside menu dismisses
+* Make menu items work
+* Show album in menu for context?
+* Should resets be paused while menu is up? Or maybe another way to deal with state changing?
 * Don't allow a second drag while one is in progress
 * Optimize for next album... pop top item off of queue right away?
 * Prettier grip
