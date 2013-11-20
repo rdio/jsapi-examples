@@ -50,44 +50,36 @@
         self.updateNowPlaying();
       });
 
-      var doResetEnd = function() {
-        self._queueReset = false;
-        self.queue.reset();        
-      };
-
-      var timeout;
-      var checkResetEnd = function() {
-        clearTimeout(timeout);
-
-        if (R.player.queue.length() === self.queue.items.length) {
-          doResetEnd();
-          return;
-        }
-
-        timeout = setTimeout(doResetEnd, 3000);
-      };
-
       this.queue.reset();
-      R.player.queue.on('reset', function() {
-        if (self.queue.items.length) {
-          self._queueReset = true;
-          checkResetEnd();
-        } else {
-          self.queue.reset();
-        }
+      this._firstReset = true;
+      R.player.queue.on('reset add remove', function() {
+        self.triggerReset();
       });
-      
-      R.player.queue.on('add', function(model, collection, info) {
-        if (self._queueReset) {
-          checkResetEnd();
-        } else {
-          self.queue.newItem(model.toJSON(), info.index);         
-        }
-      });
+    },
 
-      R.player.queue.on('remove', function(model, collection, info) {
-        self.queue.removeByIndex(info.index);
-      });
+    // ----------
+    triggerReset: function() {
+      var self = this;
+
+      var doResetEnd = function() {
+        self.queue.reset();   
+        self._firstReset = false;     
+      };
+
+      var checkResetEnd = function() {
+        clearTimeout(self._resetTimeout);
+
+        if (self._firstReset) {
+          if ((self.queue.items.length === 0 && R.player.queue.length() === 5) 
+              || (R.player.queue.length() - self.queue.items.length >= 20)) {
+            self.queue.reset();
+          }
+        }
+
+        self._resetTimeout = setTimeout(doResetEnd, 2000);
+      };
+
+      checkResetEnd();
     },
 
     // ----------
