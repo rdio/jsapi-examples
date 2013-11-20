@@ -46,7 +46,9 @@
       $('.authenticated').show();
 
       this.updateNowPlaying();
-      R.player.on('change:playingSource', this.updateNowPlaying, this);
+      R.player.on('change:playingSource', function() {
+        self.updateNowPlaying();
+      });
 
       var doResetEnd = function() {
         self._queueReset = false;
@@ -89,10 +91,16 @@
     },
 
     // ----------
-    updateNowPlaying: function() {
-      var playingSource = R.player.playingSource();
-      if (playingSource) {
-        $('.now-playing img').prop('src', playingSource.get('icon'));        
+    updateNowPlaying: function(data) {
+      if (!data) {
+        var playingSource = R.player.playingSource();
+        if (playingSource) {  
+          data = playingSource.toJSON();
+        }
+      }
+
+      if (data) {
+        $('.now-playing img').prop('src', data.icon);
       }
     },
 

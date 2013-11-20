@@ -110,9 +110,17 @@
 
     // ----------
     playNow: function(item) {
+      var data = R.player.playingSource().toJSON();
+      this.newItem(data, 0);
+
+      Main.updateNowPlaying(item.data);
+
+      var index = this.index(item);
+      this.removeByIndex(index);
+
       R.player.queue.addPlayingSource();
       R.player.play({ source: item.data.key });
-      R.player.queue.remove(this.index(item) + 1);
+      R.player.queue.remove(index);
     },
 
     // ----------
@@ -127,7 +135,9 @@
 
     // ----------
     remove: function(item) {
-      R.player.queue.remove(this.index(item));
+      var index = this.index(item);
+      this.removeByIndex(index);
+      R.player.queue.remove(index);
     }
   };
 

@@ -6,8 +6,6 @@ http://iangilman.com/rdio/mobile-queue/
 
 # TODO:
 
-* Make menu items work
-* Prettier grip
 * Dragging and dropping makes duplicates; maybe when master?
 * Should resets be paused while menu is up? Or maybe another way to deal with state changing?
 * Optimize for next album... pop top item off of queue right away?
@@ -15,6 +13,7 @@ http://iangilman.com/rdio/mobile-queue/
 * Hold off on sending move if there's a reset in progress
 * If updates are coming in from elsewhere, hold off on determining drag indices
 
+* Sometimes there's a flash of the old playing album when you switch to a new one with "Play Now"
 * Don't allow a second drag while one is in progress
 * Show album in menu for context?
 * Clean up code so it's a proper example
