@@ -12,6 +12,10 @@
         return;
       }
 
+      this.downEventName = (Modernizr.touch) ? 'touchstart' : 'mousedown';
+      this.moveEventName = (Modernizr.touch) ? 'touchmove' : 'mousemove';
+      this.upEventName = (Modernizr.touch) ? 'touchend' : 'mouseup';
+
       this.queue = new this.Queue();
       this.menu = new this.Menu();
 
@@ -51,12 +55,13 @@
 
       var timeout;
       var checkResetEnd = function() {
+        clearTimeout(timeout);
+
         if (R.player.queue.length() === self.queue.items.length) {
           doResetEnd();
           return;
         }
 
-        clearTimeout(timeout);
         timeout = setTimeout(doResetEnd, 3000);
       };
 

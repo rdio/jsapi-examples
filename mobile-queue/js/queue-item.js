@@ -8,9 +8,6 @@
     this.$el = Main.template('queue-item', data);
     this._shift = 0;
     this._drag = null;
-    this._downEventName = (Modernizr.touch) ? 'touchstart' : 'mousedown';
-    this._moveEventName = (Modernizr.touch) ? 'touchmove' : 'mousemove';
-    this._upEventName = (Modernizr.touch) ? 'touchend' : 'mouseup';
     this._boundDownHandler = _.bind(this._downHandler, this);
     this._boundMoveHandler = _.bind(this._moveHandler, this);
     this._boundUpHandler = _.bind(this._upHandler, this);
@@ -42,14 +39,14 @@
       var self = this;
 
       this.$el.find('.grip')
-        .bind(this._downEventName, this._boundDownHandler);
+        .bind(Main.downEventName, this._boundDownHandler);
 
       this.$el
-        .bind(this._downEventName, function() {
+        .bind(Main.downEventName, function() {
           var $window = $(window);
           var scrollTop = $window.scrollTop();
 
-          var timeout = setTimeout(function() {
+          self._longPressTimeout = setTimeout(function() {
             if (Math.abs($window.scrollTop() - scrollTop) > 5) {
               return;
             }
@@ -58,11 +55,11 @@
           }, 1000);
 
           var upHandler = function() {
-            clearTimeout(timeout);
-            $(window).unbind(this._upEventName, upHandler);
+            clearTimeout(self._longPressTimeout);
+            $(window).unbind(Main.upEventName, upHandler);
           };
 
-          $(window).bind(this._upEventName, upHandler);
+          $(window).bind(Main.upEventName, upHandler);
         });
     },
 
@@ -87,10 +84,11 @@
       drag.y = drag.startY;
       drag.oldY = drag.startY;
 
+      Main.menu.hide();
       this.queue.dragging = true;
       this._drag = drag;
-      $(window).bind(this._moveEventName, this._boundMoveHandler);
-      $(window).bind(this._upEventName, this._boundUpHandler);
+      $(window).bind(Main.moveEventName, this._boundMoveHandler);
+      $(window).bind(Main.upEventName, this._boundUpHandler);
       this.$el.addClass('dragging');
       event.preventDefault();
       event.stopPropagation();
@@ -189,8 +187,8 @@
         top: 0
       });
 
-      $(window).unbind(this._moveEventName, this._boundMoveHandler);
-      $(window).unbind(this._upEventName, this._boundUpHandler);
+      $(window).unbind(Main.moveEventName, this._boundMoveHandler);
+      $(window).unbind(Main.upEventName, this._boundUpHandler);
       this.$el.removeClass('dragging');
 
       this.queue.dragging = false;
