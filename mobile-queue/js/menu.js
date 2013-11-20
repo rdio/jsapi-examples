@@ -7,21 +7,34 @@
     this.$el = $('.menu');
     this.shown = false;
 
-    $('.play-now').click(function() {
+    var map = {
+      'play-now': function() {
+        Main.queue.playNow(self.queueItem);        
+      }, 
+      'play-next': function() {
+        Main.queue.playNext(self.queueItem);        
+      },       
+      'move-to-bottom': function() {
+        Main.queue.moveToBottom(self.queueItem);        
+      },       
+      'remove': function() {
+        Main.queue.remove(self.queueItem);        
+      }    
+    };
 
-    });
+    _.each(map, function(v, k) {
+      $('.' + k).click(function() {
+        self.$el.hide();
 
-    $('.play-next').click(function() {
-      self.$el.hide();
-
-      if (self.queueItem) {
-        Main.queue.move(self.queueItem, -Main.queue.index(self.queueItem));        
-        self.queueItem = null;
-      }
+        if (self.queueItem) {
+          v();
+          self.queueItem = null;
+        }        
+      });
     });
 
     $(window).bind(Main.downEventName, function(event) {
-      if (self.shown && $(event.originalTarget).closest('.menu').length === 0) {
+      if (self.shown && $(event.target).closest('.menu').length === 0) {
         self.hide();
       }
     });

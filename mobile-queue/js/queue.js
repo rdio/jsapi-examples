@@ -39,7 +39,7 @@
     },
 
     // ----------
-    remove: function(index) {
+    removeByIndex: function(index) {
       var item = this.items[index];
       this.items.splice(index, 1);
       if (item) {
@@ -106,6 +106,28 @@
       } 
 
       item.bindEvents();
+    },
+
+    // ----------
+    playNow: function(item) {
+      R.player.queue.addPlayingSource();
+      R.player.play({ source: item.data.key });
+      R.player.queue.remove(this.index(item) + 1);
+    },
+
+    // ----------
+    playNext: function(item) {
+      this.move(item, -this.index(item));    
+    },
+
+    // ----------
+    moveToBottom: function(item) {
+      this.move(item, this.items.length - this.index(item));
+    },
+
+    // ----------
+    remove: function(item) {
+      R.player.queue.remove(this.index(item));
     }
   };
 

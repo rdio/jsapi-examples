@@ -84,7 +84,7 @@
       });
 
       R.player.queue.on('remove', function(model, collection, info) {
-        self.queue.remove(info.index);
+        self.queue.removeByIndex(info.index);
       });
     },
 

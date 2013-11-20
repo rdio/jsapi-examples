@@ -4,6 +4,7 @@
   var component = Main.QueueItem = function(data, queue) {
     var self = this;
 
+    this.data = data;
     this.queue = queue;
     this.$el = Main.template('queue-item', data);
     this._shift = 0;
