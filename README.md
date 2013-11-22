@@ -11,6 +11,8 @@ Example apps for the new Rdio JavaScript API ([currently in beta](https://groups
 * Music Triage: Collect or reject the music you've listened to.
 * Tag View: View your collection by Last.fm tag.
 * Collection Browse: Mobile-optimized collection viewer.
+* Playlist Albums: View your playlists by album rather than track.
+* Mobile Queue: Manage your queue via your mobile browser.
 
 ## Utils
 

@@ -4,6 +4,8 @@ Gives you a random selection of albums from your collection and allows you to ea
 
 http://iangilman.com/rdio/collection-random/
 
+Note that this app requires the "shared_playstate" permission, which you can ask for when you create your own app.
+
 # TODO:
 
 * Spinner for initial load

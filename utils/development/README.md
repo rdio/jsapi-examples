@@ -40,9 +40,16 @@ You can also publish the built version to the folder above (where the stable bui
  * If library changes during initial load
 * Track the collection of any user?
 * Sort collectionAlbums by play count, date added, etc?
+* More UI widgets: responsive grids and track listings
+
+### Auth Widget
+
+* onAuth callback for convenience
 
 ### Album Widget
 
+* Put an error in the console if there's not enough data
+* If the length given is falsey, just omit it from the template
 * Accept Backbone-style album, straight object, or key
 * If you have to load, coalesce multiple keys into a single call if possible
 * Retina support

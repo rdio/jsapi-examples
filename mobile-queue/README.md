@@ -4,6 +4,8 @@ Allows you to manipulate your queue on mobile.
 
 http://iangilman.com/rdio/mobile-queue/
 
+Note that this app requires the "shared_playstate" permission, which you can ask for when you create your own app.
+
 # TODO:
 
 * Should resets be paused while menu is up? Or maybe another way to deal with state changing?
@@ -11,7 +13,7 @@ http://iangilman.com/rdio/mobile-queue/
 * Determine item from key, not just index
 * Hold off on sending move if there's a reset in progress
 * If updates are coming in from elsewhere, hold off on determining drag indices
-
+* If you're on a device that requires the "audio prime" sequence and the user cancels, things get messed up
 * Highlight menu items when you touch them
 * Sometimes there's a flash of the old playing album when you switch to a new one with "Play Now"
 * Don't allow a second drag while one is in progress
@@ -23,10 +25,5 @@ http://iangilman.com/rdio/mobile-queue/
 * Item is jittery when scrolling during drag
 * Variable scroll speed depending on where you are
 * Do all animations with transform instead of top?
-
-# Features
-
-* "Play Now and Push Current Item Down"
-* Send to top
 * Search for new stuff to add
 * Possible to bring in items from other apps?
