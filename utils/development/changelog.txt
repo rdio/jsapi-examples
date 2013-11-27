@@ -1,8 +1,12 @@
 Rdio Utils Changelog:
 
+0.0.8:
+
+* Fixed an issue where local queue didn't work if you didn't have things in your Rdio queue.
+
 0.0.7:
 
-* Fixed issue with clicking on album widget
+* Fixed issue with clicking on album widget.
 
 0.0.6:
 

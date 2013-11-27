@@ -68,7 +68,6 @@ You can also publish the built version to the folder above (where the stable bui
 
 ### Local Queue
 
-* Publish and point example at the right place
 * Support multiple queues per page
 * Tests
 * More bulletproof

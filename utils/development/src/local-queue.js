@@ -30,7 +30,7 @@
       R.player.on('change:playingSource', function(playingSource) {
         if (self._playing) {
           if (!self._playingSourceIsPlaying()) {
-            if (playingSource.get('key') == self._keyFromQueue && self._sources.length) {
+            if ((!playingSource || playingSource.get('key') == self._keyFromQueue) && self._sources.length) {
               self._play(self.remove());
             } else {
               self._playing = false;
