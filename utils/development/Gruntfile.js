@@ -9,6 +9,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
+  grunt.loadNpmTasks("grunt-contrib-connect");
 
   // ----------
   var packageJson = grunt.file.readJSON('package.json'),
@@ -70,6 +71,26 @@ module.exports = function(grunt) {
       },
       beforeconcat: sources,
       afterconcat: [ distribution ]
+    },
+    connect: {
+      test: {
+        options: {
+          port: 8889,
+          base: '.'
+        }
+      }
+    },
+    jasmine: {
+      main: {
+        src: [ 'src/main.js', 'src/*.js' ],
+        options: {
+          // keepRunner: true,
+          outfile: 'test/runner.html',
+          host : 'http://localhost:8889/',
+          vendor: [ 'https://www.rdio.com/api/api.js?client_id=Zg9xdHqnouVe9LxHdyAdBg' ],
+          specs: 'test/spec/*.js'
+        }
+      }
     }
   });
 
