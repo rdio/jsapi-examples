@@ -111,9 +111,12 @@ The `album` you pass in must have these properties:
 * artistUrl
 * icon
 * key
-* length
 * name
 * url
+
+...and will optionally use:
+
+* length
 
 Note that the widget doesn't have the standard "Share" and "Action" buttons yet... we'll be adding those in if and when the JavaScript API supports their functionality.
 

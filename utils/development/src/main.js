@@ -146,6 +146,14 @@
     },
 
     // ----------
+    _error: function() {
+      /*globals console */
+      if (window.console && console.error) {
+        console.error.apply(console, arguments);
+      }
+    },
+
+    // ----------
     _assert: function(condition, message) {
       /*globals console */
       if (!window.console) {
