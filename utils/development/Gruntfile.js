@@ -82,9 +82,8 @@ module.exports = function(grunt) {
     },
     jasmine: {
       main: {
-        src: [ 'src/main.js', 'src/*.js' ],
+        src: [ 'build/rdio-utils.min.js' ],
         options: {
-          // keepRunner: true,
           outfile: 'test/runner.html',
           host : 'http://localhost:8889/',
           vendor: [ 'https://www.rdio.com/api/api.js?client_id=Zg9xdHqnouVe9LxHdyAdBg' ],
@@ -124,9 +123,16 @@ module.exports = function(grunt) {
   ]);
 
   // ----------
+  // Test task.
+  // Builds and then tests.
+  grunt.registerTask('test', [
+    'build', 'connect:test', 'jasmine'
+  ]);
+
+  // ----------
   // Publish task.
   // Cleans the built files out of the release folder and copies newly built ones over.
-  grunt.registerTask('publish', ['build', 'copy:release']);
+  grunt.registerTask('publish', ['test', 'copy:release']);
 
   // ----------
   // Default task.
