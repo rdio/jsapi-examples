@@ -2,6 +2,7 @@
 
   var albumKey = 'a171827'; // Radiohead, The Bends
   var albumKey2 = 'a216556'; // The Black Keys, Brothers
+  var trackKey = 't40267992';
 
   // ----------
   describe('rdioUtils.general', function() {
@@ -23,7 +24,7 @@
 
     // ----------
     it('can add to top of queue', function() {
-      R.player.pause();
+      R.player.play({ source: trackKey });
       R.player.queue.clear();
       R.player.queue.add(albumKey2);
 
