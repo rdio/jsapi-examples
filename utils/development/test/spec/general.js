@@ -18,7 +18,7 @@
 
       waitsFor(function() {
         return ready;
-      });
+      }, 9000);
     });
 
     // ----------
@@ -37,7 +37,7 @@
         }
 
         return false;
-      });
+      }, 9000);
     });
   });
 

@@ -4,6 +4,7 @@ Rdio Utils Changelog:
 
 * Fixed an issue where local queue didn't work if you didn't have things in your Rdio queue.
 * Better error handling for missing data in album widget.
+* Added tests.
 
 0.0.7:
 

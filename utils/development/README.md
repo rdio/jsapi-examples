@@ -32,7 +32,6 @@ You can also publish the built version to the folder above (where the stable bui
 
 ## TO DO:
 
-* Tests
 * Playback UI
 * Album UI
 * Unit tests for collectionAlbums()
@@ -45,6 +44,7 @@ You can also publish the built version to the folder above (where the stable bui
 ### Auth Widget
 
 * onAuth callback for convenience
+* test?
 
 ### Album Widget
 

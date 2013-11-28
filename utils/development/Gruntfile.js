@@ -84,10 +84,17 @@ module.exports = function(grunt) {
       main: {
         src: [ 'build/rdio-utils.min.js' ],
         options: {
+          // keepRunner: true,
           outfile: 'test/runner.html',
           host : 'http://localhost:8889/',
-          vendor: [ 'https://www.rdio.com/api/api.js?client_id=Zg9xdHqnouVe9LxHdyAdBg' ],
-          specs: 'test/spec/*.js'
+          vendor: [ 
+            'test/lib/jquery-1.9.1.min.js',
+            'https://www.rdio.com/api/api.js?client_id=Zg9xdHqnouVe9LxHdyAdBg' 
+          ],
+          specs: [ 
+            'test/spec/general.js', 
+            'test/spec/album-widget.js' 
+          ]
         }
       }
     }
