@@ -93,7 +93,9 @@ module.exports = function(grunt) {
           ],
           specs: [ 
             'test/spec/general.js', 
-            'test/spec/album-widget.js' 
+            'test/spec/album-widget.js', 
+            'test/spec/local-queue.js',
+            'test/spec/finish.js'
           ]
         }
       }

@@ -23,6 +23,7 @@
 
     // ----------
     it('can add to top of queue', function() {
+      R.player.pause();
       R.player.queue.clear();
       R.player.queue.add(albumKey2);
 

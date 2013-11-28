@@ -30,6 +30,12 @@ You can also publish the built version to the folder above (where the stable bui
 
     grunt publish
 
+## Testing
+
+We're using Jasmine. The test specs are located in the test/spec folder. To run the tests, use:
+
+    grunt test
+
 ## TO DO:
 
 * Playback UI
@@ -67,7 +73,6 @@ You can also publish the built version to the folder above (where the stable bui
 ### Local Queue
 
 * Support multiple queues per page
-* Tests
 * More bulletproof
  * Should we be able to cancel things in flight for forceMaster? For instance, what if you're not master and you fire off a play and a stop in rapid succession; the play will arrive after the stop.
  * Double check the values we get from the API
