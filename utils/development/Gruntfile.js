@@ -141,7 +141,7 @@ module.exports = function(grunt) {
   // ----------
   // Publish task.
   // Cleans the built files out of the release folder and copies newly built ones over.
-  grunt.registerTask('publish', ['test', 'copy:release']);
+  grunt.registerTask('publish', ['build', 'copy:release']);
 
   // ----------
   // Default task.

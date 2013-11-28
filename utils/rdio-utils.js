@@ -1,5 +1,5 @@
-//! rdioUtils 0.0.7
-//! Built on 2013-10-08
+//! rdioUtils 0.0.8
+//! Built on 2013-11-27
 //! https://github.com/rdio/jsapi-examples/tree/master/utils
 //! Copyright 2013, Rdio, Inc.
 //! Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
@@ -154,6 +154,14 @@
     },
 
     // ----------
+    _error: function() {
+      /*globals console */
+      if (window.console && console.error) {
+        console.error.apply(console, arguments);
+      }
+    },
+
+    // ----------
     _assert: function(condition, message) {
       /*globals console */
       if (!window.console) {
@@ -190,12 +198,30 @@
 
   // ----------
   rdioUtils.AlbumWidget = function(album) {
+    var i;
+
     this._element = document.createElement('div');
     this._element.className = 'rdio-utils-album';
 
-    this._broken = !(album && album.url && album.icon && album.name 
-      && album.artist && album.artistUrl && album.length && album.key
-      && /^(a|al)[0-9]/.test(album.key));
+    this._broken = false;
+
+    if (album) {
+      if (album.key && !/^(a|al)[0-9]/.test(album.key)) {
+        rdioUtils._error('[rdioUtils] Bad key for album widget: ' + album.key);
+        this._broken = true;
+      }
+
+      var required = ['url', 'icon', 'name', 'artist', 'artistUrl', 'key'];
+      for (i = 0; i < required.length; i++) {
+        if (!album[required[i]]) {
+          rdioUtils._error('[rdioUtils] Missing ' + required[i] + ' for album widget', album);
+          this._broken = true;
+        }
+      }
+    } else {
+      rdioUtils._error('[rdioUtils] Album is required for album widget');
+      this._broken = true;
+    }
 
     if (this._broken) {
       this._element.innerHTML = ''
@@ -209,7 +235,7 @@
       return;
     }
 
-    this._element.innerHTML = ''
+    var html = ''
         + '<div class="rdio-utils-album-cover">'
           + '<a href="http://www.rdio.com' + rdioUtils._escape(album.url) + '">'
             + '<div class="rdio-utils-album-icon" style="background-image: url(' + rdioUtils._escape(album.icon) + ')"></div>'
@@ -220,11 +246,17 @@
           + '</a>'
         + '</div>'
         + '<div class="rdio-utils-album-title rdio-utils-truncated"><a href="http://www.rdio.com' + rdioUtils._escape(album.url) + '">' + rdioUtils._escape(album.name) + '</a></div>'
-        + '<div class="rdio-utils-album-author rdio-utils-truncated"><a href="http://www.rdio.com' + rdioUtils._escape(album.artistUrl) + '">' + rdioUtils._escape(album.artist) + '</a></div>'
-        + '<div class="rdio-utils-album-size rdio-utils-truncated">' + rdioUtils._escape(album.length) + ' songs</div>';
+        + '<div class="rdio-utils-album-author rdio-utils-truncated"><a href="http://www.rdio.com' + rdioUtils._escape(album.artistUrl) + '">' + rdioUtils._escape(album.artist) + '</a></div>';
+
+    if (album.length) {
+      html += '<div class="rdio-utils-album-size rdio-utils-truncated">' 
+        + rdioUtils._escape(album.length) + ' songs</div>'; 
+    }
+
+    this._element.innerHTML = html;
 
     var links = this._element.getElementsByTagName('a');
-    for (var i = 0; i < links.length; i++) {
+    for (i = 0; i < links.length; i++) {
       rdioUtils._bind(links[i], 'click', linkClickHandler);
     }
 
@@ -656,7 +688,7 @@
       R.player.on('change:playingSource', function(playingSource) {
         if (self._playing) {
           if (!self._playingSourceIsPlaying()) {
-            if (playingSource.get('key') == self._keyFromQueue && self._sources.length) {
+            if ((!playingSource || playingSource.get('key') == self._keyFromQueue) && self._sources.length) {
               self._play(self.remove());
             } else {
               self._playing = false;
