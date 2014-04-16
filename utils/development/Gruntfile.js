@@ -103,6 +103,17 @@ module.exports = function(grunt) {
   });
 
   // ----------
+  var copyBuild = function(destRoot) {
+    grunt.file.recurse('build', function(abspath, rootdir, subdir, filename) {
+      var dest = destRoot
+        + (subdir ? subdir + '/' : '/')
+        + filename;
+
+      grunt.file.copy(abspath, dest);
+    });
+  };
+
+  // ----------
   // Copy:build task.
   // Copies the other files into the appropriate location in the build folder.
   grunt.registerTask('copy:build', function() {
@@ -115,13 +126,28 @@ module.exports = function(grunt) {
   // Copy:release task.
   // Copies the contents of the build folder into the release folder.
   grunt.registerTask('copy:release', function() {
-    grunt.file.recurse('build', function(abspath, rootdir, subdir, filename) {
-      var dest = releaseRoot
-        + (subdir ? subdir + '/' : '/')
-        + filename;
+    copyBuild(releaseRoot);
+  });
 
-      grunt.file.copy(abspath, dest);
-    });
+  // ----------
+  // Copy:examples task.
+  // Copies the contents of the build folder into the examples folders.
+  grunt.registerTask('copy:examples', function() {
+    var names = [
+      'collection-browse',
+      'collection-random',
+      'following',
+      'mobile-queue',
+      'music-triage',
+      'now-playing',
+      'playlist-albums',
+      'simple-player',
+      'tag-view'
+    ];
+
+    for (var i = 0; i < names.length; i++) {
+      copyBuild('../../' + names[i] + '/lib/rdio-utils/');
+    }
   });
 
   // ----------
@@ -141,7 +167,7 @@ module.exports = function(grunt) {
   // ----------
   // Publish task.
   // Cleans the built files out of the release folder and copies newly built ones over.
-  grunt.registerTask('publish', ['build', 'copy:release']);
+  grunt.registerTask('publish', ['build', 'copy:release', 'copy:examples']);
 
   // ----------
   // Default task.
