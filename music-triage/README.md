@@ -6,6 +6,10 @@ I like to queue up a bunch of new music and listen to it throughout the day. Eve
 
 Note that the "dustbin" status of an album is stored only in your browser's local storage. Perhaps in the future we'll add a server-side component for more robust storage.
 
+# Running
+
+This project was started with [Google App Engine](https://developers.google.com/appengine/) in mind, but you can actually run it in a regular web server as well. For instance, if you have Python installed, you can `cd` into this example's directory in your terminal and run `python -m SimpleHTTPServer 8888`. The app will then be available in your browser at http://localhost:8888/.
+
 # Todo: high
 
 * Show track listing on hover
@@ -40,4 +44,3 @@ Note that the "dustbin" status of an album is stored only in your browser's loca
 * Triage related, based on an artist/album
 * Triage albums from activity in your network
 * Triage new albums from artists in your collection
-
