@@ -1,4 +1,4 @@
-# About
+# Mobile Queue
 
 Allows you to manipulate your queue on mobile.
 
@@ -6,7 +6,9 @@ http://iangilman.com/rdio/mobile-queue/
 
 Note that this app requires the "shared_playstate" permission, which you can ask for when you create your own app.
 
-# TODO:
+For information on using this example, see https://github.com/rdio/jsapi-examples#rdio-js-api-examples.
+
+# To Do (possible future additions to this example)
 
 * Should resets be paused while menu is up? Or maybe another way to deal with state changing?
 * Optimize for next album... pop top item off of queue right away?

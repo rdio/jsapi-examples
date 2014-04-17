@@ -1,12 +1,14 @@
-# About
+# Tag View
 
 This app displays Last.fm tags for the albums in your Rdio collection and allows you to browse by tag.
 
 http://iangilman.com/rdio/tag-view/
 
-# TODO
+For information on using this example, see https://github.com/rdio/jsapi-examples#rdio-js-api-examples.
 
-## High
+# To Do (possible future additions to this example)
+
+## High Priority
 
 * Each tag could link to http://rdiolab.herokuapp.com/lastfm/artist/top/tag/<tagName>
 * Multi-tag select
@@ -19,7 +21,7 @@ http://iangilman.com/rdio/tag-view/
 * Alex G wants: Some sort of progress bar to know how much of my collection has been loaded
 * Alex G wants: It should probably paralleize the last.fm requests, rather than do them in serial?
 
-## Normal
+## Normal Priority
 
 * Be able to support larger number of albums/tags
 * Suggest new albums not in your collection that match certain tags
@@ -32,6 +34,6 @@ http://iangilman.com/rdio/tag-view/
 * Remove albums from storage that have been removed from your collection
 * Be able to queue things up
 
-## Low
+## Low Priority
 
 * Don't rely on the JavaScript object that our albums are stored in to keep them sorted in the correct order?

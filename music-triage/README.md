@@ -1,4 +1,4 @@
-# About
+# Music Triage
 
 This web-app is an example usage of the new Rdio JavaScript API. You can see it in action at http://music-triage.appspot.com/
 
@@ -8,9 +8,13 @@ Note that the "dustbin" status of an album is stored only in your browser's loca
 
 # Running
 
-This project was started with [Google App Engine](https://developers.google.com/appengine/) in mind, but you can actually run it in a regular web server as well. For instance, if you have Python installed, you can `cd` into this example's directory in your terminal and run `python -m SimpleHTTPServer 8888`. The app will then be available in your browser at http://localhost:8888/.
+For information on using this example, see https://github.com/rdio/jsapi-examples#rdio-js-api-examples.
 
-# Todo: high
+This project was started with [Google App Engine](https://developers.google.com/appengine/) in mind, but you can actually run it in a regular web server as well. 
+
+# To Do (possible future additions to this example)
+
+## High Priority
 
 * Show track listing on hover
 * Checkbox to auto-hide singles and remix albums
@@ -20,7 +24,7 @@ This project was started with [Google App Engine](https://developers.google.com/
 * If you've removed an album from your collection, remove it from the local storage cache too
 * Only show albums that support full streaming.
 
-# Todo: normal
+## Normal Priority
 
 * If an album is playing when you hit heart/x, start the next album playing
 * Each click on sample button should take you to 1/3rd through the next track (on playingTrack change, seek to its duration / 3)
@@ -29,7 +33,7 @@ This project was started with [Google App Engine](https://developers.google.com/
 * The first time you hit play there's a bit of a lag before the button highlights
 * Shadows behind buttons
 
-# Todo: low
+## Low Priority
 
 * Spinner for buffering
 * Periodically check for newly played albums
@@ -38,7 +42,7 @@ This project was started with [Google App Engine](https://developers.google.com/
 * Use normal Rdio album controls, but add some of our own
 * Sort high if other albums from same artist in collection; low if not and others in dustbin
 
-# Wishlist
+## Wishlist
 
 * Triage for new releases (heart goes into queue instead of collection)
 * Triage related, based on an artist/album

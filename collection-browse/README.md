@@ -1,10 +1,12 @@
-# About
+# Collection Browse
 
 This app gives a more visual way to browse your Rdio collection with your mobile device.
 
-# Todo: high
+http://iangilman.com/rdio/collection-browse/
 
-# Todo: normal
+For information on using this example, see https://github.com/rdio/jsapi-examples#rdio-js-api-examples.
+
+# To Do (possible future additions to this example)
 
 * Playlist view that shows albums from your playlists.
 * Center on the screen
@@ -19,6 +21,3 @@ This app gives a more visual way to browse your Rdio collection with your mobile
 * Make the page long enough for the entire collection, then fill it in as needed. 
 * Add the word "done" at the bottom when done loading?
 * Remember where you have scrolled to
-
-# Todo: low
-
