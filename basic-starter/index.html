@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rdio JS API Basic Starter</title>
+
+    <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
+    <script src="https://www.rdio.com/api/api.js?client_id=5rjLjE0qaxlxKFMHAUyJig"></script>
+  
+    <style>
+
+      .content {
+        margin: 20px;
+      }
+
+      .error {
+        color: #a00;
+        font-weight: bold;
+      }
+
+      .hidden-view {
+        display: none;
+        margin: 20px 0;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <div id="error-message" class="error"></div>
+      <div id="protocol-error" class="hidden-view error">You must run this page from a server (even localhost) for the Rdio JS API to work. See <a href="https://github.com/rdio/jsapi-examples">https://github.com/rdio/jsapi-examples</a> for more info.</div>
+      <div class="authenticated-view hidden-view">
+        Authenticated as <span class="username"></span>.
+      </div>
+      <div class="unauthenticated-view hidden-view">
+        Unauthenticated.
+        <button class="sign-in">Sign In</button>
+      </div>
+      <div class="top-track-view hidden-view">
+        The top track on Rdio right now is <span class="top-track"></span>.
+        <button class="play">Play It</button>
+      </div>
+      <div class="playback-view hidden-view">
+        Now <span class="playback-status"></span>.
+        <button class="toggle-pause">Toggle Pause</button>
+      </div>
+    </div>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>  
+    <script>
+
+      var topTrack;
+
+      // ----------
+      function showAuthenticated() {
+        $('.authenticated-view').show();
+        $('.username').text(R.currentUser.get('firstName') + ' ' + R.currentUser.get('lastName'));
+      }
+
+      // ----------
+      function showUnauthenticated() {
+        $('.unauthenticated-view').show();
+      }
+
+      // ----------
+      function showError(message) {
+        $('#error-message').text(message);
+      }
+
+      // ----------
+      function showTopTrack() {
+        $('.top-track-view').show();
+        $('.top-track').text(topTrack.name + ' by ' + topTrack.artist);
+      }
+
+      // ----------
+      function showPlayback() {
+        $('.playback-view').show();
+      }
+
+      // ----------
+      function showPlayState(playState) {
+        var text = 'unknown';
+        switch (playState) {
+          case R.player.PLAYSTATE_PAUSED:
+            text = 'paused';
+            break;
+          
+          case R.player.PLAYSTATE_PLAYING:
+            text = 'playing';
+            break;
+          
+          case R.player.PLAYSTATE_STOPPED:
+            text = 'stopped';
+            break;
+          
+          case R.player.PLAYSTATE_BUFFERING:
+            text = 'buffering';
+            break;
+          
+          case R.player.PLAYSTATE_OFFLINE:
+            text = 'offline';
+            break;
+        }
+
+        $('.playback-status').text(text);
+      }
+
+      // ----------
+      function getTopTrack() {
+        R.request({
+          method: 'getTopCharts', 
+          content: {
+            type: 'Track', 
+            start: 0, 
+            count: 1
+          }, 
+          success: function(response) {
+            topTrack = response.result[0];
+            showTopTrack();
+          },
+          error: function(response) {
+            showError(response.message);
+          }
+        });
+      }
+
+      // ----------
+      R.ready(function() {
+        $('.sign-in').click(function() {
+          R.authenticate(function(nowAuthenticated) {
+            if (nowAuthenticated) {
+              $('.unauthenticated-view').hide();
+              showAuthenticated();
+            }
+          });
+        });        
+
+        $('.play').click(function() {
+          R.player.play({ source: topTrack.key });
+          showPlayback();
+        });
+
+        $('.toggle-pause').click(function() {
+          R.player.togglePause();
+        });
+
+        R.player.on('change:playState', function(newPlayState) { 
+          showPlayState(newPlayState);
+        });
+
+        if (R.authenticated()) {
+          showAuthenticated();
+        } else {
+          showUnauthenticated();
+        }
+
+        getTopTrack();
+      });
+
+      // ----------
+      if (location.protocol === 'file:') {
+        document.getElementById('protocol-error').style.display = 'block';
+      }
+
+    </script>
+  </body>
+</html>

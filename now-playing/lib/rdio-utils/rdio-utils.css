@@ -1,0 +1,111 @@
+.rdio-utils-dialog {
+  position: fixed;
+  top: 30px;
+  width: 300px;
+  left: 50%;
+  margin-left: -170px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #666;
+  z-index: 99999;
+}
+.rdio-utils-truncated {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 200px;
+}
+.rdio-utils-album {
+  display: inline-block;
+  width: 202px;
+  margin: 0 10px 20px 10px;
+  overflow: hidden;
+  text-align: left;
+  font-size: 12px;
+  line-height: 18px;
+  vertical-align: top;
+  position: relative;
+  font-family: sans-serif;
+}
+.rdio-utils-album a,
+.rdio-utils-album a:visited {
+  text-decoration: none;
+}
+.rdio-utils-album a:hover,
+.rdio-utils-album a:active {
+  text-decoration: underline;
+}
+.rdio-utils-album-icon {
+  width: 200px;
+  height: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.rdio-utils-album-hover-overlay {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('rdio-utils-images/hover_overlay.png');
+  background-repeat: repeat-x;
+  background-position: center bottom;
+}
+.rdio-utils-album-cover {
+  position: relative;
+}
+.rdio-utils-album-cover:hover .rdio-utils-album-hover-overlay {
+  display: block;
+}
+.rdio-utils-album-play-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  width: 42px;
+  height: 42px;
+  margin-left: -21px;
+  margin-bottom: -21px;
+  background-image: url('rdio-utils-images/medium.png');
+  cursor: pointer;
+}
+.rdio-utils-album-play-btn:hover {
+  background-image: url('rdio-utils-images/medium-hover.png');
+}
+.rdio-utils-album-action-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 32px;
+  width: 33px;
+  height: 33px;
+  margin-left: 24px;
+  margin-bottom: -17px;
+  background-image: url('rdio-utils-images/plus.png');
+  cursor: pointer;
+}
+.rdio-utils-album-title {
+  margin-top: 4px;
+  color: #4B5C66;
+}
+.rdio-utils-album-title a,
+.rdio-utils-album-title a:visited,
+.rdio-utils-album-title a:hover,
+.rdio-utils-album-title a:active {
+  color: #4B5C66;
+}
+.rdio-utils-album-author,
+.rdio-utils-album-size {
+  color: #89949B;
+}
+.rdio-utils-album-author a,
+.rdio-utils-album-size a,
+.rdio-utils-album-author a:visited,
+.rdio-utils-album-size a:visited,
+.rdio-utils-album-author a:hover,
+.rdio-utils-album-size a:hover,
+.rdio-utils-album-author a:active,
+.rdio-utils-album-size a:active {
+  color: #89949B;
+}
