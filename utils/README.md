@@ -53,7 +53,8 @@ var collection = rdioUtils.collectionAlbums({
   onRemoved: function(albums) {
     // Called after the initial load when the user removes albums from their 
     // collection.
-  }
+  },
+  extraAlbumFields: "playCount" // Additional fields for the `extras` parameter
 });
 ```
 

@@ -13,7 +13,8 @@
       onAlbumsLoaded: config.onAlbumsLoaded,
       onError: config.onError,
       onAdded: config.onAdded,
-      onRemoved: config.onRemoved
+      onRemoved: config.onRemoved,
+      extraAlbumFields: config.extraAlbumFields
     };
 
     if (config.localStorage && window.JSON) {
@@ -39,6 +40,10 @@
     
     this._bigExtras = '-*,releaseDate,duration,isClean,canStream,icon,'
       + 'canSample,name,isExplicit,artist,url,length,trackKeys,artistUrl';
+
+    if (this._config.extraAlbumFields) {
+      this._bigExtras += ',' + this._config.extraAlbumFields;
+    }
 
     var whenAuthenticated = function() {
       if (self._config.localStorage) {
@@ -122,6 +127,19 @@
     },
 
     // ----------
+    _albumFromCollectionAlbum: function (album) {
+      album.collectionKey = album.key;
+
+      album.key = album.albumKey;
+      delete album.albumKey;
+
+      album.artistKey = album.rawArtistKey;
+      delete album.rawArtistKey;
+
+      return album;
+    },
+
+    // ----------
     _startLoad: function() {
       rdioUtils._log('_startLoad');
       this._start = 0;
@@ -134,7 +152,7 @@
         this._extras = this._bigExtras + ',albumKey,rawArtistKey';
       } else {
         this._count = 1000;
-        this._extras = '-*,albumKey';
+        this._extras = '-*,key,albumKey';
       }
 
       this._load();
@@ -163,13 +181,7 @@
             var album;
             for (var i = 0; i < data.result.length; i++) {
               album = data.result[i];
-
-              album.key = album.albumKey;
-              delete album.albumKey;
-
-              album.artistKey = album.rawArtistKey;
-              delete album.rawArtistKey;
-
+              album = self._albumFromCollectionAlbum(album);
               self._newAlbums.push(album);
               self._newAlbumsByKey[album.key] = album;
             }
@@ -195,7 +207,7 @@
               // Added
               for (key in self._newAlbumsByKey) {
                 if (!self._albumsByKey[key]) {
-                  addedKeys.push(key);
+                  addedKeys.push(self._newAlbumsByKey[key].collectionKey);
                 }
               }
 
@@ -246,7 +258,7 @@
         method: "get", 
         content: {
           keys: keysChunk.join(','),
-          extras: this._bigExtras + ',key,artistKey'
+          extras: this._bigExtras + ',key,artistKey,albumKey'
         },
         success: function(data) {
           self._loading.request = null;
@@ -254,6 +266,7 @@
           var album;
           for (var key in data.result) {
             album = data.result[key];
+            album = self._albumFromCollectionAlbum(album);
             addedAlbums.push(album);
           }
 
