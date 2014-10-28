@@ -20,8 +20,8 @@
           loggedIn: R.authenticated(),
           name: R.authenticated() ? R.currentUser.get('firstName') : null,
           playState: undefined,
-          topTrack: undefined,
-        }
+          topTrack: undefined
+        };
       },
 
       componentDidMount() {
@@ -59,9 +59,9 @@
         R.authenticate(nowAuthenticated => {
           this.setState({
             loggedIn: nowAuthenticated,
-            name: nowAuthenticated ? R.currentUser.get('firstName') : null,
-          })
-        })
+            name: nowAuthenticated ? R.currentUser.get('firstName') : null
+          });
+        });
       },
 
       _getTopTrack() {
@@ -95,7 +95,7 @@
         loggedIn: React.PropTypes.bool.isRequired,
         name: React.PropTypes.string.isRequired,
 
-        onLoginClick: React.PropTypes.func.isRequired,
+        onLoginClick: React.PropTypes.func.isRequired
       },
 
       render() {
@@ -173,6 +173,7 @@
           </div>
         );
       },
+
       _getPlayStateText() {
         switch (this.props.playState) {
           case R.player.PLAYSTATE_PAUSED:
@@ -196,7 +197,8 @@
         <SampleApp />,
         document.getElementById('container')
       );
-    })
+    });
+    
   </script>
 </body>
 </html>
