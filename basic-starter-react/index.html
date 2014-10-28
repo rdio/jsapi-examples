@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rdio JS API Basic Starter - React</title>
+</head>
+<body>
+  <div id="container">Loading...</div>
+
+  <script src="http://fb.me/react-0.11.2.js"></script>
+  <script src="http://fb.me/JSXTransformer-0.11.2.js"></script>
+  <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
+  <script src="https://www.rdio.com/api/api.js?client_id=jUUIxfNb_R9Ecx2LGCPQyA"></script>
+  <script type="text/jsx;harmony=true">
+    /** @jsx React.DOM */
+
+    var SampleApp = React.createClass({
+      getInitialState() {
+        return {
+          loggedIn: R.authenticated(),
+          name: R.authenticated() ? R.currentUser.get('firstName') : null,
+          playState: undefined,
+          topTrack: undefined,
+        }
+      },
+
+      componentDidMount() {
+        this._getTopTrack();
+        this._attachEventListeners();
+      },
+
+      render() {
+        return (
+          <div>
+            <LoginStatus
+              loggedIn={this.state.loggedIn}
+              name={this.state.name}
+              onLoginClick={this._authenticate}
+            />
+            <TopTrack
+              track={this.state.topTrack}
+              onPlay={this._play}
+            />
+            <Playback
+              playState={this.state.playState}
+              onTogglePause={this._togglePause}
+            />
+          </div>
+        );
+      },
+
+      _attachEventListeners() {
+        R.player.on('change:playState', (newPlayState) => {
+          this.setState({ playState: newPlayState });
+        });
+      },
+
+      _authenticate() {
+        R.authenticate(nowAuthenticated => {
+          this.setState({
+            loggedIn: nowAuthenticated,
+            name: nowAuthenticated ? R.currentUser.get('firstName') : null,
+          })
+        })
+      },
+
+      _getTopTrack() {
+        R.request({
+          method: 'getTopCharts',
+          content: {
+            type: 'Track',
+            start: 0,
+            count: 1
+          },
+          success: (response) => {
+            this.setState({
+              topTrack: response.result[0]
+            });
+          }
+        });
+      },
+
+      _play(track) {
+        R.player.play({ source: track.key });
+        this.setState({ isPlaying: true });
+      },
+
+      _togglePause() {
+        R.player.togglePause();
+      }
+    });
+
+    var LoginStatus = React.createClass({
+      propTypes: {
+        loggedIn: React.PropTypes.bool.isRequired,
+        name: React.PropTypes.string.isRequired,
+
+        onLoginClick: React.PropTypes.func.isRequired,
+      },
+
+      render() {
+        if (this.props.loggedIn) {
+          return this._renderLoggedIn();
+        } else {
+          return this._renderLoggedOut();
+        }
+      },
+
+      _renderLoggedOut() {
+        return (
+          <p>
+            Not logged in.
+            <button type="button" onClick={this.props.onLoginClick}>
+              Log In
+            </button>
+          </p>
+        );
+      },
+
+      _renderLoggedIn() {
+        return (
+          <p>
+            Logged in as {this.props.name}.
+          </p>
+        );
+      }
+    });
+
+    var TopTrack = React.createClass({
+      propTypes: {
+        track: React.PropTypes.shape({
+          name: React.PropTypes.string,
+          artist: React.PropTypes.string
+        }),
+
+        onPlay: React.PropTypes.func.isRequired
+      },
+
+      render() {
+        if (!this.props.track) {
+          return null;
+        }
+        return (
+          <p>
+            The top track on Rdio right now is {this.props.track.name} by {this.props.track.artist}.
+            <button type="button" onClick={this._onPlay}>Play</button>
+          </p>
+        );
+      },
+
+      _onPlay() {
+        this.props.onPlay(this.props.track);
+      }
+    });
+
+    var Playback = React.createClass({
+      propTypes: {
+        playState: React.PropTypes.number,
+
+        onTogglePause: React.PropTypes.func.isRequired
+      },
+
+      render() {
+        if (this.props.playState === undefined) {
+          return null;
+        }
+        return (
+          <div>
+            Now {this._getPlayStateText()}.
+            <button type="button" onClick={this.props.onTogglePause}>
+              Toggle Pause
+            </button>
+          </div>
+        );
+      },
+      _getPlayStateText() {
+        switch (this.props.playState) {
+          case R.player.PLAYSTATE_PAUSED:
+            return 'paused';
+          case R.player.PLAYSTATE_PLAYING:
+            return 'playing';
+          case R.player.PLAYSTATE_STOPPED:
+            return 'stopped';
+          case R.player.PLAYSTATE_BUFFERING:
+            return 'buffering';
+          case R.player.PLAYSTATE_OFFLINE:
+            return 'offline';
+          default:
+            return 'unknown';
+        }
+      }
+    });
+
+    R.ready(() => {
+      React.renderComponent(
+        <SampleApp />,
+        document.getElementById('container')
+      );
+    })
+  </script>
+</body>
+</html>
