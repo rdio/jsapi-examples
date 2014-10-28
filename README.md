@@ -9,6 +9,7 @@ For each example you use, you'll also need to create an Rdio JS API client ID (n
 ## Basics
 
 * Basic Starter: Best place to start.
+* Basic Starter React: If you prefer React to jQuery.
 * Simple Player: Simple playback and searching.
 * Now Playing: For using the `shared_playstate` permission.
 * Following: For using `R.currentUser.trackFollowing()`.
