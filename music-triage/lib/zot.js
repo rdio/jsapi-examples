@@ -1,35 +1,39 @@
-/// zot 0.06
-/// Copyright 2012, Ian Gilman
-/// http://iangilman.com
+/// zot 0.1.6
+/// Copyright 2012-15, Ian Gilman
+/// https://github.com/iangilman/zot
 /// Licensed under the MIT license: http://www.opensource.org/licenses/mit-license.php
 
 (function(){
+  /*globals zot */
 
   // ==========
-  if ("zot" in window)
-    throw Error("There's already a zot defined!");
+  if ('zot' in window)
+    throw new Error('There\'s already a zot defined!');
     
   // ==========
   window.zot = {
     // ----------
     assert: function(condition, message) {
-      if (condition)
-        return;
-        
-      if ("console" in window)
-        console.error("ASSERT FAILED: " + message);
-    }, 
+      if (window.console && console.assert) {
+        console.assert(condition, message);
+      }
+    },
     
     // ----------
     assertProperties: function(obj, properties) {
-      if (typeof properties == "string")
-        properties = properties.split(" ");
+      if (typeof properties == 'string')
+        properties = properties.split(' ');
         
       for (var a = 0; a < properties.length; a++) {
         var property = properties[a];
-        this.assert(property in obj, "must have " + property + " property");
+        this.assert(property in obj, 'must have ' + property + ' property');
       }
     }, 
+
+    // ----------
+    isInteger: function(value) {
+      return typeof value === 'number' && !isNaN(value) && Math.floor(value) === value;
+    },
     
     // ----------
     bounds: function($el) {
@@ -53,14 +57,72 @@
     outerBoundsInPage: function($el) {
       var pos = $el.offset() || {left: 0, top: 0};
       return new this.rect(pos.left, pos.top, $el.outerWidth(), $el.outerHeight());
+    },
+
+    // ----------
+    asyncEach: function(list, iterator, completion) {
+      var index = -1;
+      var savedErr = null;
+
+      if (typeof list.length !== 'number' || isNaN(list.length)) {
+        completion(savedErr);
+        return;
+      }
+
+      var next = function(err) {
+        if (err && !savedErr) {
+          savedErr = err;
+        }
+
+        index++;
+
+        if (index >= list.length) {
+          completion(savedErr);
+          return;
+        }
+
+        iterator(list[index], index, next);
+      };
+
+      next();
+    },
+
+    // ----------
+    exists: function(obj, propertyPath) {
+      if (!obj) {
+        return false; 
+      }
+      
+      var properties = propertyPath.split('.');
+      for (var i = 0; i < properties.length; i++) {
+        obj = obj[properties[i]]; 
+        if (obj === undefined) {
+          return false; 
+        }
+      }
+
+      return true;
+    },
+
+    // ----------
+    fire: function(func) {
+      if (func) {
+        func();
+      }
+    },
+
+    // ----------
+    lerp: function(a, b, factor) {
+      this.assert(factor >= 0 && factor <= 1, 'factor must be >= 0 and <= 1');
+      return (a * (1 - factor)) + (b * factor);
     }
-  } 
+  };
 
   // ==========
   zot.range = function(start, end) {
     this.start = start || 0;
     this.end = end || 0;
-  }
+  };
   
   zot.range.prototype = {
     // ----------
@@ -113,7 +175,7 @@
   zot.point = function(x, y) {
     this.x = x || 0;
     this.y = y || 0;
-  }
+  };
   
   zot.point.prototype = {
     // ----------
@@ -149,7 +211,7 @@
   zot.polar = function(radians, distance) {
     this.radians = radians || 0;
     this.distance = distance || 0;
-  }
+  };
   
   zot.polar.prototype = {
     // ----------
@@ -167,7 +229,7 @@
     this.top = top || 0;
     this.width = width || 0;
     this.height = height || 0;
-  }
+  };
   
   zot.rect.prototype = {
     // ----------
@@ -240,7 +302,28 @@
       var bottom = Math.max(this.bottom(), rect.bottom());
       return new zot.rect(left, top, right - left, bottom - top);
     }, 
-    
+
+    // ----------
+    intersection: function(rect) {
+      var left = Math.max(this.left, rect.left);
+      var top = Math.max(this.top, rect.top);
+      var right = Math.min(this.right(), rect.right());
+      var bottom = Math.min(this.bottom(), rect.bottom());
+      if (right > left && bottom > top) {
+        return new zot.rect(left, top, right - left, bottom - top);
+      }
+
+      return new zot.rect(0, 0, 0, 0);
+    }, 
+
+    // ----------
+    intersects: function(rect) {
+      return (this.right() > rect.left
+        && this.left < rect.right()
+        && this.bottom() > rect.top
+        && this.top < rect.bottom());
+    },
+
     // ----------
     css: function() {
       return {
@@ -249,6 +332,26 @@
         width: this.width,
         height: this.height
       };
+    }
+  };
+
+  // ==========
+  zot.grid = function() {
+    this._cells = {};
+  };
+
+  zot.grid.prototype = {
+    // ----------
+    cell: function(x, y, value) {
+      zot.assert(zot.isInteger(x), '[zot.grid.cell] x must be an integer');
+      zot.assert(zot.isInteger(y), '[zot.grid.cell] y must be an integer');
+
+      var key = x + 'x' + y;
+      if (value === undefined) {
+        return this._cells[key];
+      }
+
+      this._cells[key] = value;
     }
   };
   
