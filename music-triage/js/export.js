@@ -49,11 +49,16 @@
             keys: self.rdioKeys.join(',') 
           }, 
           success: function(response) {
+            var output = JSON.stringify(response, null, 2);
+            output = b64EncodeUnicode(output);
             $('.during-export').hide();
             $('.after-export').show();
             $('.download').prop({
-              href: 'data:application/json;charset=utf-8;base64,' + btoa(JSON.stringify(response, null, 2))
+              href: 'data:application/json;charset=utf-16le;base64,' + output
             });
+
+            var count = _.keys(response.result).length;
+            $('.after-count').text(' (' + count + (count === 1 ? ' album)' : ' albums)'));
             // console.log(response);
           },
           error: function(response) {
@@ -65,6 +70,14 @@
     }
   };
   
+  // ----------
+  // From https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding
+  function b64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        return String.fromCharCode('0x' + p1);
+    }));
+  }
+
   $(document).ready(function() {
     Export.init();
   });
