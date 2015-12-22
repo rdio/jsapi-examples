@@ -1,64 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Music Triage</title>
+    <title>Farewell</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="lib/normalize.css">
-    <link rel="stylesheet" type="text/css" href="lib/rdio-utils/rdio-utils.css">
-    <link rel="stylesheet/less" type="text/css" href="style/main.less">
-
-    <!-- Register your app at http://www.rdio.com/developers/create/ and replace client_id below with yours  -->
-    <script src="https://www.rdio.com/api/api.js?client_id=zfPdMwbs2DyCN96qUswHmQ"></script>
-
+    <link rel="stylesheet/less" type="text/css" href="style/export.less">
     <script src="lib/jquery-1.9.1.min.js"></script>
     <script src="lib/underscore-1.4.4.min.js"></script>
     <script src="lib/less-1.3.0.min.js"></script>
-    <script src="lib/transformjs.1.0.beta.2.min.js"></script>
     <script src="lib/zot.js"></script>
     <script src="lib/spin.min.js"></script>
-    <script src="lib/rdio-utils/rdio-utils.js"></script>
-    <script src="js/music.js"></script>
-    <script src="js/album.js"></script>
-    <script src="js/main.js"></script>
-    <script id="album-template" type="text/template">
-      <div class="album" data-key="<%= key %>">
-        <div class="yes btn"></div>
-        <div class="no btn"></div>
-        <div class="sample btn"></div>
-        <a href="<%= url %>" target="_blank">
-          <div class="icon" style="background-image: url(<%= icon %>)"></div>
-        </a>
-      </div>
-    </script>
+    <script src="js/export.js"></script>
   </head>
   <body>
-    <div id="unauthenticated">
-      <p>I like to queue up a bunch of new music and listen to it throughout the day. Every day or two I go back through my history and add the albums I liked to my collection. This web app is tailored to that history triage. Albums you've listened to but haven't triaged show up in the middle. Hit the heart on an album to add that album to your collection; hit the X to discard it.</p>
-      <p>To get started, you'll have to <button id="authenticate">authorize</button> this app.</p>
-      <p>Note that the "dustbin" status of an album is stored only in your browser's local storage. Perhaps in the future we'll add a server-side component for more robust storage.</p>
-    </div>
-    <div id="authenticated">
-      <div id="collection">
-        <div class="section-head">
-          Added to Collection
-        </div>
-        <div class="albums small">
-        </div>
-      </div>
-      <div id="history">
-        <div class="section-head">
-          Untriaged History
-        </div>
-        <p class="history-error">Rdio play history is not responding at the moment. Please try again later.</p>
-        <div class="albums">
-        </div>
-      </div>
-      <div id="rejects">
-        <div class="section-head">
-          Dustbin
-        </div>
-        <div class="albums small">
-        </div>
-      </div>
+    <div class="content">
+      <h1>Farewell</h1>
+      <p><a href="http://www.rdio.com/farewell">Rdio has shut down</a> so this app no longer works.</p>
+      <p>For new post-Rdio apps from <a href="/">Ian Gilman<a/>, see <a href="http://www.letsfathom.com/">Fathom</a>.</p>
+      <p>I hope to add a similar triage feature to Fathom. To facilitate that, you can export your "dustbin" from here. Remember that it's stored in your browser's local storage, so you need to use the same browser as you used before.</p>
+      <p><button class="export-button">Export Dustbin</button></p>
     </div>
   </body>
 </html>
